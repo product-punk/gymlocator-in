@@ -81,7 +81,7 @@ export default function FeaturedGyms() {
             <h2 className="h2 text-text-primary">Top-rated gyms</h2>
           </div>
           <a
-            href="/city/bangalore"
+            href="/gyms/bangalore"
             className="ghost text-[13px] inline-flex items-center gap-1.5 whitespace-nowrap hidden md:inline-flex"
           >
             View all <i className="ti ti-arrow-right text-[14px]" />

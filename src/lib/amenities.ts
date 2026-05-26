@@ -1,0 +1,15 @@
+export const AMENITIES = [
+  'crossfit',
+  'yoga',
+  'zumba',
+  'swimming',
+  'pilates',
+  'women-only',
+  '24-7',
+  'mma',
+  'boxing',
+  'calisthenics',
+  'functional-training',
+  'powerlifting',
+  'cardio-only',
+] as const

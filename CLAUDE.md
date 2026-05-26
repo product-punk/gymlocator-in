@@ -32,27 +32,27 @@ with gyms in their city or locality. Think Zomato UX but for fitness centers.
 
 ```
 app/
-├── page.tsx                          → /
-├── city/
+├── page.tsx                              → /
+├── gyms/
 │   └── [city]/
-│       ├── page.tsx                  → /city/bangalore
+│       ├── page.tsx                      → /gyms/bangalore
 │       └── [slug]/
-│           └── page.tsx              → /city/bangalore/koramangala (locality)
-│                                        /city/bangalore/crossfit    (amenity)
+│           └── page.tsx                  → /gyms/bangalore/koramangala (locality)
+│                                            /gyms/bangalore/crossfit    (amenity)
 ├── gym/
 │   └── [slug]/
-│       └── page.tsx                  → /gym/cult-fit-koramangala-bangalore
+│       └── page.tsx                      → /gym/cult-fit-koramangala-bangalore
 ├── blog/
-│   ├── page.tsx                      → /blog
+│   ├── page.tsx                          → /blog
 │   └── [slug]/
-│       └── page.tsx                  → /blog/best-gyms-bangalore-2025
+│       └── page.tsx                      → /blog/best-gyms-bangalore-2026
 ├── about/page.tsx
 ├── contact/page.tsx
-└── sitemap.xml/route.ts              → auto-generated
+└── sitemap.xml/route.ts                  → auto-generated
 ```
 
 ### Locality vs Amenity (Option B)
-`/city/[city]/[slug]` is shared. Resolve using the known amenity list:
+`/gyms/[city]/[slug]` is shared. Resolve using the known amenity list:
 
 ```ts
 // lib/amenities.ts
@@ -124,8 +124,8 @@ gym_count     int default 0
 ### Meta title templates
 ```
 Homepage:    "Find Best Gyms in India | Gymlocator.in"
-City:        "Best Gyms in {City} 2025 — Fees, Reviews & Timings | Gymlocator"
-Locality:    "Gyms in {Locality}, {City} — Top {N} Fitness Centers | Gymlocator"
+City:        "Best Gyms in {City} 2026 — Fees, Reviews & Timings | Gymlocator"
+Locality:    "Gyms in {Locality}, {City} — Top Fitness Centers | Gymlocator"
 Amenity:     "{Amenity} Gyms in {City} — Find & Compare | Gymlocator"
 Gym detail:  "{Gym Name}, {Locality} {City} — Timings, Fees & Reviews"
 Blog post:   "{Post Title} | Gymlocator Fitness Guide"
@@ -161,11 +161,11 @@ Must show: name, locality, rating, price_range, top 3 amenities, phone CTA
 ### Search bar (homepage hero)
 - Searches by city, locality, or gym name
 - Autocomplete from Supabase
-- On submit → navigate to `/city/[city]?q=[query]`
+- On submit → navigate to `/gyms/[city]?q=[query]`
 
 ### Filter bar (city/locality pages)
 Filters: Price tier · Gender · AC/Non-AC · Amenities (multi-select)
-- Filters update URL params: `/city/bangalore?price=budget&gender=women-only`
+- Filters update URL params: `/gyms/bangalore?price=budget&gender=women-only`
 - Always use `useSearchParams` + `router.push` — never local state only
 
 ---

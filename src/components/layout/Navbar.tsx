@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { label: 'Cities', href: '/#cities' },
   { label: 'Blog', href: '/blog' },
   { label: 'About', href: '/about' },
+  { label: 'Contact Us', href: '/contact' },
 ]
 
 export default function Navbar() {

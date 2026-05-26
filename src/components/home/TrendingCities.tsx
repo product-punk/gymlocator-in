@@ -29,7 +29,7 @@ export default function TrendingCities() {
         {/* Cities grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {CITIES.map((city) => (
-            <Link key={city.slug} href={`/city/${city.slug}`}>
+            <Link key={city.slug} href={`/gyms/${city.slug}`}>
               <div className="bg-surface b-hair rounded-md p-5 flex items-center gap-4 hover:bg-raised hover:border-border-hi transition-colors cursor-pointer group">
                 <div className="w-10 h-10 bg-raised rounded-sm flex items-center justify-center flex-shrink-0 group-hover:bg-border transition-colors">
                   <i className={`ti ${city.icon} text-[20px] text-accent`} />
