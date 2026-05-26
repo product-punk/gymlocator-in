@@ -1,17 +1,12 @@
 import Link from 'next/link'
 
-const CITIES = [
-  { name: 'Bangalore', slug: 'bangalore', count: 380, icon: 'ti-building-skyscraper' },
-  { name: 'Mumbai',    slug: 'mumbai',    count: 520, icon: 'ti-building-skyscraper' },
-  { name: 'Delhi',     slug: 'delhi',     count: 450, icon: 'ti-building-skyscraper' },
-  { name: 'Hyderabad', slug: 'hyderabad', count: 280, icon: 'ti-building-skyscraper' },
-  { name: 'Chennai',   slug: 'chennai',   count: 320, icon: 'ti-building-skyscraper' },
-  { name: 'Pune',      slug: 'pune',      count: 250, icon: 'ti-building-skyscraper' },
-  { name: 'Kolkata',   slug: 'kolkata',   count: 200, icon: 'ti-building-skyscraper' },
-  { name: 'Ahmedabad', slug: 'ahmedabad', count: 180, icon: 'ti-building-skyscraper' },
-]
+interface City {
+  name: string
+  slug: string
+  gym_count: number | null
+}
 
-export default function TrendingCities() {
+export default function TrendingCities({ cities }: { cities: City[] }) {
   return (
     <section id="cities" className="bb-hair">
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-20 md:py-24">
@@ -28,11 +23,11 @@ export default function TrendingCities() {
 
         {/* Cities grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {CITIES.map((city) => (
+          {cities.map((city) => (
             <Link key={city.slug} href={`/gyms/${city.slug}`}>
               <div className="bg-surface b-hair rounded-md p-5 flex items-center gap-4 hover:bg-raised hover:border-border-hi transition-colors cursor-pointer group">
                 <div className="w-10 h-10 bg-raised rounded-sm flex items-center justify-center flex-shrink-0 group-hover:bg-border transition-colors">
-                  <i className={`ti ${city.icon} text-[20px] text-accent`} />
+                  <i className="ti ti-building-skyscraper text-[20px] text-accent" />
                 </div>
                 <div>
                   <div className="text-[15px] font-bold text-text-primary tracking-tight">
@@ -40,7 +35,7 @@ export default function TrendingCities() {
                   </div>
                   <div className="text-[12px] text-text-muted mt-0.5 flex items-center gap-1">
                     <i className="ti ti-map-pin text-[11px]" />
-                    {city.count} gyms
+                    {city.gym_count ?? 0} gyms
                   </div>
                 </div>
               </div>

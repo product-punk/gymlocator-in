@@ -1,75 +1,25 @@
 import Link from 'next/link'
 
-const GYMS = [
-  {
-    name: 'Cult Fit',
-    slug: 'cult-fit-koramangala-bangalore',
-    locality: 'Koramangala',
-    city: 'Bangalore',
-    rating: 4.6,
-    reviews: 312,
-    price: 2500,
-    amenities: ['CrossFit', 'AC', 'Parking'],
-    featured: true,
-  },
-  {
-    name: "Gold's Gym",
-    slug: 'golds-gym-indiranagar-bangalore',
-    locality: 'Indiranagar',
-    city: 'Bangalore',
-    rating: 4.3,
-    reviews: 198,
-    price: 1800,
-    amenities: ['Yoga', 'AC', '24/7'],
-    featured: true,
-  },
-  {
-    name: 'Anytime Fitness',
-    slug: 'anytime-fitness-bandra-mumbai',
-    locality: 'Bandra',
-    city: 'Mumbai',
-    rating: 4.5,
-    reviews: 276,
-    price: 3200,
-    amenities: ['24/7', 'AC', 'Cardio'],
-    featured: true,
-  },
-  {
-    name: 'Snap Fitness',
-    slug: 'snap-fitness-connaught-delhi',
-    locality: 'Connaught Place',
-    city: 'Delhi',
-    rating: 4.2,
-    reviews: 154,
-    price: 2200,
-    amenities: ['AC', 'Functional', 'Boxing'],
-    featured: true,
-  },
-  {
-    name: 'Iron Paradise',
-    slug: 'iron-paradise-banjara-hyderabad',
-    locality: 'Banjara Hills',
-    city: 'Hyderabad',
-    rating: 4.9,
-    reviews: 214,
-    price: 3600,
-    amenities: ['Powerlifting', 'MMA', 'Boxing'],
-    featured: true,
-  },
-  {
-    name: 'SheLifts',
-    slug: 'shelifts-kothrud-pune',
-    locality: 'Kothrud',
-    city: 'Pune',
-    rating: 4.8,
-    reviews: 190,
-    price: 2100,
-    amenities: ['Women-only', 'Zumba', 'Functional'],
-    featured: true,
-  },
-]
+interface Gym {
+  slug: string
+  name: string
+  locality_slug: string | null
+  city_slug: string
+  rating: number | null
+  review_count: number | null
+  price_monthly: number | null
+  amenities: string[]
+}
 
-export default function FeaturedGyms() {
+function formatSlug(slug: string) {
+  return slug.split('-').map(w =>
+    w.charAt(0).toUpperCase() + w.slice(1)
+  ).join(' ')
+}
+
+export default function FeaturedGyms({ gyms }: { gyms: Gym[] }) {
+  if (gyms.length === 0) return null
+
   return (
     <section className="bb-hair">
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-20 md:py-24">
@@ -90,7 +40,7 @@ export default function FeaturedGyms() {
 
         {/* Scrollable row */}
         <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2 snap-x snap-mandatory">
-          {GYMS.map((gym) => (
+          {gyms.map((gym) => (
             <article key={gym.slug} className="flex-none w-[300px] sm:w-[320px] snap-start bg-surface b-hair rounded-md overflow-hidden flex flex-col hover:border-border-hi transition-colors group relative">
 
               {/* Full-card link underlay */}
@@ -114,13 +64,13 @@ export default function FeaturedGyms() {
                   <h3 className="h3 text-text-primary">{gym.name}</h3>
                   <div className="flex items-center gap-1.5 text-[13px] text-text-muted mt-1">
                     <i className="ti ti-map-pin text-[13px]" />
-                    {gym.locality}, {gym.city}
+                    {gym.locality_slug ? formatSlug(gym.locality_slug) : ''}, {formatSlug(gym.city_slug)}
                   </div>
                 </div>
 
                 {/* Amenity tags */}
                 <div className="flex flex-wrap gap-1.5">
-                  {gym.amenities.map((tag, i) => (
+                  {gym.amenities.slice(0, 3).map((tag, i) => (
                     i === 0 ? (
                       <span key={tag} className="text-[11px] font-bold uppercase tracking-[0.08em] bg-accent-dim text-accent px-2 py-1 rounded-sm">
                         {tag}
@@ -137,12 +87,15 @@ export default function FeaturedGyms() {
                 <div className="mt-auto pt-3 bt-hair flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-[13px] text-text-primary">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
-                    <span className="font-bold">{gym.rating}</span>
-                    <span className="text-text-muted">({gym.reviews})</span>
+                    <span className="font-bold">{gym.rating ?? '—'}</span>
+                    <span className="text-text-muted">({gym.review_count ?? 0})</span>
                   </div>
                   <div className="text-[13px] text-text-secondary">
-                    <span className="text-text-muted">₹</span>{gym.price}
-                    <span className="text-text-muted">/mo</span>
+                    {gym.price_monthly ? (
+                      <><span className="text-text-muted">₹</span>{gym.price_monthly}<span className="text-text-muted">/mo</span></>
+                    ) : (
+                      <span className="text-text-muted">Price on request</span>
+                    )}
                   </div>
                   <Link
                     href={`/gym/${gym.slug}`}

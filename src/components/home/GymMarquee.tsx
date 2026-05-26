@@ -1,19 +1,24 @@
-const GYM_BRANDS = [
-  { name: 'Cult Fit',        abbr: 'CF' },
-  { name: "Gold's Gym",      abbr: 'GG' },
-  { name: 'Anytime Fitness', abbr: 'AF' },
-  { name: 'Snap Fitness',    abbr: 'SF' },
-  { name: 'Fitness First',   abbr: 'FF' },
-  { name: 'Talwalkars',      abbr: 'TW' },
-  { name: 'Planet Fitness',  abbr: 'PF' },
-  { name: 'CrossFit India',  abbr: 'CI' },
-  { name: 'F45 Training',    abbr: 'F4' },
-  { name: 'Energize Gym',    abbr: 'EG' },
-  { name: 'Iron Body',       abbr: 'IB' },
-  { name: 'PowerHouse Gym',  abbr: 'PH' },
+interface Gym {
+  name: string
+}
+
+const FALLBACK = [
+  'Cult Fit', "Gold's Gym", 'Anytime Fitness',
+  'Snap Fitness', 'Talwalkars', 'Fitness First',
+  'PowerHouse Gym', 'Iron Body', 'CrossFit India',
 ]
 
-export default function GymMarquee() {
+export default function GymMarquee({ gyms }: { gyms: Gym[] }) {
+  const brands = gyms.length > 0
+    ? gyms.map((g) => ({
+        name: g.name,
+        abbr: g.name.replace(/[^A-Z]/g, '').slice(0, 2) || g.name.slice(0, 2).toUpperCase(),
+      }))
+    : FALLBACK.map((name) => ({
+        name,
+        abbr: name.replace(/[^A-Z]/g, '').slice(0, 2) || name.slice(0, 2).toUpperCase(),
+      }))
+
   return (
     <section className="bb-hair py-10 overflow-hidden">
       <div className="text-center mb-8">
@@ -24,7 +29,7 @@ export default function GymMarquee() {
 
       <div className="marquee-fade overflow-hidden">
         <div className="marquee-track">
-          {[...GYM_BRANDS, ...GYM_BRANDS].map((gym, i) => (
+          {[...brands, ...brands].map((gym, i) => (
             <div
               key={i}
               className="flex items-center gap-3 bg-surface b-hair rounded-md px-5 py-3 mx-4 hover:bg-raised hover:border-border-hi transition-colors cursor-pointer"
