@@ -13,8 +13,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Find Best Gyms in India | Gymlocator.in",
-  description: "Discover and compare gyms near you. Fees, timings, amenities and reviews for gyms across India.",
+  title: 'Find Best Gyms in India | Gymlocator.in',
+  description: 'Discover and compare gyms near you. Fees, timings, amenities and reviews for gyms across India.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({
