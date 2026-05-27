@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 type City = {
   id: string
@@ -7,6 +8,7 @@ type City = {
   gym_count: number
   is_active: boolean
   wave: number
+  icon?: string | null
 }
 
 type Props = {
@@ -40,8 +42,18 @@ export default function TrendingCities({ cities }: Props) {
               href={"/gyms/" + city.slug}
               className="bg-surface b-hair rounded-md p-5 flex items-center gap-4 hover:bg-raised hover:border-border-hi transition-colors cursor-pointer group"
             >
-              <div className="w-10 h-10 bg-raised rounded-sm flex items-center justify-center flex-shrink-0 group-hover:bg-border transition-colors">
-                <i className="ti ti-building-skyscraper text-[20px] text-accent" />
+              <div className="w-12 h-12 rounded-sm bg-raised flex items-center justify-center flex-shrink-0 overflow-hidden group-hover:bg-border transition-colors">
+                {city.icon ? (
+                  <Image
+                    src={city.icon}
+                    alt={city.name}
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-contain p-1.5"
+                  />
+                ) : (
+                  <i className="ti ti-building-skyscraper text-[20px] text-accent" />
+                )}
               </div>
               <div>
                 <div className="text-[15px] font-bold text-text-primary tracking-tight">
