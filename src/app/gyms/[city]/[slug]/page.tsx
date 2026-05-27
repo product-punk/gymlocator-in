@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { city, slug } = await params
   const cityName = city.charAt(0).toUpperCase() + city.slice(1)
   const slugName = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
-  const isAmenity = AMENITIES.includes(slug)
+  const isAmenity = AMENITIES.includes(slug as typeof AMENITIES[number])
 
   const title = isAmenity
     ? `${slugName} Gyms in ${cityName} — Find & Compare | Gymlocator`
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CitySlugPage({ params }: Props) {
   const { city, slug } = await params
-  const isAmenity = AMENITIES.includes(slug)
+  const isAmenity = AMENITIES.includes(slug as typeof AMENITIES[number])
   const cityName = city.charAt(0).toUpperCase() + city.slice(1)
   const slugName = slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 
