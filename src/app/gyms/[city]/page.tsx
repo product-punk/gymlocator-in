@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import { getCityBySlug, getGymsByCity, getLocalitiesByCity } from '@/lib/supabase/queries'
 
 export const revalidate = 3600
@@ -117,22 +116,9 @@ export default async function CityPage({ params }: Props) {
 
       {/* HERO */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-8 pb-6 bb-hair">
-        <div className="flex items-center gap-4">
-          {city.icon && (
-            <div className="w-14 h-14 bg-surface b-hair rounded-md flex items-center justify-center flex-shrink-0 overflow-hidden">
-              <Image
-                src={city.icon}
-                alt={city.name}
-                width={56}
-                height={56}
-                className="w-full h-full object-contain p-2"
-              />
-            </div>
-          )}
-          <h1 className="h1 text-text-primary">
-            {city.seo_h1 || `Best Gyms in ${cityName}`}
-          </h1>
-        </div>
+        <h1 className="h1 text-text-primary">
+          {city.seo_h1 || `Best Gyms in ${cityName}`}
+        </h1>
         <p className="text-[16px] text-text-secondary mt-3 max-w-[640px]">
           {city.seo_subtitle || `Compare ${city.gym_count || gyms.length}+ gyms across ${cityName} by fees, ratings, timings and amenities.`}
         </p>
