@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props) {
   if (!city) return {}
   return {
     title: `Best Gyms in ${city.name} – Compare Fees, Timings & Ratings | Gymlocator`,
-    description: `Find the best gyms in ${city.name} on Gymlocator. Compare ${city.gym_count}+ gyms by fees, ratings, timings & amenities. Book a free trial near you today.`,
+    description: city.meta_description || `Find the best gyms in ${city.name} on Gymlocator. Compare ${city.gym_count}+ gyms by fees, ratings, timings & amenities. Book a free trial near you today.`,
     alternates: {
       canonical: `https://gymlocator.in/gyms/${citySlug}`,
     },
@@ -51,32 +51,34 @@ export default async function CityPage({ params }: Props) {
 
   const cityName = city.name
 
-  const faqs = [
-    {
-      q: `How much does a gym membership cost in ${cityName}?`,
-      a: `Gym memberships in ${cityName} typically range from ₹1,200–₹1,800/month for budget gyms, ₹2,000–₹3,500/month for standard gyms, and ₹4,000–₹8,000+/month for premium clubs with steam room, personal trainer and group classes.`,
-    },
-    {
-      q: `Which is the best 24-hour gym in ${cityName}?`,
-      a: `Several gyms in ${cityName} offer 24/7 access including Anytime Fitness and Snap Fitness branches. Use the 24x7 filter above to find all round-the-clock gyms near you.`,
-    },
-    {
-      q: `Are there women-only gyms in ${cityName}?`,
-      a: `Yes, ${cityName} has several women-only gyms and fitness studios. Many standard gyms also offer dedicated women-only timing slots. Use the Women-only filter to browse all options.`,
-    },
-    {
-      q: `Do gyms in ${cityName} offer a free trial?`,
-      a: `Most gyms in ${cityName} offer a free trial session or a one-day pass. Look for the "Free Trial" badge on gym cards above or ask the gym directly when you call.`,
-    },
-    {
-      q: `What documents do I need to join a gym in ${cityName}?`,
-      a: `Most gyms in ${cityName} require a government-issued photo ID (Aadhaar, PAN, or passport) and a recent passport-size photograph. Some premium gyms may also ask for a medical fitness declaration.`,
-    },
-    {
-      q: `Which gyms in ${cityName} offer personal training?`,
-      a: `Many gyms in ${cityName} offer personal training sessions. Filter by "Personal Trainer" above to find certified PT-enabled gyms near you. Rates typically range from ₹500–₹1,500 per session.`,
-    },
-  ]
+  const faqs = city.faqs?.length > 0
+    ? city.faqs
+    : [
+        {
+          q: `How much does a gym membership cost in ${cityName}?`,
+          a: `Gym memberships in ${cityName} typically range from ${city.price_budget_monthly || '₹1,200–₹1,800'}/month for budget gyms to ${city.price_premium_monthly || '₹4,000–₹8,000+'}/month for premium clubs.`,
+        },
+        {
+          q: `Which is the best 24-hour gym in ${cityName}?`,
+          a: `Several gyms in ${cityName} offer 24/7 access. Use the 24x7 filter above to find all round-the-clock gyms near you.`,
+        },
+        {
+          q: `Are there women-only gyms in ${cityName}?`,
+          a: `Yes, ${cityName} has several women-only gyms and fitness studios. Use the Women-only filter to browse all options.`,
+        },
+        {
+          q: `Do gyms in ${cityName} offer a free trial?`,
+          a: `Most gyms in ${cityName} offer a free trial session or a one-day pass. Look for the Free Trial badge on gym cards above.`,
+        },
+        {
+          q: `What documents do I need to join a gym in ${cityName}?`,
+          a: `Most gyms in ${cityName} require a government-issued photo ID (Aadhaar, PAN, or passport) and a recent passport-size photograph.`,
+        },
+        {
+          q: `Which gyms in ${cityName} offer personal training?`,
+          a: `Many gyms in ${cityName} offer personal training. Filter by Personal Trainer above to find certified PT-enabled gyms near you.`,
+        },
+      ]
 
   const popularSearches = [
     { label: `best gym in ${cityName}`, href: `/gyms/${citySlug}` },
@@ -114,10 +116,11 @@ export default async function CityPage({ params }: Props) {
 
       {/* HERO */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-8 pb-6 bb-hair">
-        <h1 className="h1 text-text-primary">Best Gyms in {cityName}</h1>
+        <h1 className="h1 text-text-primary">
+          {city.seo_h1 || `Best Gyms in ${cityName}`}
+        </h1>
         <p className="text-[16px] text-text-secondary mt-3 max-w-[640px]">
-          Compare {city.gym_count || gyms.length}+ gyms across {cityName} by fees,
-          ratings, timings and amenities.
+          {city.seo_subtitle || `Compare ${city.gym_count || gyms.length}+ gyms across ${cityName} by fees, ratings, timings and amenities.`}
         </p>
 
         {/* FILTER BAR */}
@@ -321,14 +324,7 @@ export default async function CityPage({ params }: Props) {
         <div className="max-w-[780px] mb-12">
           <h2 className="h2 text-text-primary mb-4">About Gyms in {cityName}</h2>
           <p className="text-[15px] text-text-secondary leading-relaxed">
-            {cityName}&apos;s fitness scene spans 24-hour franchise gyms in popular
-            localities to boutique strength studios in residential neighbourhoods.
-            Monthly memberships typically range from ₹1,200 for neighbourhood gyms
-            to ₹6,000+ for premium clubs with steam rooms, personal trainers and
-            group classes. Most gyms offer a free trial, and 24x7 access is common
-            in IT-corridor localities. Use the filters above to find a gym near you
-            that fits your budget, schedule and workout style — whether you need a
-            women-only timing, swimming pool access, or a certified personal trainer.
+            {city.about_text || `${cityName}'s fitness scene spans 24-hour franchise gyms to boutique strength studios. Monthly memberships range from ₹1,200 for neighbourhood gyms to ₹6,000+ for premium clubs.`}
           </p>
         </div>
 
@@ -367,9 +363,9 @@ export default async function CityPage({ params }: Props) {
               </thead>
               <tbody>
                 {[
-                  { tier: 'Budget', monthly: '₹1,200–1,800', annual: '₹10,000–15,000', includes: 'Equipment, locker, basic trainer' },
-                  { tier: 'Standard', monthly: '₹2,000–3,500', annual: '₹18,000–28,000', includes: '+ Group classes, shower, personal plan' },
-                  { tier: 'Premium', monthly: '₹4,000–8,000+', annual: '₹35,000–80,000', includes: '+ Pool, steam/sauna, dedicated PT' },
+                  { tier: 'Budget', monthly: city.price_budget_monthly || '₹1,200–1,800', annual: city.price_budget_annual || '₹10,000–15,000', includes: 'Equipment, locker, basic trainer' },
+                  { tier: 'Standard', monthly: city.price_standard_monthly || '₹2,000–3,500', annual: city.price_standard_annual || '₹18,000–28,000', includes: '+ Group classes, shower, personal plan' },
+                  { tier: 'Premium', monthly: city.price_premium_monthly || '₹4,000–8,000+', annual: city.price_premium_annual || '₹35,000–80,000', includes: '+ Pool, steam/sauna, dedicated PT' },
                 ].map((row, i) => (
                   <tr key={row.tier} className={i < 2 ? 'bb-hair' : ''}>
                     <td className="p-4 font-semibold text-text-primary">{row.tier}</td>
@@ -387,7 +383,7 @@ export default async function CityPage({ params }: Props) {
         <div className="max-w-[780px] mb-12">
           <h2 className="h2 text-text-primary mb-6">Frequently Asked Questions</h2>
           <div className="space-y-3">
-            {faqs.map((faq, i) => (
+            {faqs.map((faq: { q: string; a: string }, i: number) => (
               <details key={i} className="bg-surface b-hair rounded-md group">
                 <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text-primary list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
                   {faq.q}
@@ -477,7 +473,7 @@ export default async function CityPage({ params }: Props) {
               },
               {
                 '@type': 'FAQPage',
-                mainEntity: faqs.map((faq) => ({
+                mainEntity: faqs.map((faq: { q: string; a: string }) => ({
                   '@type': 'Question',
                   name: faq.q,
                   acceptedAnswer: { '@type': 'Answer', text: faq.a },
