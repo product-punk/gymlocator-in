@@ -108,7 +108,7 @@ export default async function CityPage({ params }: Props) {
         <nav className="flex items-center gap-2 text-[12px] text-text-muted">
           <Link href="/" className="ghost">Home</Link>
           <span>›</span>
-          <Link href="/gyms" className="ghost">Gyms</Link>
+          <Link href="/cities" className="ghost">Cities</Link>
           <span>›</span>
           <span className="text-text-secondary">{cityName}</span>
         </nav>
@@ -438,7 +438,7 @@ export default async function CityPage({ params }: Props) {
                 '@id': `https://gymlocator.in/gyms/${citySlug}#breadcrumb`,
                 itemListElement: [
                   { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://gymlocator.in/' },
-                  { '@type': 'ListItem', position: 2, name: 'Gyms', item: 'https://gymlocator.in/gyms' },
+                  { '@type': 'ListItem', position: 2, name: 'Cities', item: 'https://gymlocator.in/cities' },
                   { '@type': 'ListItem', position: 3, name: cityName, item: `https://gymlocator.in/gyms/${citySlug}` },
                 ],
               },
