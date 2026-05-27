@@ -332,14 +332,17 @@ export default async function CityPage({ params }: Props) {
         <div className="max-w-[780px] mb-12">
           <h2 className="h2 text-text-primary mb-4">What to Look for in a Gym in {cityName}</h2>
           <ul className="space-y-3">
-            {[
-              'Certified trainers and a free trial session before you commit',
-              'Hygiene: sanitised equipment, clean changing rooms, towel service',
-              'Equipment quality: free weights, cardio mix, functional training zone',
-              'Distance: under 15 minutes from home or office for better adherence',
-              'Locker, shower, and parking — essential for working professionals',
-              'Women-only timings or dedicated zones if relevant to you',
-            ].map((point) => (
+            {(city.what_to_look_for?.length > 0
+              ? city.what_to_look_for
+              : [
+                  'Certified trainers and a free trial session before you commit',
+                  'Hygiene: sanitised equipment, clean changing rooms, towel service',
+                  'Equipment quality: free weights, cardio mix, functional training zone',
+                  'Distance: under 15 minutes from home or office for better adherence',
+                  'Locker, shower, and parking for working professionals',
+                  'Women-only timings or dedicated zones if relevant to you',
+                ]
+            ).map((point: string) => (
               <li key={point} className="flex items-start gap-3 text-[15px] text-text-secondary">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
                 {point}
