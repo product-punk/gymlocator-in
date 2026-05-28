@@ -197,6 +197,52 @@ boxing · calisthenics · functional-training · powerlifting · cardio-only
 
 ---
 
+## Launch Strategy
+
+### Wave 1 (Launch Day) — 4 cities only
+Mumbai · Delhi · Bangalore · Pune
+
+### Minimum DB requirement before publishing a page
+- City page:     ≥ 10 gyms in that city
+- Locality page: ≥ 5 gyms in that locality
+- Pages below threshold: return 404 or redirect to city page
+
+### Wave 1 Localities to seed in DB
+
+Mumbai (8 at launch):
+mira-road · chembur · ghatkopar-east · andheri-west ·
+borivali-west · malad-west · vashi · kharghar
+
+Delhi (8 at launch):
+dwarka · saket · janakpuri · paschim-vihar ·
+laxmi-nagar · karol-bagh · lajpat-nagar · rajouri-garden
+
+Bangalore (4 at launch):
+indiranagar · hsr-layout · koramangala · rr-nagar
+
+Pune (8 at launch):
+baner · kharadi · kothrud · viman-nagar ·
+wakad · kalyani-nagar · pimple-saudagar · hinjewadi-phase-1
+
+### Target page count at launch
+- 4 city pages
+- 28 locality pages
+- 1 homepage
+- 250–600 gym detail pages
+- Total: ~285–640 indexable pages
+
+### Seed priority
+Mumbai first → validate template → scale to 4 cities
+
+### Wave 2 (+30 days)
+Hyderabad · Gurgaon · Noida · Ahmedabad · Chennai · Kolkata
+
+### Wave 3 (+60–90 days)
+Indore · Chandigarh · Jaipur · Dehradun · Lucknow ·
+Surat · Coimbatore · Bhopal · Thane · Nagpur
+
+---
+
 ## What We Are NOT Building (MVP)
 - User accounts / login
 - Gym owner dashboard
