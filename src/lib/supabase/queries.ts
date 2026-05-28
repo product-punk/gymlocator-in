@@ -65,18 +65,48 @@ export async function getLocalitiesByCity(citySlug: string) {
   return data ?? []
 }
 
+export async function getLocalityBySlug(citySlug: string, localitySlug: string) {
+  const { data } = await supabase
+    .from('localities')
+    .select('*')
+    .eq('city_slug', citySlug)
+    .eq('slug', localitySlug)
+    .single()
+  return data
+}
+
 export async function getGymsByLocality(
   citySlug: string,
-  localitySlug: string
+  localitySlug: string,
+  limit = 12,
+  offset = 0
 ) {
-  const { data } = await supabase
+  const { data, count } = await supabase
     .from('gyms')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('city_slug', citySlug)
     .eq('locality_slug', localitySlug)
     .eq('is_active', true)
     .order('rating', { ascending: false })
-  return data ?? []
+    .range(offset, offset + limit - 1)
+  return { gyms: data ?? [], total: count ?? 0 }
+}
+
+export async function getGymsByAmenity(
+  citySlug: string,
+  amenity: string,
+  limit = 12,
+  offset = 0
+) {
+  const { data, count } = await supabase
+    .from('gyms')
+    .select('*', { count: 'exact' })
+    .eq('city_slug', citySlug)
+    .eq('is_active', true)
+    .contains('amenities', [amenity])
+    .order('rating', { ascending: false })
+    .range(offset, offset + limit - 1)
+  return { gyms: data ?? [], total: count ?? 0 }
 }
 
 export async function getCityBySlug(citySlug: string) {
