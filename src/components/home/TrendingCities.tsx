@@ -13,9 +13,18 @@ type Props = {
   cities: City[]
 }
 
-export default function TrendingCities({ cities }: Props) {
-  console.log('Cities received:', cities)
+const CITY_ICONS: Record<string, string> = {
+  bangalore: 'ti-building-skyscraper',
+  mumbai:    'ti-buildings',
+  delhi:     'ti-building-monument',
+  hyderabad: 'ti-building-arch',
+  chennai:   'ti-building-pavilion',
+  pune:      'ti-building-community',
+  kolkata:   'ti-building-bridge',
+  ahmedabad: 'ti-building-factory-2',
+}
 
+export default function TrendingCities({ cities }: Props) {
   if (!cities || cities.length === 0) {
     return null
   }
@@ -38,19 +47,19 @@ export default function TrendingCities({ cities }: Props) {
             <Link
               key={city.id}
               href={"/gyms/" + city.slug}
-              className="bg-surface b-hair rounded-md p-5 flex items-center gap-4 hover:bg-raised hover:border-border-hi transition-colors cursor-pointer group"
+              className="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors"
             >
-              <div className="w-10 h-10 bg-raised rounded-sm flex items-center justify-center flex-shrink-0 group-hover:bg-border transition-colors">
-                <i className="ti ti-building-skyscraper text-[20px] text-accent" />
-              </div>
-              <div>
-                <div className="text-[15px] font-bold text-text-primary tracking-tight">
-                  {city.name}
+              <i className={`ti ${CITY_ICONS[city.slug] || 'ti-building-skyscraper'} text-[28px] text-text-primary`} />
+              <div className="mt-8 flex items-end justify-between gap-3">
+                <div>
+                  <div className="text-[17px] font-bold tracking-tight text-text-primary">
+                    {city.name}
+                  </div>
+                  <div className="text-[12px] text-text-muted mt-0.5">
+                    {city.gym_count ?? 0} gyms
+                  </div>
                 </div>
-                <div className="text-[12px] text-text-muted mt-0.5 flex items-center gap-1">
-                  <i className="ti ti-map-pin text-[11px]" />
-                  {city.gym_count ?? 0} gyms
-                </div>
+                <i className="ti ti-arrow-up-right text-[18px] text-text-muted group-hover:text-text-primary transition-colors" />
               </div>
             </Link>
           ))}

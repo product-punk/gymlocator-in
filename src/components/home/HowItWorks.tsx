@@ -58,7 +58,7 @@ export default function HowItWorks() {
         </div>
 
         {/* CTA strip */}
-        <div className="mt-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-surface b-hair rounded-md p-6 md:p-8">
+        <div className="light-card mt-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 b-hair rounded-md p-6 md:p-8">
           <div>
             <h3 className="h3 text-text-primary">Run a gym? Get listed.</h3>
             <p className="text-[14px] text-text-secondary mt-1">
@@ -68,13 +68,13 @@ export default function HowItWorks() {
           <div className="flex items-center gap-3">
             <Link
               href="/list-your-gym"
-              className="btn-outline inline-flex items-center gap-2 font-bold text-[13px] text-accent px-4 py-2.5 rounded-sm hover:bg-accent-dim transition-colors"
+              className="btn-outline-dark inline-flex items-center gap-2 font-bold text-[13px] px-4 py-2.5 rounded-sm transition-colors"
             >
               Learn more
             </Link>
             <Link
               href="/list-your-gym"
-              className="inline-flex items-center gap-2 bg-accent text-base font-bold text-[13px] px-4 py-2.5 rounded-sm hover:bg-white transition-colors"
+              className="inline-flex items-center gap-2 bg-[#0C0C0C] text-[#D4D4D4] font-bold text-[13px] px-4 py-2.5 rounded-sm hover:bg-raised transition-colors"
             >
               <i className="ti ti-arrow-right text-[16px]" /> List your gym
             </Link>

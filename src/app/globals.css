@@ -110,6 +110,38 @@
   background: var(--color-accent-dim);
 }
 
+/* Silver section background — used for contrast breaks */
+.silver-section {
+  background: #E0E0E0;
+  color: #0C0C0C;
+}
+.silver-section .text-text-primary    { color: #0C0C0C !important; }
+.silver-section .text-text-secondary  { color: #333333 !important; }
+.silver-section .text-text-muted      { color: #666666 !important; }
+.silver-section .text-accent          { color: #0C0C0C !important; }
+.silver-section .label                { color: #0C0C0C !important; }
+.silver-section .b-hair,
+.silver-section .bb-hair,
+.silver-section .bt-hair              { border-color: rgba(0,0,0,0.15) !important; }
+
+/* Light card — used inside dark sections */
+.light-card {
+  background: #E5E5E5 !important;
+  border-color: #C8C8C8 !important;
+}
+.light-card .text-text-primary   { color: #0C0C0C !important; }
+.light-card .text-text-secondary { color: #444444 !important; }
+.light-card .bg-accent           { background: #0C0C0C !important;
+                                   color: #D4D4D4 !important; }
+.light-card .bg-accent:hover     { background: #1A1A1A !important; }
+
+.btn-outline-dark {
+  border: 0.5px solid #0C0C0C;
+  color: #0C0C0C;
+  background: transparent;
+}
+.btn-outline-dark:hover { background: rgba(0,0,0,0.08); }
+
 /* Striped dark image placeholder */
 .img-placeholder {
   background-color: var(--color-raised);

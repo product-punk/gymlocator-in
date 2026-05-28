@@ -1,4 +1,5 @@
 import Hero from '@/components/home/Hero'
+import AccentMarquee from '@/components/home/AccentMarquee'
 import GymMarquee from '@/components/home/GymMarquee'
 import TrendingCities from '@/components/home/TrendingCities'
 import FeaturedGyms from '@/components/home/FeaturedGyms'
@@ -17,6 +18,7 @@ export default async function HomePage() {
   return (
     <main>
       <Hero />
+      <AccentMarquee />
       <GymMarquee gyms={partnerGyms} />
       <TrendingCities cities={cities} />
       <FeaturedGyms gyms={featuredGyms} />

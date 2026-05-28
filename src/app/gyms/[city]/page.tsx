@@ -164,6 +164,24 @@ export default async function CityPage({ params }: Props) {
         )}
       </div>
 
+      {/* CITY STATS BAR */}
+      <div className="silver-section bb-hair bt-hair">
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-4 flex flex-wrap items-center gap-x-8 gap-y-2 text-[12px] font-bold uppercase tracking-[0.12em] font-mono">
+          <span className="inline-flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#0C0C0C]" />
+            {cityName}
+          </span>
+          <span className="opacity-25">———</span>
+          <span>
+            <strong className="text-[15px] mr-1">{city.gym_count || gyms.length}</strong> gyms
+          </span>
+          <span className="opacity-25">———</span>
+          <span>
+            <strong className="text-[15px] mr-1">{localities.length}</strong> localities
+          </span>
+        </div>
+      </div>
+
       {/* GYM CARD GRID */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12">
         <h2 className="h2 text-text-primary mb-8">Top Gyms in {cityName}</h2>
