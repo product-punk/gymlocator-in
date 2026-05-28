@@ -4,7 +4,12 @@ import { getCityBySlug, getGymsByCity, getLocalitiesByCity } from '@/lib/supabas
 
 export const revalidate = 3600
 
-type Props = { params: Promise<{ city: string }> }
+const GYMS_PER_PAGE = 12
+
+type Props = {
+  params: Promise<{ city: string }>
+  searchParams: Promise<{ page?: string }>
+}
 
 export async function generateStaticParams() {
   return [
@@ -19,13 +24,19 @@ export async function generateStaticParams() {
   ]
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params, searchParams }: Props) {
   const { city: citySlug } = await params
+  const { page } = await searchParams
+  const currentPage = parseInt(page || '1')
   const city = await getCityBySlug(citySlug)
   if (!city) return {}
   return {
     title: `Best Gyms in ${city.name} – Compare Fees, Timings & Ratings | Gymlocator`,
-    description: city.meta_description || `Find the best gyms in ${city.name} on Gymlocator. Compare ${city.gym_count}+ gyms by fees, ratings, timings & amenities. Book a free trial near you today.`,
+    description: city.meta_description || `Find the best gyms in ${city.name} on Gymlocator. Compare ${city.gym_count}+ gyms by fees, ratings, timings & amenities.`,
+    robots: {
+      index: currentPage === 1,
+      follow: true,
+    },
     alternates: {
       canonical: `https://gymlocator.in/gyms/${citySlug}`,
     },
@@ -38,17 +49,22 @@ function formatSlug(slug: string) {
   ).join(' ')
 }
 
-export default async function CityPage({ params }: Props) {
+export default async function CityPage({ params, searchParams }: Props) {
   const { city: citySlug } = await params
+  const { page } = await searchParams
+  const currentPage = parseInt(page || '1')
+  const offset = (currentPage - 1) * GYMS_PER_PAGE
 
-  const [city, gyms, localities] = await Promise.all([
+  const [city, gymData, localities] = await Promise.all([
     getCityBySlug(citySlug),
-    getGymsByCity(citySlug),
+    getGymsByCity(citySlug, GYMS_PER_PAGE, offset),
     getLocalitiesByCity(citySlug),
   ])
 
   if (!city) notFound()
 
+  const { gyms, total } = gymData
+  const totalPages = Math.ceil(total / GYMS_PER_PAGE)
   const cityName = city.name
 
   const faqs = city.faqs?.length > 0
@@ -120,7 +136,10 @@ export default async function CityPage({ params }: Props) {
           {city.seo_h1 || `Best Gyms in ${cityName}`}
         </h1>
         <p className="text-[16px] text-text-secondary mt-3 max-w-[640px]">
-          {city.seo_subtitle || `Compare ${city.gym_count || gyms.length}+ gyms across ${cityName} by fees, ratings, timings and amenities.`}
+          {currentPage === 1
+            ? city.seo_subtitle || `Compare ${city.gym_count || total}+ gyms across ${cityName} by fees, ratings, timings and amenities.`
+            : `Showing gyms ${offset + 1}–${Math.min(offset + GYMS_PER_PAGE, total)} of ${total} in ${cityName}.`
+          }
         </p>
 
         {/* FILTER BAR */}
@@ -173,7 +192,7 @@ export default async function CityPage({ params }: Props) {
           </span>
           <span className="opacity-25">———</span>
           <span>
-            <strong className="text-[15px] mr-1">{city.gym_count || gyms.length}</strong> gyms
+            <strong className="text-[15px] mr-1">{city.gym_count || total}</strong> gyms
           </span>
           <span className="opacity-25">———</span>
           <span>
@@ -203,7 +222,6 @@ export default async function CityPage({ params }: Props) {
             }, index: number) => (
               <article key={gym.id} className="bg-surface b-hair rounded-md overflow-hidden flex flex-col hover:border-border-hi transition-colors group">
 
-                {/* Image zone */}
                 <Link href={`/gym/${gym.slug}`} className="block">
                   <div className="img-placeholder h-[180px] relative">
                     {gym.is_featured && (
@@ -217,15 +235,13 @@ export default async function CityPage({ params }: Props) {
                       </span>
                     )}
                     <span className="absolute bottom-2 right-2 text-[10px] text-text-disabled">
-                      {String(index + 1).padStart(2, '0')}
+                      {String(offset + index + 1).padStart(2, '0')}
                     </span>
                   </div>
                 </Link>
 
-                {/* Card body */}
                 <div className="p-4 flex flex-col gap-2 flex-1">
 
-                  {/* Name + Rating */}
                   <div className="flex items-start justify-between gap-2">
                     <Link href={`/gym/${gym.slug}`}>
                       <h3 className="h3 text-text-primary group-hover:text-accent transition-colors leading-tight">
@@ -243,7 +259,6 @@ export default async function CityPage({ params }: Props) {
                     )}
                   </div>
 
-                  {/* Locality */}
                   <div className="flex items-center gap-1.5 text-[13px] text-text-muted">
                     <i className="ti ti-map-pin text-[13px]" />
                     {gym.locality_slug ? formatSlug(gym.locality_slug) : cityName}
@@ -254,7 +269,6 @@ export default async function CityPage({ params }: Props) {
                     )}
                   </div>
 
-                  {/* Hours */}
                   {gym.timing_open && (
                     <div className="text-[12px] text-text-muted flex items-center gap-1.5">
                       <i className="ti ti-clock text-[12px]" />
@@ -262,7 +276,6 @@ export default async function CityPage({ params }: Props) {
                     </div>
                   )}
 
-                  {/* Amenity tags */}
                   {gym.amenities?.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-1">
                       {gym.amenities.slice(0, 3).map((a: string, i: number) => (
@@ -283,7 +296,6 @@ export default async function CityPage({ params }: Props) {
                     </div>
                   )}
 
-                  {/* Footer — price + CTA */}
                   <div className="mt-auto pt-3 bt-hair flex items-center justify-between gap-2">
                     <div>
                       {gym.price_monthly ? (
@@ -310,131 +322,198 @@ export default async function CityPage({ params }: Props) {
             ))}
           </div>
         )}
+
+        {/* PAGINATION */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-12 flex-wrap">
+
+            {currentPage > 1 && (
+              <Link
+                href={`/gyms/${citySlug}?page=${currentPage - 1}`}
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-surface b-hair rounded-md text-[13px] text-text-secondary hover:border-border-hi hover:text-text-primary transition-colors"
+              >
+                <i className="ti ti-chevron-left text-[14px]" />
+                Previous
+              </Link>
+            )}
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(p =>
+                p === 1 ||
+                p === totalPages ||
+                Math.abs(p - currentPage) <= 2
+              )
+              .reduce((acc: (number | string)[], p, idx, arr) => {
+                if (idx > 0 && (p as number) - (arr[idx - 1] as number) > 1) {
+                  acc.push('...')
+                }
+                acc.push(p)
+                return acc
+              }, [])
+              .map((p, idx) =>
+                p === '...'
+                  ? (
+                    <span key={`ellipsis-${idx}`} className="px-2 text-text-muted text-[13px]">
+                      …
+                    </span>
+                  )
+                  : (
+                    <Link
+                      key={`page-${p}`}
+                      href={`/gyms/${citySlug}?page=${p}`}
+                      className={`w-10 h-10 flex items-center justify-center rounded-md text-[13px] font-semibold transition-colors ${
+                        p === currentPage
+                          ? 'bg-accent text-[#0C0C0C]'
+                          : 'bg-surface b-hair text-text-secondary hover:border-border-hi hover:text-text-primary'
+                      }`}
+                    >
+                      {p}
+                    </Link>
+                  )
+              )
+            }
+
+            {currentPage < totalPages && (
+              <Link
+                href={`/gyms/${citySlug}?page=${currentPage + 1}`}
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-surface b-hair rounded-md text-[13px] text-text-secondary hover:border-border-hi hover:text-text-primary transition-colors"
+              >
+                Next
+                <i className="ti ti-chevron-right text-[14px]" />
+              </Link>
+            )}
+
+          </div>
+        )}
       </div>
 
-      {/* BROWSE BY AREA */}
-      {localities.length > 0 && (
-        <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12 bb-hair bt-hair">
-          <h2 className="h2 text-text-primary mb-8">Browse Gyms by Area in {cityName}</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {localities.map((loc: { id: string; name: string; slug: string; gym_count: number }) => (
-              <Link
-                key={loc.id}
-                href={`/gyms/${citySlug}/${loc.slug}`}
-                className="bg-surface b-hair rounded-md p-4 hover:bg-raised hover:border-border-hi transition-colors"
-              >
-                <div className="text-[14px] font-semibold text-text-primary">
-                  Gyms in {loc.name}
-                </div>
-                {loc.gym_count > 0 && (
-                  <div className="text-[12px] text-text-muted mt-1">{loc.gym_count} gyms</div>
-                )}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* SEO CONTENT */}
-      <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12">
-
-        {/* About */}
-        <div className="max-w-[780px] mb-12">
-          <h2 className="h2 text-text-primary mb-4">About Gyms in {cityName}</h2>
-          <p className="text-[15px] text-text-secondary leading-relaxed">
-            {city.about_text || `${cityName}'s fitness scene spans 24-hour franchise gyms to boutique strength studios. Monthly memberships range from ₹1,200 for neighbourhood gyms to ₹6,000+ for premium clubs.`}
-          </p>
-        </div>
-
-        {/* What to look for */}
-        <div className="max-w-[780px] mb-12">
-          <h2 className="h2 text-text-primary mb-4">What to Look for in a Gym in {cityName}</h2>
-          <ul className="space-y-3">
-            {(city.what_to_look_for?.length > 0
-              ? city.what_to_look_for
-              : [
-                  'Certified trainers and a free trial session before you commit',
-                  'Hygiene: sanitised equipment, clean changing rooms, towel service',
-                  'Equipment quality: free weights, cardio mix, functional training zone',
-                  'Distance: under 15 minutes from home or office for better adherence',
-                  'Locker, shower, and parking for working professionals',
-                  'Women-only timings or dedicated zones if relevant to you',
-                ]
-            ).map((point: string) => (
-              <li key={point} className="flex items-start gap-3 text-[15px] text-text-secondary">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
-                {point}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Pricing table */}
-        <div className="max-w-[780px] mb-12">
-          <h2 className="h2 text-text-primary mb-4">Average Gym Membership Cost in {cityName}</h2>
-          <div className="b-hair rounded-md overflow-hidden">
-            <table className="w-full text-[14px]">
-              <thead>
-                <tr className="bg-surface">
-                  <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Tier</th>
-                  <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Monthly</th>
-                  <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Annual</th>
-                  <th className="text-left p-4 text-text-secondary font-semibold bb-hair hidden md:table-cell">Includes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { tier: 'Budget', monthly: city.price_budget_monthly || '₹1,200–1,800', annual: city.price_budget_annual || '₹10,000–15,000', includes: 'Equipment, locker, basic trainer' },
-                  { tier: 'Standard', monthly: city.price_standard_monthly || '₹2,000–3,500', annual: city.price_standard_annual || '₹18,000–28,000', includes: '+ Group classes, shower, personal plan' },
-                  { tier: 'Premium', monthly: city.price_premium_monthly || '₹4,000–8,000+', annual: city.price_premium_annual || '₹35,000–80,000', includes: '+ Pool, steam/sauna, dedicated PT' },
-                ].map((row, i) => (
-                  <tr key={row.tier} className={i < 2 ? 'bb-hair' : ''}>
-                    <td className="p-4 font-semibold text-text-primary">{row.tier}</td>
-                    <td className="p-4 text-text-secondary">{row.monthly}</td>
-                    <td className="p-4 text-text-secondary">{row.annual}</td>
-                    <td className="p-4 text-text-muted hidden md:table-cell">{row.includes}</td>
-                  </tr>
+      {/* SEO SECTIONS — page 1 only */}
+      {currentPage === 1 && (
+        <>
+          {/* BROWSE BY AREA */}
+          {localities.length > 0 && (
+            <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12 bb-hair bt-hair">
+              <h2 className="h2 text-text-primary mb-8">Browse Gyms by Area in {cityName}</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {localities.map((loc: { id: string; name: string; slug: string; gym_count: number }) => (
+                  <Link
+                    key={loc.id}
+                    href={`/gyms/${citySlug}/${loc.slug}`}
+                    className="bg-surface b-hair rounded-md p-4 hover:bg-raised hover:border-border-hi transition-colors"
+                  >
+                    <div className="text-[14px] font-semibold text-text-primary">
+                      Gyms in {loc.name}
+                    </div>
+                    {loc.gym_count > 0 && (
+                      <div className="text-[12px] text-text-muted mt-1">{loc.gym_count} gyms</div>
+                    )}
+                  </Link>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              </div>
+            </div>
+          )}
 
-        {/* FAQ */}
-        <div className="max-w-[780px] mb-12">
-          <h2 className="h2 text-text-primary mb-6">Frequently Asked Questions</h2>
-          <div className="space-y-3">
-            {faqs.map((faq: { q: string; a: string }, i: number) => (
-              <details key={i} className="bg-surface b-hair rounded-md group">
-                <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text-primary list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
-                  {faq.q}
-                  <i className="ti ti-chevron-down text-[16px] text-text-muted flex-shrink-0 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div className="px-4 pb-4 text-[14px] text-text-secondary leading-relaxed bt-hair pt-3">
-                  {faq.a}
-                </div>
-              </details>
-            ))}
-          </div>
-        </div>
+          <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12">
 
-        {/* Popular searches */}
-        <div className="max-w-[780px]">
-          <h2 className="h2 text-text-primary mb-6">Popular Searches in {cityName}</h2>
-          <div className="flex flex-wrap gap-2">
-            {popularSearches.map((s) => (
-              <Link
-                key={s.label}
-                href={s.href}
-                className="text-[13px] text-text-muted px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text-primary transition-colors"
-              >
-                {s.label}
-              </Link>
-            ))}
-          </div>
-        </div>
+            {/* About */}
+            <div className="max-w-[780px] mb-12">
+              <h2 className="h2 text-text-primary mb-4">About Gyms in {cityName}</h2>
+              <p className="text-[15px] text-text-secondary leading-relaxed">
+                {city.about_text || `${cityName}'s fitness scene spans 24-hour franchise gyms to boutique strength studios. Monthly memberships range from ₹1,200 for neighbourhood gyms to ₹6,000+ for premium clubs.`}
+              </p>
+            </div>
 
-      </div>
+            {/* What to look for */}
+            <div className="max-w-[780px] mb-12">
+              <h2 className="h2 text-text-primary mb-4">What to Look for in a Gym in {cityName}</h2>
+              <ul className="space-y-3">
+                {(city.what_to_look_for?.length > 0
+                  ? city.what_to_look_for
+                  : [
+                      'Certified trainers and a free trial session before you commit',
+                      'Hygiene: sanitised equipment, clean changing rooms, towel service',
+                      'Equipment quality: free weights, cardio mix, functional training zone',
+                      'Distance: under 15 minutes from home or office for better adherence',
+                      'Locker, shower, and parking for working professionals',
+                      'Women-only timings or dedicated zones if relevant to you',
+                    ]
+                ).map((point: string) => (
+                  <li key={point} className="flex items-start gap-3 text-[15px] text-text-secondary">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Pricing table */}
+            <div className="max-w-[780px] mb-12">
+              <h2 className="h2 text-text-primary mb-4">Average Gym Membership Cost in {cityName}</h2>
+              <div className="b-hair rounded-md overflow-hidden">
+                <table className="w-full text-[14px]">
+                  <thead>
+                    <tr className="bg-surface">
+                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Tier</th>
+                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Monthly</th>
+                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Annual</th>
+                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair hidden md:table-cell">Includes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { tier: 'Budget', monthly: city.price_budget_monthly || '₹1,200–1,800', annual: city.price_budget_annual || '₹10,000–15,000', includes: 'Equipment, locker, basic trainer' },
+                      { tier: 'Standard', monthly: city.price_standard_monthly || '₹2,000–3,500', annual: city.price_standard_annual || '₹18,000–28,000', includes: '+ Group classes, shower, personal plan' },
+                      { tier: 'Premium', monthly: city.price_premium_monthly || '₹4,000–8,000+', annual: city.price_premium_annual || '₹35,000–80,000', includes: '+ Pool, steam/sauna, dedicated PT' },
+                    ].map((row, i) => (
+                      <tr key={row.tier} className={i < 2 ? 'bb-hair' : ''}>
+                        <td className="p-4 font-semibold text-text-primary">{row.tier}</td>
+                        <td className="p-4 text-text-secondary">{row.monthly}</td>
+                        <td className="p-4 text-text-secondary">{row.annual}</td>
+                        <td className="p-4 text-text-muted hidden md:table-cell">{row.includes}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* FAQ */}
+            <div className="max-w-[780px] mb-12">
+              <h2 className="h2 text-text-primary mb-6">Frequently Asked Questions</h2>
+              <div className="space-y-3">
+                {faqs.map((faq: { q: string; a: string }, i: number) => (
+                  <details key={i} className="bg-surface b-hair rounded-md group">
+                    <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text-primary list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
+                      {faq.q}
+                      <i className="ti ti-chevron-down text-[16px] text-text-muted flex-shrink-0 group-open:rotate-180 transition-transform" />
+                    </summary>
+                    <div className="px-4 pb-4 text-[14px] text-text-secondary leading-relaxed bt-hair pt-3">
+                      {faq.a}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+
+            {/* Popular searches */}
+            <div className="max-w-[780px]">
+              <h2 className="h2 text-text-primary mb-6">Popular Searches in {cityName}</h2>
+              <div className="flex flex-wrap gap-2">
+                {popularSearches.map((s) => (
+                  <Link
+                    key={s.label}
+                    href={s.href}
+                    className="text-[13px] text-text-muted px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text-primary transition-colors"
+                  >
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </>
+      )}
 
       {/* JSON-LD SCHEMA */}
       <script
@@ -463,13 +542,13 @@ export default async function CityPage({ params }: Props) {
               {
                 '@type': 'ItemList',
                 name: `Top Gyms in ${cityName}`,
-                numberOfItems: gyms.length,
+                numberOfItems: total,
                 itemListElement: gyms.slice(0, 10).map((gym: {
                   slug: string; name: string; address: string;
                   locality_slug: string | null; rating: number; review_count: number;
                 }, i: number) => ({
                   '@type': 'ListItem',
-                  position: i + 1,
+                  position: offset + i + 1,
                   item: {
                     '@type': ['HealthClub', 'SportsActivityLocation', 'LocalBusiness'],
                     '@id': `https://gymlocator.in/gym/${gym.slug}`,
@@ -492,14 +571,16 @@ export default async function CityPage({ params }: Props) {
                   },
                 })),
               },
-              {
-                '@type': 'FAQPage',
-                mainEntity: faqs.map((faq: { q: string; a: string }) => ({
-                  '@type': 'Question',
-                  name: faq.q,
-                  acceptedAnswer: { '@type': 'Answer', text: faq.a },
-                })),
-              },
+              ...(currentPage === 1 ? [
+                {
+                  '@type': 'FAQPage',
+                  mainEntity: faqs.map((faq: { q: string; a: string }) => ({
+                    '@type': 'Question',
+                    name: faq.q,
+                    acceptedAnswer: { '@type': 'Answer', text: faq.a },
+                  })),
+                },
+              ] : []),
             ],
           }),
         }}

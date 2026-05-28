@@ -40,14 +40,19 @@ export async function getGymBySlug(slug: string) {
   return data
 }
 
-export async function getGymsByCity(citySlug: string) {
-  const { data } = await supabase
+export async function getGymsByCity(
+  citySlug: string,
+  limit = 12,
+  offset = 0
+) {
+  const { data, count } = await supabase
     .from('gyms')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('city_slug', citySlug)
     .eq('is_active', true)
-    .order('order_index', { ascending: true })
-  return data ?? []
+    .order('rating', { ascending: false })
+    .range(offset, offset + limit - 1)
+  return { gyms: data ?? [], total: count ?? 0 }
 }
 
 export async function getLocalitiesByCity(citySlug: string) {
