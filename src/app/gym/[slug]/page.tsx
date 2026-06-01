@@ -20,6 +20,10 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: `${gym.name}, ${gym.locality_slug ? formatSlug(gym.locality_slug) + ' ' : ''}${formatSlug(gym.city_slug)} — Timings, Fees & Reviews | Gymlocator`,
     description: `${gym.name} in ${gym.locality_slug ? formatSlug(gym.locality_slug) + ', ' : ''}${formatSlug(gym.city_slug)}. ${gym.price_monthly ? 'Membership from Rs ' + gym.price_monthly + '/month. ' : ''}Timings, amenities, contact and directions on Gymlocator.`,
+    robots: {
+      index: true,
+      follow: true,
+    },
     alternates: {
       canonical: `https://gymlocator.in/gym/${slug}`,
     },
@@ -92,8 +96,21 @@ export default async function GymDetailPage({ params }: Props) {
           <div className="flex-1 min-w-0">
 
             {/* IMAGE GALLERY */}
-            <div className="grid grid-cols-4 gap-2 mb-8">
-              <div className="col-span-4 md:col-span-2 img-placeholder rounded-md h-[280px] flex items-center justify-center relative">
+            <div className="grid grid-cols-4 gap-2 mb-8 rounded-md overflow-hidden">
+
+              {/* Hero image — takes 2 cols */}
+              <div className="col-span-4 md:col-span-2 relative h-[280px] bg-raised">
+                {gym.images?.[0] && gym.images[0] !== '' && gym.images[0] !== 'nan' ? (
+                  <img
+                    src={gym.images[0]}
+                    alt={gym.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <i className="ti ti-building-skyscraper text-[48px] text-text-disabled" />
+                  </div>
+                )}
                 {gym.is_featured && (
                   <span className="absolute top-3 left-3 label !text-accent bg-accent-dim px-2 py-1 rounded-sm">
                     Featured
@@ -101,18 +118,32 @@ export default async function GymDetailPage({ params }: Props) {
                 )}
                 {gym.is_verified && (
                   <span className="absolute top-3 right-3 label !text-accent bg-accent-dim px-2 py-1 rounded-sm flex items-center gap-1">
-                    <i className="ti ti-circle-check text-[12px]" /> Verified
+                    <i className="ti ti-circle-check text-[12px]" />
+                    Verified
                   </span>
                 )}
-                <span className="text-[12px] text-text-disabled">Main photo</span>
               </div>
+
+              {/* Thumbnail grid — 2x2 */}
               <div className="hidden md:grid col-span-2 grid-rows-2 gap-2">
                 {[1, 2, 3, 4].map((n) => (
-                  <div key={n} className="img-placeholder rounded-md flex items-center justify-center h-[134px]">
-                    <span className="text-[11px] text-text-disabled">Photo {n + 1}</span>
+                  <div key={n} className="relative h-[134px] bg-raised">
+                    {gym.images?.[n] && gym.images[n] !== '' && gym.images[n] !== 'nan' ? (
+                      <img
+                        src={gym.images[n]}
+                        alt={`${gym.name} photo ${n + 1}`}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <i className="ti ti-photo text-[24px] text-text-disabled" />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
+
             </div>
 
             {/* GYM NAME + RATING */}
@@ -303,43 +334,6 @@ export default async function GymDetailPage({ params }: Props) {
                   </a>
                 )}
 
-              </div>
-
-              {/* GYM QUICK INFO */}
-              <div className="bg-surface b-hair rounded-md p-5">
-                <div className="label !text-text-muted mb-4">Quick info</div>
-                <div className="space-y-3">
-                  {[
-                    {
-                      icon: 'ti-clock',
-                      label: 'Timings',
-                      value: gym.is_247 ? '24 / 7' : gym.timing_open ? `${gym.timing_open} – ${gym.timing_close}` : 'Call to confirm',
-                    },
-                    {
-                      icon: 'ti-map-pin',
-                      label: 'Locality',
-                      value: localityName,
-                    },
-                    {
-                      icon: 'ti-users',
-                      label: 'Gender',
-                      value: gym.gender === 'women-only' ? 'Women only' : gym.gender === 'men-only' ? 'Men only' : 'Mixed',
-                    },
-                    {
-                      icon: 'ti-air-conditioning',
-                      label: 'AC',
-                      value: gym.ac ? 'Yes' : 'No',
-                    },
-                  ].map((item) => (
-                    <div key={item.label} className="flex items-center justify-between text-[13px]">
-                      <div className="flex items-center gap-2 text-text-muted">
-                        <i className={`ti ${item.icon} text-[14px]`} />
-                        {item.label}
-                      </div>
-                      <span className="text-text-primary font-semibold">{item.value}</span>
-                    </div>
-                  ))}
-                </div>
               </div>
 
             </div>
