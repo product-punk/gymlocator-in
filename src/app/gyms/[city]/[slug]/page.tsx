@@ -123,6 +123,8 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
   let pageTitle: string
   let pageSubtitle: string
   let localityName: string | null = null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let locality: Record<string, any> | null = null
 
   if (isAmenity) {
     const label = AMENITY_LABELS[slug] || formatSlug(slug)
@@ -130,7 +132,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
     pageTitle = `${label} Gyms in ${cityName}`
     pageSubtitle = `Compare ${gymData.total} ${label} gyms in ${cityName} by fees, ratings and timings.`
   } else {
-    const locality = await getLocalityBySlug(citySlug, slug)
+    locality = await getLocalityBySlug(citySlug, slug)
     localityName = (locality?.name as string | null) ?? formatSlug(slug)
     gymData = await getGymsByLocality(citySlug, slug, GYMS_PER_PAGE, offset, filters)
     pageTitle = `Best Gyms in ${localityName}, ${cityName}`
@@ -278,6 +280,105 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
 
       </div>
 
+      {/* LOCALITY CONTENT SECTIONS */}
+      {currentPage === 1 && !isAmenity && locality && (
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10 pb-16 mt-12 space-y-12">
+
+          {/* About */}
+          {locality.about_text && (
+            <div className="max-w-[780px]">
+              <h2 className="h2 text-text-primary mb-4">About Gyms in {localityName}</h2>
+              <p className="text-[15px] text-text-secondary leading-relaxed">
+                {locality.about_text as string}
+              </p>
+            </div>
+          )}
+
+          {/* What to look for */}
+          {locality.what_to_look_for?.length > 0 && (
+            <div className="max-w-[780px]">
+              <h2 className="h2 text-text-primary mb-4">What to Look for in a Gym in {localityName}</h2>
+              <ul className="space-y-3">
+                {(locality.what_to_look_for as string[]).map((point) => (
+                  <li key={point} className="flex items-start gap-3 text-[15px] text-text-secondary">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Pricing */}
+          {locality.price_budget_monthly && (
+            <div className="max-w-[780px]">
+              <h2 className="h2 text-text-primary mb-4">Gym Membership Cost in {localityName}</h2>
+              <div className="b-hair rounded-md overflow-hidden">
+                <table className="w-full text-[14px]">
+                  <thead>
+                    <tr className="bg-surface">
+                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Tier</th>
+                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Monthly</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {([
+                      { tier: 'Budget', price: locality.price_budget_monthly },
+                      { tier: 'Standard', price: locality.price_standard_monthly },
+                      { tier: 'Premium', price: locality.price_premium_monthly },
+                    ] as { tier: string; price: unknown }[]).filter((r) => r.price).map((row, i, arr) => (
+                      <tr key={row.tier} className={i < arr.length - 1 ? 'bb-hair' : ''}>
+                        <td className="p-4 font-semibold text-text-primary">{row.tier}</td>
+                        <td className="p-4 text-text-secondary">{row.price as string}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* FAQ */}
+          {locality.faqs?.length > 0 && (
+            <div className="max-w-[780px]">
+              <h2 className="h2 text-text-primary mb-6">Frequently Asked Questions</h2>
+              <div className="space-y-3">
+                {(locality.faqs as { q: string; a: string }[]).map((faq, i) => (
+                  <details key={i} className="bg-surface b-hair rounded-md group">
+                    <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text-primary list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
+                      {faq.q}
+                      <i className="ti ti-chevron-down text-[16px] text-text-muted flex-shrink-0 group-open:rotate-180 transition-transform" />
+                    </summary>
+                    <div className="px-4 pb-4 text-[14px] text-text-secondary leading-relaxed bt-hair pt-3">
+                      {faq.a}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Popular searches */}
+          {locality.popular_searches?.length > 0 && (
+            <div className="max-w-[780px]">
+              <h2 className="h2 text-text-primary mb-6">Popular Searches in {localityName}</h2>
+              <div className="flex flex-wrap gap-2">
+                {(locality.popular_searches as { label: string; href: string }[]).map((s) => (
+                  <Link
+                    key={s.label}
+                    href={s.href}
+                    className="text-[13px] text-text-muted px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text-primary transition-colors"
+                  >
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+        </div>
+      )}
+
       {/* JSON-LD SCHEMA */}
       <script
         type="application/ld+json"
@@ -332,6 +433,14 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
                   },
                 })),
               },
+              ...(currentPage === 1 && !isAmenity && locality?.faqs?.length > 0 ? [{
+                '@type': 'FAQPage',
+                mainEntity: (locality!.faqs as { q: string; a: string }[]).map((faq) => ({
+                  '@type': 'Question',
+                  name: faq.q,
+                  acceptedAnswer: { '@type': 'Answer', text: faq.a },
+                })),
+              }] : []),
             ],
           }),
         }}
