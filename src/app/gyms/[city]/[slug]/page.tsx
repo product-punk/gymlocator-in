@@ -6,6 +6,7 @@ import {
   getGymsByLocality,
   getGymsByAmenity,
 } from '@/lib/supabase/queries'
+import GymCard from '@/components/shared/GymCard'
 
 export const revalidate = 3600
 
@@ -201,104 +202,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {gyms.map((gym) => (
-              <article
-                key={gym.id}
-                className="bg-surface b-hair rounded-md overflow-hidden flex flex-col hover:border-border-hi transition-colors group"
-              >
-                <Link href={`/gym/${gym.slug}`} className="block">
-                  <div className="img-placeholder h-[180px] relative">
-                    {gym.images?.[0] && gym.images[0] !== '' && (
-                      <img
-                        src={gym.images[0]}
-                        alt={gym.name}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    )}
-                    {gym.is_featured && (
-                      <span className="absolute top-3 left-3 label !text-accent bg-accent-dim px-2 py-1 rounded-sm">
-                        Featured
-                      </span>
-                    )}
-                  </div>
-                </Link>
-
-                <div className="p-4 flex flex-col gap-2 flex-1">
-                  <div className="flex items-start justify-between gap-2">
-                    <Link href={`/gym/${gym.slug}`}>
-                      <h3 className="h3 text-text-primary group-hover:text-accent transition-colors leading-tight">
-                        {gym.name}
-                      </h3>
-                    </Link>
-                    {gym.rating > 0 && (
-                      <div className="flex items-center gap-1.5 flex-shrink-0">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                        <span className="text-[13px] font-bold text-text-primary">{gym.rating}</span>
-                        {gym.review_count > 0 && (
-                          <span className="text-[12px] text-text-muted">({gym.review_count})</span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-1.5 text-[13px] text-text-muted">
-                    <i className="ti ti-map-pin text-[13px]" />
-                    {gym.locality_slug ? formatSlug(gym.locality_slug) : cityName}
-                    {gym.is_247 && (
-                      <span className="ml-auto text-[11px] font-bold uppercase tracking-[0.08em] bg-accent-dim text-accent px-2 py-0.5 rounded-sm">
-                        24/7
-                      </span>
-                    )}
-                  </div>
-
-                  {gym.timing_open && (
-                    <div className="text-[12px] text-text-muted flex items-center gap-1.5">
-                      <i className="ti ti-clock text-[12px]" />
-                      {gym.timing_open} – {gym.timing_close}
-                    </div>
-                  )}
-
-                  {gym.amenities?.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                      {gym.amenities.slice(0, 3).map((a, i) => (
-                        <span
-                          key={a}
-                          className={`text-[11px] font-bold uppercase tracking-[0.08em] px-2 py-1 rounded-sm ${
-                            i === 0
-                              ? 'bg-accent-dim text-accent'
-                              : 'bg-raised b-hair text-text-muted'
-                          }`}
-                        >
-                          {a}
-                        </span>
-                      ))}
-                      {gym.amenities.length > 3 && (
-                        <span className="text-[11px] text-text-muted px-2 py-1">
-                          +{gym.amenities.length - 3}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="mt-auto pt-3 bt-hair flex items-center justify-between gap-2">
-                    {gym.price_monthly ? (
-                      <div className="text-[15px] font-bold text-text-primary">
-                        ₹{gym.price_monthly.toLocaleString('en-IN')}
-                        <span className="text-[12px] font-normal text-text-muted">/mo</span>
-                      </div>
-                    ) : (
-                      <div className="text-[13px] text-text-muted">Price on request</div>
-                    )}
-                    <Link
-                      href={`/gym/${gym.slug}`}
-                      className="inline-flex items-center gap-1.5 bg-accent text-[#0C0C0C] font-bold text-[12px] px-3 py-2 rounded-sm hover:bg-white transition-colors flex-shrink-0"
-                    >
-                      <i className="ti ti-arrow-right text-[13px]" />
-                      View
-                    </Link>
-                  </div>
-                </div>
-              </article>
+              <GymCard key={gym.id} gym={gym} />
             ))}
           </div>
         )}
