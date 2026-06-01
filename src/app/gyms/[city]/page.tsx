@@ -151,30 +151,6 @@ export default async function CityPage({ params, searchParams }: Props) {
           }
         </p>
 
-        {/* FILTER BAR */}
-        <div className="mt-6 flex flex-col sm:flex-row gap-2 p-2 bg-surface rounded-md b-hair max-w-[780px]">
-          <div className="flex items-center gap-3 flex-1 px-3">
-            <i className="ti ti-search text-[20px] text-text-muted" />
-            <input
-              type="text"
-              placeholder="Search by locality, pincode or gym name…"
-              className="bg-transparent w-full py-3 text-[15px] text-text-primary placeholder:text-text-muted border-0 outline-none"
-            />
-          </div>
-          <button className="bg-accent text-base font-bold text-[14px] px-6 py-3 rounded-sm hover:bg-white transition-colors">
-            Search
-          </button>
-        </div>
-
-        {/* FILTER CHIPS */}
-        <div className="mt-4 flex flex-wrap gap-2">
-          {['All', 'Women-only', 'AC', '24/7', 'CrossFit', 'Yoga', 'Swimming', 'Budget', 'Premium'].map((f) => (
-            <button key={f} className={`filter-pill ${f === 'All' ? 'active' : ''}`}>
-              {f}
-            </button>
-          ))}
-        </div>
-
         {/* LOCALITY QUICK-JUMP */}
         {localities.length > 0 && (
           <div className="mt-4 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
