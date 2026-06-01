@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -7,6 +8,7 @@ import {
   getGymsByAmenity,
 } from '@/lib/supabase/queries'
 import GymCard from '@/components/shared/GymCard'
+import GymFilters from '@/components/shared/GymFilters'
 
 export const revalidate = 3600
 
@@ -58,7 +60,7 @@ type Gym = {
 
 type Props = {
   params: Promise<{ city: string; slug: string }>
-  searchParams: Promise<{ page?: string }>
+  searchParams: Promise<{ page?: string; gender?: string; '247'?: string; min_rating?: string; sort?: string }>
 }
 
 function formatSlug(slug: string) {
@@ -71,8 +73,9 @@ function formatSlug(slug: string) {
 
 export async function generateMetadata({ params, searchParams }: Props) {
   const { city: citySlug, slug } = await params
-  const { page } = await searchParams
+  const { page, gender, '247': is247, min_rating } = await searchParams
   const currentPage = parseInt(page || '1')
+  const hasFilters = !!(gender || is247 || min_rating)
   const isAmenity = AMENITIES.includes(slug as typeof AMENITIES[number])
   const cityName = formatSlug(citySlug)
   const city = await getCityBySlug(citySlug)
@@ -92,16 +95,22 @@ export async function generateMetadata({ params, searchParams }: Props) {
   return {
     title: `Best Gyms in ${localityName}, ${cityName} — Fees, Timings & Reviews | Gymlocator`,
     description: `Discover top gyms in ${localityName}, ${cityName}. Compare fees, ratings, timings & amenities. Filter by 24x7, women-only, personal trainer & more.`,
-    robots: { index: currentPage === 1, follow: true },
+    robots: { index: currentPage === 1 && !hasFilters, follow: true },
     alternates: { canonical: `https://gymlocator.in/gyms/${citySlug}/${slug}` },
   }
 }
 
 export default async function CitySlugPage({ params, searchParams }: Props) {
   const { city: citySlug, slug } = await params
-  const { page } = await searchParams
+  const { page, gender, '247': is247, min_rating, sort } = await searchParams
   const currentPage = parseInt(page || '1')
   const offset = (currentPage - 1) * GYMS_PER_PAGE
+  const filters = {
+    gender,
+    is247: is247 === '1',
+    minRating: min_rating ? parseFloat(min_rating) : undefined,
+    sort,
+  }
 
   const isAmenity = AMENITIES.includes(slug as typeof AMENITIES[number])
 
@@ -123,7 +132,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
   } else {
     const locality = await getLocalityBySlug(citySlug, slug)
     localityName = (locality?.name as string | null) ?? formatSlug(slug)
-    gymData = await getGymsByLocality(citySlug, slug, GYMS_PER_PAGE, offset)
+    gymData = await getGymsByLocality(citySlug, slug, GYMS_PER_PAGE, offset, filters)
     pageTitle = `Best Gyms in ${localityName}, ${cityName}`
     pageSubtitle = `Compare ${gymData.total} gyms in ${localityName} by fees, ratings, timings and amenities.`
   }
@@ -181,6 +190,13 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
           <span>{cityName}</span>
         </div>
       </div>
+
+      {/* FILTERS — locality pages only */}
+      {!isAmenity && (
+        <Suspense fallback={<div />}>
+          <GymFilters citySlug={citySlug} localitySlug={slug} total={total} />
+        </Suspense>
+      )}
 
       {/* GYM GRID */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12">

@@ -1,3 +1,5 @@
+import SearchBar from './SearchBar'
+
 const CITIES = ['Bangalore', 'Mumbai', 'Delhi', 'Pune']
 
 const STATS = [
@@ -30,21 +32,8 @@ export default function Hero() {
         </p>
 
         {/* Search bar */}
-        <div className="mt-10 max-w-[780px]">
-          <div className="flex flex-col sm:flex-row gap-2 p-2 bg-surface rounded-md b-hair">
-            <div className="flex items-center gap-3 flex-1 px-3">
-              <i className="ti ti-search text-[20px] text-text-muted" />
-              <input
-                type="text"
-                placeholder="Search by city, locality or gym name…"
-                className="bg-transparent w-full py-3 text-[15px] text-text-primary placeholder:text-text-muted border-0 outline-none"
-              />
-            </div>
-            <button className="bg-accent text-base font-bold text-[14px] px-6 py-3 rounded-sm hover:bg-white transition-colors inline-flex items-center gap-2">
-              <i className="ti ti-search text-[16px]" />
-              Search
-            </button>
-          </div>
+        <div className="mt-10">
+          <SearchBar />
         </div>
 
         {/* Quick city links */}

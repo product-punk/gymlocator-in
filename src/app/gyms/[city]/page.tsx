@@ -1,7 +1,9 @@
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getCityBySlug, getGymsByCity, getLocalitiesByCity } from '@/lib/supabase/queries'
 import GymCard from '@/components/shared/GymCard'
+import GymFilters from '@/components/shared/GymFilters'
 
 export const revalidate = 3600
 
@@ -9,7 +11,7 @@ const GYMS_PER_PAGE = 12
 
 type Props = {
   params: Promise<{ city: string }>
-  searchParams: Promise<{ page?: string }>
+  searchParams: Promise<{ page?: string; gender?: string; '247'?: string; min_rating?: string; sort?: string }>
 }
 
 export async function generateStaticParams() {
@@ -27,7 +29,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params, searchParams }: Props) {
   const { city: citySlug } = await params
-  const { page } = await searchParams
+  const { page, gender, '247': is247, min_rating } = await searchParams
   const currentPage = parseInt(page || '1')
   const city = await getCityBySlug(citySlug)
   if (!city) return {}
@@ -35,7 +37,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
     title: `Best Gyms in ${city.name} – Compare Fees, Timings & Ratings | Gymlocator`,
     description: city.meta_description || `Find the best gyms in ${city.name} on Gymlocator. Compare ${city.gym_count}+ gyms by fees, ratings, timings & amenities.`,
     robots: {
-      index: currentPage === 1,
+      index: currentPage === 1 && !gender && !is247 && !min_rating,
       follow: true,
     },
     alternates: {
@@ -52,13 +54,19 @@ function formatSlug(slug: string) {
 
 export default async function CityPage({ params, searchParams }: Props) {
   const { city: citySlug } = await params
-  const { page } = await searchParams
+  const { page, gender, '247': is247, min_rating, sort } = await searchParams
   const currentPage = parseInt(page || '1')
   const offset = (currentPage - 1) * GYMS_PER_PAGE
+  const filters = {
+    gender,
+    is247: is247 === '1',
+    minRating: min_rating ? parseFloat(min_rating) : undefined,
+    sort,
+  }
 
   const [city, gymData, localities] = await Promise.all([
     getCityBySlug(citySlug),
-    getGymsByCity(citySlug, GYMS_PER_PAGE, offset),
+    getGymsByCity(citySlug, GYMS_PER_PAGE, offset, filters),
     getLocalitiesByCity(citySlug),
   ])
 
@@ -201,6 +209,11 @@ export default async function CityPage({ params, searchParams }: Props) {
           </span>
         </div>
       </div>
+
+      {/* FILTERS */}
+      <Suspense fallback={<div />}>
+        <GymFilters citySlug={citySlug} total={total} />
+      </Suspense>
 
       {/* GYM CARD GRID */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12">
