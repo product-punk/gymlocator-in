@@ -1,6 +1,14 @@
+import Link from 'next/link'
 import SearchBar from './SearchBar'
 
-const CITIES = ['Bangalore', 'Mumbai', 'Delhi', 'Pune']
+const POPULAR_CITIES = [
+  { name: 'Bangalore', slug: 'bangalore' },
+  { name: 'Mumbai', slug: 'mumbai' },
+  { name: 'Delhi', slug: 'delhi' },
+  { name: 'Pune', slug: 'pune' },
+  { name: 'Hyderabad', slug: 'hyderabad' },
+  { name: 'Chennai', slug: 'chennai' },
+]
 
 const STATS = [
   { value: '2,580+', label: 'Gyms listed' },
@@ -28,7 +36,7 @@ export default function Hero() {
         {/* Subtext */}
         <p className="max-w-[620px] text-[16px] leading-relaxed text-text-secondary mt-6">
           Discover, compare and connect with top fitness centers across India.
-          Filter by amenity, price tier, locality and timing — no signup needed.
+          Filter by amenity, price tier, locality and timing - no signup needed.
         </p>
 
         {/* Search bar */}
@@ -39,10 +47,15 @@ export default function Hero() {
         {/* Quick city links */}
         <div className="mt-6 flex flex-wrap items-center gap-x-1.5 gap-y-2 text-[13px] text-text-muted">
           <span className="label !text-text-muted mr-2">Popular</span>
-          {CITIES.map((city, i) => (
-            <span key={city} className="contents">
-              <a href="#" className="ghost px-2 py-1">{city}</a>
-              {i < CITIES.length - 1 && (
+          {POPULAR_CITIES.map((city, i) => (
+            <span key={city.slug} className="contents">
+              <Link
+                href={`/gyms/${city.slug}`}
+                className="text-[13px] text-text-muted hover:text-text-primary transition-colors px-2 py-1"
+              >
+                {city.name}
+              </Link>
+              {i < POPULAR_CITIES.length - 1 && (
                 <span className="text-text-disabled">·</span>
               )}
             </span>

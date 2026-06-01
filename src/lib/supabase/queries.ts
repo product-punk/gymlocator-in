@@ -5,18 +5,17 @@ export async function getCities() {
     .from('cities')
     .select('*')
     .eq('is_active', true)
-    .order('wave', { ascending: true })
+    .order('order_index', { ascending: true })
   return data ?? []
 }
 
-export async function getFeaturedGyms() {
+export async function getFeaturedGyms(limit = 6) {
   const { data } = await supabase
     .from('gyms')
     .select('*')
-    .eq('is_featured', true)
     .eq('is_active', true)
-    .order('order_index', { ascending: true })
-    .limit(6)
+    .order('rating', { ascending: false })
+    .limit(limit)
   return data ?? []
 }
 
