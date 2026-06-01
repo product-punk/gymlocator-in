@@ -158,23 +158,23 @@ export async function searchGymsAndLocalities(query: string) {
   const [gymsRes, citiesRes, localitiesRes] = await Promise.all([
     supabase
       .from('gyms')
-      .select('id, name, slug, city_slug, locality_slug, rating, images')
+      .select('id, name, slug, city_slug, locality_slug, rating, review_count, images, price_monthly, amenities, is_247, gender')
       .eq('is_active', true)
       .ilike('name', `%${q}%`)
       .order('rating', { ascending: false })
-      .limit(5),
+      .limit(20),
 
     supabase
       .from('cities')
       .select('id, name, slug, gym_count')
       .ilike('name', `%${q}%`)
-      .limit(3),
+      .limit(4),
 
     supabase
       .from('localities')
       .select('id, name, slug, city_slug')
       .ilike('name', `%${q}%`)
-      .limit(4),
+      .limit(6),
   ])
 
   return {
