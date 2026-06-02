@@ -34,8 +34,9 @@ const FOOTER_SECTIONS: { heading: string; links: FooterLink[] }[] = [
   {
     heading: 'Company',
     links: [
-      { label: 'About Us',       href: '', comingSoon: true },
-      { label: 'Contact',        href: '', comingSoon: true },
+      { label: 'About Us',       href: '/about' },
+      { label: 'Contact',        href: '/contact' },
+      { label: 'List your gym',  href: '/list-your-gym' },
       { label: 'Privacy Policy', href: '/privacy' },
       { label: 'Terms of Use',   href: '/terms' },
       { label: 'Sitemap',        href: '/sitemap.xml' },
