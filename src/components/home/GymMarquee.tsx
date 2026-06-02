@@ -22,7 +22,7 @@ export default function GymMarquee({ gyms }: { gyms: Gym[] }) {
   return (
     <section className="bb-hair py-10 overflow-hidden">
       <div className="text-center mb-8">
-        <div className="label !text-text-muted">
+        <div className="label !text-accent">
           Trusted by India&apos;s top gyms
         </div>
       </div>
@@ -37,7 +37,7 @@ export default function GymMarquee({ gyms }: { gyms: Gym[] }) {
               <span className="w-8 h-8 rounded-sm bg-raised flex items-center justify-center text-[11px] font-bold text-accent flex-shrink-0">
                 {gym.abbr}
               </span>
-              <span className="text-[13px] font-semibold text-text-secondary whitespace-nowrap">
+              <span className="text-[13px] font-semibold text-accent whitespace-nowrap">
                 {gym.name}
               </span>
             </div>

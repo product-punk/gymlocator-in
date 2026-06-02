@@ -30,7 +30,7 @@ export default function FeaturedGyms({ gyms }: { gyms: Gym[] }) {
         <div className="flex items-end justify-between gap-4 mb-10">
           <div>
             <div className="label mb-3">Featured</div>
-            <h2 className="h2 text-text-primary">Top-rated gyms</h2>
+            <h2 className="h2 text-text">Top-rated gyms</h2>
           </div>
           <a
             href="/gyms/bangalore"

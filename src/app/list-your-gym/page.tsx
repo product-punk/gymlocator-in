@@ -11,11 +11,11 @@ export default function ListYourGymPage() {
 
       {/* HERO */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-16 pb-12 bb-hair">
-        <div className="label !text-text-muted mb-4">For gym owners</div>
-        <h1 className="h1 text-text-primary max-w-[640px]">
+        <div className="label !text-accent mb-4">For gym owners</div>
+        <h1 className="h1 text-text max-w-[640px]">
           Get your gym in front of people searching right now.
         </h1>
-        <p className="text-[17px] text-text-secondary mt-5 max-w-[580px] leading-relaxed">
+        <p className="text-[17px] text-accent mt-5 max-w-[580px] leading-relaxed">
           Gymlocator.in is free to list on. Verified gyms get priority placement on city and
           locality pages, putting you above unverified listings when someone searches for a gym
           near them.
@@ -26,7 +26,7 @@ export default function ListYourGymPage() {
 
         {/* Benefits */}
         <div>
-          <h2 className="h2 text-text-primary mb-6">Why list on Gymlocator.in</h2>
+          <h2 className="h2 text-text mb-6">Why list on Gymlocator.in</h2>
           <div className="space-y-4">
             {[
               {
@@ -60,8 +60,8 @@ export default function ListYourGymPage() {
                   <i className={`ti ${item.icon} text-[18px] text-accent`} />
                 </div>
                 <div>
-                  <div className="text-[14px] font-bold text-text-primary mb-0.5">{item.title}</div>
-                  <div className="text-[13px] text-text-secondary">{item.desc}</div>
+                  <div className="text-[14px] font-bold text-text mb-0.5">{item.title}</div>
+                  <div className="text-[13px] text-accent">{item.desc}</div>
                 </div>
               </div>
             ))}
@@ -70,7 +70,7 @@ export default function ListYourGymPage() {
 
         {/* Form */}
         <div>
-          <h2 className="h2 text-text-primary mb-6">Submit your gym</h2>
+          <h2 className="h2 text-text mb-6">Submit your gym</h2>
           <div className="bg-surface b-hair rounded-md p-6 space-y-4">
 
             {[
@@ -81,37 +81,37 @@ export default function ListYourGymPage() {
               { label: 'Email address',     type: 'email', placeholder: 'you@example.com' },
             ].map((field) => (
               <div key={field.label}>
-                <label className="block text-[13px] font-semibold text-text-secondary mb-1.5">
+                <label className="block text-[13px] font-semibold text-accent mb-1.5">
                   {field.label}
                 </label>
                 <input
                   type={field.type}
                   placeholder={field.placeholder}
-                  className="w-full bg-raised b-hair rounded-sm px-3 py-2.5 text-[14px] text-text-primary placeholder:text-text-disabled outline-none focus:border-border-hi transition-colors"
+                  className="w-full bg-raised b-hair rounded-sm px-3 py-2.5 text-[14px] text-text placeholder:text-accent outline-none focus:border-border-hi transition-colors"
                 />
               </div>
             ))}
 
             <div>
-              <label className="block text-[13px] font-semibold text-text-secondary mb-1.5">
+              <label className="block text-[13px] font-semibold text-accent mb-1.5">
                 Additional details (optional)
               </label>
               <textarea
                 rows={3}
                 placeholder="Monthly fees, timings, amenities, special offerings..."
-                className="w-full bg-raised b-hair rounded-sm px-3 py-2.5 text-[14px] text-text-primary placeholder:text-text-disabled outline-none focus:border-border-hi transition-colors resize-none"
+                className="w-full bg-raised b-hair rounded-sm px-3 py-2.5 text-[14px] text-text placeholder:text-accent outline-none focus:border-border-hi transition-colors resize-none"
               />
             </div>
 
             <a
               href="mailto:hello@gymlocator.in?subject=List my gym on Gymlocator.in"
-              className="w-full flex items-center justify-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[14px] py-3.5 rounded-sm hover:bg-white transition-colors mt-2"
+              className="w-full flex items-center justify-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[14px] py-3.5 rounded-sm hover:bg-text transition-colors mt-2"
             >
               <i className="ti ti-mail text-[16px]" />
               Send listing request
             </a>
 
-            <p className="text-[12px] text-text-disabled text-center">
+            <p className="text-[12px] text-accent text-center">
               We will review and publish your listing within 24 hours
             </p>
           </div>
@@ -129,8 +129,8 @@ export default function ListYourGymPage() {
             { n: '24hrs', l: 'Listing turnaround' },
           ].map((s) => (
             <div key={s.l}>
-              <div className="text-[28px] font-black tracking-tight text-[#0C0C0C]">{s.n}</div>
-              <div className="text-[12px] font-bold uppercase tracking-[0.08em] text-[#555555]">
+              <div className="text-[28px] font-black tracking-tight text-base">{s.n}</div>
+              <div className="text-[12px] font-bold uppercase tracking-[0.08em] text-accent">
                 {s.l}
               </div>
             </div>

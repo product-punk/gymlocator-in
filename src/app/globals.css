@@ -1,18 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-  /* Colors */
-  --color-base: #0C0C0C;
+  /*
+   * Five canonical brand tokens — use only these in new code.
+   *
+   *   base    → page background (the darkest layer)
+   *   surface → cards, panels, nav backgrounds (one step lighter)
+   *   border  → all dividers, outlines, input borders
+   *   accent  → secondary text, labels, metadata, icons, placeholders
+   *   text    → primary text: headings, names, prices, CTA copy
+   *
+   * Additional tokens below (raised, border-hi, accent-dim, text-*)
+   * are kept for legacy utility classes (ghost, filter-pill, silver-section).
+   * Do NOT add new shades — every new component should use the five above.
+   */
+
+  /* ── Core five ── */
+  --color-base:    #0C0C0C;
   --color-surface: #111111;
-  --color-raised: #1A1A1A;
-  --color-border: #222222;
-  --color-border-hi: #333333;
-  --color-accent: #D4D4D4;
-  --color-accent-dim: #1E1E1E;
-  --color-text-primary: #F0F0F0;
-  --color-text-secondary: #AAAAAA;
-  --color-text-muted: #555555;
-  --color-text-disabled: #333333;
+  --color-border:  #222222;
+  --color-accent:  #D4D4D4;
+  --color-text:    #F0F0F0;
+
+  /* ── Supporting (legacy — do not expand) ── */
+  --color-raised:         #1A1A1A;
+  --color-border-hi:      #333333;
+  --color-accent-dim:     #1E1E1E;
+  --color-text-primary:   #F0F0F0;   /* alias → text */
+  --color-text-secondary: #AAAAAA;   /* legacy only */
+  --color-text-muted:     #555555;   /* legacy only */
+  --color-text-disabled:  #333333;   /* legacy only */
 
   /* Typography */
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -69,10 +86,10 @@
 /* Ghost interactive element */
 .ghost {
   transition: color 150ms ease;
-  color: var(--color-text-secondary);
+  color: var(--color-accent);
 }
 .ghost:hover {
-  color: var(--color-text-primary);
+  color: var(--color-text);
 }
 
 /* Hide scrollbar cross-browser */
@@ -115,6 +132,7 @@
   background: #E0E0E0;
   color: #0C0C0C;
 }
+.silver-section .text-text            { color: #0C0C0C !important; }
 .silver-section .text-text-primary    { color: #0C0C0C !important; }
 .silver-section .text-text-secondary  { color: #333333 !important; }
 .silver-section .text-text-muted      { color: #666666 !important; }

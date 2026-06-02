@@ -40,7 +40,7 @@ export default function GymCard({ gym }: { gym: {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <i className="ti ti-building-skyscraper text-[40px] text-text-disabled" />
+              <i className="ti ti-building-skyscraper text-[40px] text-accent" />
             </div>
           )}
 
@@ -53,7 +53,7 @@ export default function GymCard({ gym }: { gym: {
                 </span>
               )}
               {gym.gender === 'women-only' && (
-                <span className="label !text-[#FF85A1] bg-[#2A1018] px-2 py-1 rounded-sm self-start">
+                <span className="label !text-text bg-surface px-2 py-1 rounded-sm self-start b-hair">
                   Women Only
                 </span>
               )}
@@ -81,23 +81,23 @@ export default function GymCard({ gym }: { gym: {
         {/* NAME + RATING */}
         <div className="flex items-start justify-between gap-2">
           <Link href={`/gym/${gym.slug}`}>
-            <h3 className="text-[15px] font-bold text-text-primary group-hover:text-accent transition-colors leading-snug">
+            <h3 className="text-[15px] font-bold text-text group-hover:text-accent transition-colors leading-snug">
               {gym.name}
             </h3>
           </Link>
           {(gym.rating ?? 0) > 0 && (
             <div className="flex items-center gap-1 flex-shrink-0">
               <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-              <span className="text-[13px] font-bold text-text-primary">{gym.rating}</span>
+              <span className="text-[13px] font-bold text-text">{gym.rating}</span>
               {(gym.review_count ?? 0) > 0 && (
-                <span className="text-[11px] text-text-muted">({gym.review_count})</span>
+                <span className="text-[11px] text-accent">({gym.review_count})</span>
               )}
             </div>
           )}
         </div>
 
         {/* LOCALITY */}
-        <div className="flex items-center gap-1.5 text-[12px] text-text-muted">
+        <div className="flex items-center gap-1.5 text-[12px] text-accent">
           <i className="ti ti-map-pin text-[12px]" />
           {gym.locality_slug
             ? formatSlug(gym.locality_slug)
@@ -106,7 +106,7 @@ export default function GymCard({ gym }: { gym: {
 
         {/* TIMINGS */}
         {(gym.timing_open || gym.is_247) && (
-          <div className="text-[12px] text-text-muted flex items-center gap-1.5">
+          <div className="text-[12px] text-accent flex items-center gap-1.5">
             <i className="ti ti-clock text-[12px]" />
             {gym.is_247
               ? '24 / 7 Open'
@@ -123,14 +123,14 @@ export default function GymCard({ gym }: { gym: {
                 className={`text-[11px] font-bold uppercase tracking-[0.07em] px-2 py-0.5 rounded-sm ${
                   i === 0
                     ? 'bg-accent-dim text-accent'
-                    : 'bg-raised b-hair text-text-muted'
+                    : 'bg-raised b-hair text-accent'
                 }`}
               >
                 {a}
               </span>
             ))}
             {gym.amenities!.length > 3 && (
-              <span className="text-[11px] text-text-muted px-1 py-0.5">
+              <span className="text-[11px] text-accent px-1 py-0.5">
                 +{gym.amenities!.length - 3}
               </span>
             )}
@@ -141,17 +141,17 @@ export default function GymCard({ gym }: { gym: {
         <div className="mt-auto pt-3 bt-hair flex items-center justify-between gap-2">
           <div>
             {gym.price_monthly ? (
-              <div className="text-[15px] font-bold text-text-primary">
+              <div className="text-[15px] font-bold text-text">
                 ₹{gym.price_monthly.toLocaleString('en-IN')}
-                <span className="text-[12px] font-normal text-text-muted">/mo</span>
+                <span className="text-[12px] font-normal text-accent">/mo</span>
               </div>
             ) : (
-              <div className="text-[13px] text-text-muted">Price on request</div>
+              <div className="text-[13px] text-accent">Price on request</div>
             )}
           </div>
           <Link
             href={`/gym/${gym.slug}`}
-            className="inline-flex items-center gap-1.5 bg-accent text-[#0C0C0C] font-bold text-[12px] px-3 py-2 rounded-sm hover:bg-white transition-colors flex-shrink-0"
+            className="inline-flex items-center gap-1.5 bg-accent text-[#0C0C0C] font-bold text-[12px] px-3 py-2 rounded-sm hover:bg-text transition-colors flex-shrink-0"
           >
             View gym
             <i className="ti ti-arrow-right text-[12px]" />

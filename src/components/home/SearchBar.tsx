@@ -101,8 +101,8 @@ export default function SearchBar() {
       >
         <div className="flex items-center gap-3 pl-4 pr-2 flex-1 min-w-0">
           {loading
-            ? <i className="ti ti-loader-2 text-[18px] text-text-muted animate-spin flex-shrink-0" />
-            : <i className="ti ti-search text-[18px] text-text-muted flex-shrink-0" />
+            ? <i className="ti ti-loader-2 text-[18px] text-accent animate-spin flex-shrink-0" />
+            : <i className="ti ti-search text-[18px] text-accent flex-shrink-0" />
           }
           <input
             type="text"
@@ -110,13 +110,13 @@ export default function SearchBar() {
             onChange={e => setQuery(e.target.value)}
             onFocus={() => hasResults && setOpen(true)}
             placeholder="Search by city, locality or gym name..."
-            className="flex-1 min-w-0 bg-transparent py-4 text-[15px] text-text-primary placeholder:text-text-muted outline-none"
+            className="flex-1 min-w-0 bg-transparent py-4 text-[15px] text-text placeholder:text-accent outline-none"
           />
           {query && (
             <button
               type="button"
               onClick={() => { setQuery(''); setOpen(false) }}
-              className="p-1 text-text-muted hover:text-text-primary transition-colors flex-shrink-0"
+              className="p-1 text-accent hover:text-text transition-colors flex-shrink-0"
             >
               <i className="ti ti-x text-[16px]" />
             </button>
@@ -124,7 +124,7 @@ export default function SearchBar() {
         </div>
         <button
           type="submit"
-          className="bg-accent text-[#0C0C0C] font-bold text-[14px] px-6 py-4 hover:bg-white transition-colors flex-shrink-0 flex items-center gap-2"
+          className="bg-accent text-[#0C0C0C] font-bold text-[14px] px-6 py-4 hover:bg-text transition-colors flex-shrink-0 flex items-center gap-2"
         >
           <i className="ti ti-search text-[15px]" />
           <span className="hidden sm:inline">Search</span>
@@ -137,7 +137,7 @@ export default function SearchBar() {
 
           {results.cities.length > 0 && (
             <div>
-              <div className="px-4 py-2 label !text-text-disabled">Cities</div>
+              <div className="px-4 py-2 label !text-accent">Cities</div>
               {results.cities.map((city) => (
                 <button
                   key={city.id}
@@ -148,12 +148,12 @@ export default function SearchBar() {
                   }}
                   className="w-full flex items-center gap-3 px-4 py-3 hover:bg-raised transition-colors text-left"
                 >
-                  <i className="ti ti-building-skyscraper text-[16px] text-text-muted flex-shrink-0" />
+                  <i className="ti ti-building-skyscraper text-[16px] text-accent flex-shrink-0" />
                   <div>
-                    <div className="text-[14px] font-semibold text-text-primary">{city.name}</div>
-                    <div className="text-[12px] text-text-muted">{city.gym_count} gyms</div>
+                    <div className="text-[14px] font-semibold text-text">{city.name}</div>
+                    <div className="text-[12px] text-accent">{city.gym_count} gyms</div>
                   </div>
-                  <i className="ti ti-arrow-right text-[14px] text-text-muted ml-auto" />
+                  <i className="ti ti-arrow-right text-[14px] text-accent ml-auto" />
                 </button>
               ))}
             </div>
@@ -161,7 +161,7 @@ export default function SearchBar() {
 
           {results.localities.length > 0 && (
             <div className="bt-hair">
-              <div className="px-4 py-2 label !text-text-disabled">Localities</div>
+              <div className="px-4 py-2 label !text-accent">Localities</div>
               {results.localities.map((loc) => (
                 <button
                   key={loc.id}
@@ -172,12 +172,12 @@ export default function SearchBar() {
                   }}
                   className="w-full flex items-center gap-3 px-4 py-3 hover:bg-raised transition-colors text-left"
                 >
-                  <i className="ti ti-map-pin text-[16px] text-text-muted flex-shrink-0" />
+                  <i className="ti ti-map-pin text-[16px] text-accent flex-shrink-0" />
                   <div>
-                    <div className="text-[14px] font-semibold text-text-primary">{loc.name}</div>
-                    <div className="text-[12px] text-text-muted">{formatSlug(loc.city_slug)}</div>
+                    <div className="text-[14px] font-semibold text-text">{loc.name}</div>
+                    <div className="text-[12px] text-accent">{formatSlug(loc.city_slug)}</div>
                   </div>
-                  <i className="ti ti-arrow-right text-[14px] text-text-muted ml-auto" />
+                  <i className="ti ti-arrow-right text-[14px] text-accent ml-auto" />
                 </button>
               ))}
             </div>
@@ -185,7 +185,7 @@ export default function SearchBar() {
 
           {results.gyms.length > 0 && (
             <div className="bt-hair">
-              <div className="px-4 py-2 label !text-text-disabled">Gyms</div>
+              <div className="px-4 py-2 label !text-accent">Gyms</div>
               {results.gyms.map((gym) => (
                 <button
                   key={gym.id}
@@ -196,10 +196,10 @@ export default function SearchBar() {
                   }}
                   className="w-full flex items-center gap-3 px-4 py-3 hover:bg-raised transition-colors text-left"
                 >
-                  <i className="ti ti-barbell text-[16px] text-text-muted flex-shrink-0" />
+                  <i className="ti ti-barbell text-[16px] text-accent flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="text-[14px] font-semibold text-text-primary truncate">{gym.name}</div>
-                    <div className="text-[12px] text-text-muted">
+                    <div className="text-[14px] font-semibold text-text truncate">{gym.name}</div>
+                    <div className="text-[12px] text-accent">
                       {gym.locality_slug ? formatSlug(gym.locality_slug) + ', ' : ''}
                       {formatSlug(gym.city_slug)}
                     </div>
@@ -207,7 +207,7 @@ export default function SearchBar() {
                   {gym.rating > 0 && (
                     <div className="flex items-center gap-1 flex-shrink-0">
                       <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                      <span className="text-[12px] font-bold text-text-primary">{gym.rating}</span>
+                      <span className="text-[12px] font-bold text-text">{gym.rating}</span>
                     </div>
                   )}
                 </button>
@@ -221,7 +221,7 @@ export default function SearchBar() {
                 router.push(`/search?q=${encodeURIComponent(query)}`)
                 setOpen(false)
               }}
-              className="w-full text-center text-[13px] text-text-muted hover:text-accent transition-colors py-1"
+              className="w-full text-center text-[13px] text-accent hover:text-accent transition-colors py-1"
             >
               View all results for &ldquo;{query}&rdquo;
               <i className="ti ti-arrow-right text-[13px] ml-1" />
@@ -234,8 +234,8 @@ export default function SearchBar() {
       {/* NO RESULTS */}
       {open && query.length >= 2 && !loading && !hasResults && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-surface b-hair rounded-md p-6 text-center z-50">
-          <p className="text-[14px] text-text-muted">No results for &ldquo;{query}&rdquo;</p>
-          <p className="text-[12px] text-text-disabled mt-1">Try a city name, locality or gym name</p>
+          <p className="text-[14px] text-accent">No results for &ldquo;{query}&rdquo;</p>
+          <p className="text-[12px] text-accent mt-1">Try a city name, locality or gym name</p>
         </div>
       )}
     </div>

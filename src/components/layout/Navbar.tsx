@@ -15,7 +15,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-40 bg-base/95 backdrop-blur bb-hair">
+    <header className="sticky top-0 z-40 bg-surface/95 backdrop-blur bb-hair">
       <div className="mx-auto max-w-[1280px] px-5 md:px-10 h-16 flex items-center justify-between">
 
         {/* Logo */}
@@ -33,7 +33,7 @@ export default function Navbar() {
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-9">
           {NAV_LINKS.map(({ label, href }) => (
-            <Link key={href} href={href} className="ghost text-[14px] text-text-muted">
+            <Link key={href} href={href} className="ghost text-[14px] text-accent">
               {label}
             </Link>
           ))}
@@ -43,7 +43,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/list-your-gym"
-            className="bg-accent text-base font-bold text-[13px] px-4 py-2.5 rounded-sm hover:bg-white transition-colors inline-flex items-center gap-2"
+            className="bg-accent text-base font-bold text-[13px] px-4 py-2.5 rounded-sm hover:bg-text transition-colors inline-flex items-center gap-2"
           >
             <i className="ti ti-plus text-[15px]" />
             List your gym
@@ -51,7 +51,7 @@ export default function Navbar() {
 
           {/* Hamburger — mobile only */}
           <button
-            className="md:hidden ghost text-text-secondary p-1 -mr-1"
+            className="md:hidden ghost text-accent p-1 -mr-1"
             onClick={() => setMenuOpen((prev) => !prev)}
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
@@ -69,7 +69,7 @@ export default function Navbar() {
               <Link
                 key={href}
                 href={href}
-                className="ghost text-[15px] text-text-muted py-3 bt-hair first:border-t-0"
+                className="ghost text-[15px] text-accent py-3 bt-hair first:border-t-0"
                 onClick={() => setMenuOpen(false)}
               >
                 {label}

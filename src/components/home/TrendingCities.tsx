@@ -24,8 +24,8 @@ export default function TrendingCities({ cities }: Props) {
 
         <div className="mb-12">
           <div className="label mb-3">Trending Cities</div>
-          <h2 className="h2 text-text-primary">Find gyms in your city</h2>
-          <p className="text-[15px] text-text-secondary mt-3 max-w-[480px]">
+          <h2 className="h2 text-text">Find gyms in your city</h2>
+          <p className="text-[15px] text-accent mt-3 max-w-[480px]">
             Discover fitness centers in India&apos;s major cities.
             Top-rated facilities with verified listings.
           </p>
@@ -47,14 +47,14 @@ export default function TrendingCities({ cities }: Props) {
               </div>
               <div className="mt-8 flex items-end justify-between gap-3">
                 <div>
-                  <div className="text-[17px] font-bold tracking-tight text-text-primary">
+                  <div className="text-[17px] font-bold tracking-tight text-text">
                     {city.name}
                   </div>
-                  <div className="text-[12px] text-text-muted mt-0.5">
+                  <div className="text-[12px] text-accent mt-0.5">
                     {city.gym_count ?? 0} gyms
                   </div>
                 </div>
-                <i className="ti ti-arrow-up-right text-[18px] text-text-muted group-hover:text-text-primary transition-colors" />
+                <i className="ti ti-arrow-up-right text-[18px] text-accent group-hover:text-text transition-colors" />
               </div>
             </Link>
           ))}

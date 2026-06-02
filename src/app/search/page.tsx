@@ -40,12 +40,12 @@ export default async function SearchPage({ searchParams }: Props) {
 
       {/* HEADER */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-10 pb-8 bb-hair">
-        <div className="label !text-text-muted mb-3">Search results</div>
-        <h1 className="h1 text-text-primary">
+        <div className="label !text-accent mb-3">Search results</div>
+        <h1 className="h1 text-text">
           {q ? `"${q}"` : 'Search gyms in India'}
         </h1>
         {q && (
-          <p className="text-[15px] text-text-muted mt-2">
+          <p className="text-[15px] text-accent mt-2">
             {totalResults > 0
               ? `${totalResults} result${totalResults !== 1 ? 's' : ''} found`
               : 'No results found'}
@@ -58,8 +58,8 @@ export default async function SearchPage({ searchParams }: Props) {
         {/* NO QUERY STATE */}
         {!q && (
           <div className="text-center py-20">
-            <i className="ti ti-search text-[48px] text-text-disabled block mb-4" />
-            <p className="text-[16px] text-text-muted">
+            <i className="ti ti-search text-[48px] text-accent block mb-4" />
+            <p className="text-[16px] text-accent">
               Search for a city, locality or gym name
             </p>
             <div className="flex flex-wrap gap-2 justify-center mt-6">
@@ -67,7 +67,7 @@ export default async function SearchPage({ searchParams }: Props) {
                 <Link
                   key={c}
                   href={`/search?q=${encodeURIComponent(c)}`}
-                  className="text-[13px] text-text-muted px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text-primary transition-colors"
+                  className="text-[13px] text-accent px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text transition-colors"
                 >
                   {c}
                 </Link>
@@ -79,16 +79,16 @@ export default async function SearchPage({ searchParams }: Props) {
         {/* NO RESULTS */}
         {q && totalResults === 0 && (
           <div className="text-center py-20">
-            <i className="ti ti-search-off text-[48px] text-text-disabled block mb-4" />
-            <p className="text-[16px] text-text-primary font-semibold mb-2">
+            <i className="ti ti-search-off text-[48px] text-accent block mb-4" />
+            <p className="text-[16px] text-text font-semibold mb-2">
               No results for &ldquo;{q}&rdquo;
             </p>
-            <p className="text-[14px] text-text-muted mb-8">
+            <p className="text-[14px] text-accent mb-8">
               Try searching for a city, locality or gym name
             </p>
             <Link
               href="/cities"
-              className="inline-flex items-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[14px] px-5 py-2.5 rounded-sm hover:bg-white transition-colors"
+              className="inline-flex items-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[14px] px-5 py-2.5 rounded-sm hover:bg-text transition-colors"
             >
               Browse all cities
               <i className="ti ti-arrow-right text-[14px]" />
@@ -99,10 +99,10 @@ export default async function SearchPage({ searchParams }: Props) {
         {/* CITIES */}
         {cities.length > 0 && (
           <section>
-            <h2 className="h2 text-text-primary mb-6 flex items-center gap-3">
+            <h2 className="h2 text-text mb-6 flex items-center gap-3">
               <i className="ti ti-building-skyscraper text-[22px] text-accent" />
               Cities
-              <span className="text-[14px] text-text-muted font-normal">({cities.length})</span>
+              <span className="text-[14px] text-accent font-normal">({cities.length})</span>
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {(cities as { id: string; name: string; slug: string; gym_count: number }[]).map((city) => (
@@ -111,10 +111,10 @@ export default async function SearchPage({ searchParams }: Props) {
                   href={`/gyms/${city.slug}`}
                   className="bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors group"
                 >
-                  <div className="text-[16px] font-bold text-text-primary group-hover:text-accent transition-colors">
+                  <div className="text-[16px] font-bold text-text group-hover:text-accent transition-colors">
                     {city.name}
                   </div>
-                  <div className="text-[12px] text-text-muted mt-1">
+                  <div className="text-[12px] text-accent mt-1">
                     {city.gym_count || 0} gyms
                   </div>
                 </Link>
@@ -126,10 +126,10 @@ export default async function SearchPage({ searchParams }: Props) {
         {/* LOCALITIES */}
         {localities.length > 0 && (
           <section>
-            <h2 className="h2 text-text-primary mb-6 flex items-center gap-3">
+            <h2 className="h2 text-text mb-6 flex items-center gap-3">
               <i className="ti ti-map-pin text-[22px] text-accent" />
               Localities
-              <span className="text-[14px] text-text-muted font-normal">({localities.length})</span>
+              <span className="text-[14px] text-accent font-normal">({localities.length})</span>
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {(localities as { id: string; name: string; slug: string; city_slug: string }[]).map((loc) => (
@@ -138,10 +138,10 @@ export default async function SearchPage({ searchParams }: Props) {
                   href={`/gyms/${loc.city_slug}/${loc.slug}`}
                   className="bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors group"
                 >
-                  <div className="text-[15px] font-bold text-text-primary group-hover:text-accent transition-colors">
+                  <div className="text-[15px] font-bold text-text group-hover:text-accent transition-colors">
                     {loc.name || formatSlug(loc.slug)}
                   </div>
-                  <div className="text-[12px] text-text-muted mt-1">
+                  <div className="text-[12px] text-accent mt-1">
                     {formatSlug(loc.city_slug)}
                   </div>
                 </Link>
@@ -153,10 +153,10 @@ export default async function SearchPage({ searchParams }: Props) {
         {/* GYMS */}
         {gyms.length > 0 && (
           <section>
-            <h2 className="h2 text-text-primary mb-6 flex items-center gap-3">
+            <h2 className="h2 text-text mb-6 flex items-center gap-3">
               <i className="ti ti-barbell text-[22px] text-accent" />
               Gyms
-              <span className="text-[14px] text-text-muted font-normal">({gyms.length})</span>
+              <span className="text-[14px] text-accent font-normal">({gyms.length})</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {gyms.map((gym) => (

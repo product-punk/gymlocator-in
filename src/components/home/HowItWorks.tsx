@@ -32,7 +32,7 @@ export default function HowItWorks() {
         {/* Section header */}
         <div className="mb-12">
           <div className="label mb-3">Process</div>
-          <h2 className="h2 text-text-primary max-w-[640px]">
+          <h2 className="h2 text-text max-w-[640px]">
             Three steps from a search to a gym membership.
           </h2>
         </div>
@@ -40,16 +40,16 @@ export default function HowItWorks() {
         {/* Steps grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border b-hair rounded-md overflow-hidden">
           {STEPS.map((step) => (
-            <div key={step.number} className="bg-base p-8 md:p-10 flex flex-col gap-6 min-h-[260px]">
+            <div key={step.number} className="bg-surface p-8 md:p-10 flex flex-col gap-6 min-h-[260px]">
               <div className="flex items-start justify-between">
                 <i className={`ti ${step.icon} text-[32px] text-accent`} />
-                <span className="text-[80px] leading-none font-extrabold tracking-tighter text-text-disabled select-none">
+                <span className="text-[80px] leading-none font-extrabold tracking-tighter text-accent select-none">
                   {step.number}
                 </span>
               </div>
               <div className="mt-auto">
-                <h3 className="h3 text-text-primary">{step.title}</h3>
-                <p className="text-[14px] text-text-secondary mt-2 leading-relaxed">
+                <h3 className="h3 text-text">{step.title}</h3>
+                <p className="text-[14px] text-accent mt-2 leading-relaxed">
                   {step.description}
                 </p>
               </div>
@@ -60,8 +60,8 @@ export default function HowItWorks() {
         {/* CTA strip */}
         <div className="light-card mt-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 b-hair rounded-md p-6 md:p-8">
           <div>
-            <h3 className="h3 text-text-primary">Run a gym? Get listed.</h3>
-            <p className="text-[14px] text-text-secondary mt-1">
+            <h3 className="h3 text-text">Run a gym? Get listed.</h3>
+            <p className="text-[14px] text-accent mt-1">
               Free during beta. Verified listings get priority placement on city pages.
             </p>
           </div>
@@ -74,7 +74,7 @@ export default function HowItWorks() {
             </Link>
             <Link
               href="/list-your-gym"
-              className="inline-flex items-center gap-2 bg-[#0C0C0C] text-[#D4D4D4] font-bold text-[13px] px-4 py-2.5 rounded-sm hover:bg-raised transition-colors"
+              className="inline-flex items-center gap-2 bg-base text-accent font-bold text-[13px] px-4 py-2.5 rounded-sm hover:bg-raised transition-colors"
             >
               <i className="ti ti-arrow-right text-[16px]" /> List your gym
             </Link>

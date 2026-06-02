@@ -130,21 +130,21 @@ export default async function CityPage({ params, searchParams }: Props) {
 
       {/* BREADCRUMB */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-6">
-        <nav className="flex items-center gap-2 text-[12px] text-text-muted">
+        <nav className="flex items-center gap-2 text-[12px] text-accent">
           <Link href="/" className="ghost">Home</Link>
           <span>›</span>
           <Link href="/cities" className="ghost">Cities</Link>
           <span>›</span>
-          <span className="text-text-secondary">{cityName}</span>
+          <span className="text-accent">{cityName}</span>
         </nav>
       </div>
 
       {/* HERO */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-8 pb-6 bb-hair">
-        <h1 className="h1 text-text-primary">
+        <h1 className="h1 text-text">
           {city.seo_h1 || `Best Gyms in ${cityName}`}
         </h1>
-        <p className="text-[16px] text-text-secondary mt-3 max-w-[640px]">
+        <p className="text-[16px] text-accent mt-3 max-w-[640px]">
           {currentPage === 1
             ? city.seo_subtitle || `Compare ${city.gym_count || total}+ gyms across ${cityName} by fees, ratings, timings and amenities.`
             : `Showing gyms ${offset + 1}–${Math.min(offset + GYMS_PER_PAGE, total)} of ${total} in ${cityName}.`
@@ -154,12 +154,12 @@ export default async function CityPage({ params, searchParams }: Props) {
         {/* LOCALITY QUICK-JUMP */}
         {localities.length > 0 && (
           <div className="mt-4 flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-            <span className="label !text-text-muted whitespace-nowrap flex-shrink-0">Areas</span>
+            <span className="label !text-accent whitespace-nowrap flex-shrink-0">Areas</span>
             {localities.map((loc: { id: string; name: string; slug: string }) => (
               <Link
                 key={loc.id}
                 href={`/gyms/${citySlug}/${loc.slug}`}
-                className="flex-shrink-0 text-[13px] text-text-muted px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text-primary transition-colors whitespace-nowrap"
+                className="flex-shrink-0 text-[13px] text-accent px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text transition-colors whitespace-nowrap"
               >
                 {loc.name}
               </Link>
@@ -172,7 +172,7 @@ export default async function CityPage({ params, searchParams }: Props) {
       <div className="silver-section bb-hair bt-hair">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-4 overflow-x-auto scrollbar-none flex items-center gap-x-8 text-[12px] font-bold uppercase tracking-[0.12em] font-mono whitespace-nowrap">
           <span className="inline-flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#0C0C0C]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-base" />
             {cityName}
           </span>
           <span className="opacity-25">———</span>
@@ -193,10 +193,10 @@ export default async function CityPage({ params, searchParams }: Props) {
 
       {/* GYM CARD GRID */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12">
-        <h2 className="h2 text-text-primary mb-8">Top Gyms in {cityName}</h2>
+        <h2 className="h2 text-text mb-8">Top Gyms in {cityName}</h2>
 
         {gyms.length === 0 ? (
-          <div className="text-center py-20 text-text-muted">
+          <div className="text-center py-20 text-accent">
             <i className="ti ti-building-skyscraper text-[48px] mb-4 block" />
             <p className="text-[16px]">No gyms listed yet in {cityName}.</p>
             <p className="text-[14px] mt-2">Check back soon — we&apos;re adding new listings daily.</p>
@@ -222,7 +222,7 @@ export default async function CityPage({ params, searchParams }: Props) {
             {currentPage > 1 && (
               <Link
                 href={`/gyms/${citySlug}?page=${currentPage - 1}`}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-surface b-hair rounded-md text-[13px] text-text-secondary hover:border-border-hi hover:text-text-primary transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-surface b-hair rounded-md text-[13px] text-accent hover:border-border-hi hover:text-text transition-colors"
               >
                 <i className="ti ti-chevron-left text-[14px]" />
                 Previous
@@ -245,7 +245,7 @@ export default async function CityPage({ params, searchParams }: Props) {
               .map((p, idx) =>
                 p === '...'
                   ? (
-                    <span key={`ellipsis-${idx}`} className="px-2 text-text-muted text-[13px]">
+                    <span key={`ellipsis-${idx}`} className="px-2 text-accent text-[13px]">
                       …
                     </span>
                   )
@@ -256,7 +256,7 @@ export default async function CityPage({ params, searchParams }: Props) {
                       className={`w-10 h-10 flex items-center justify-center rounded-md text-[13px] font-semibold transition-colors ${
                         p === currentPage
                           ? 'bg-accent text-[#0C0C0C]'
-                          : 'bg-surface b-hair text-text-secondary hover:border-border-hi hover:text-text-primary'
+                          : 'bg-surface b-hair text-accent hover:border-border-hi hover:text-text'
                       }`}
                     >
                       {p}
@@ -268,7 +268,7 @@ export default async function CityPage({ params, searchParams }: Props) {
             {currentPage < totalPages && (
               <Link
                 href={`/gyms/${citySlug}?page=${currentPage + 1}`}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-surface b-hair rounded-md text-[13px] text-text-secondary hover:border-border-hi hover:text-text-primary transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-surface b-hair rounded-md text-[13px] text-accent hover:border-border-hi hover:text-text transition-colors"
               >
                 Next
                 <i className="ti ti-chevron-right text-[14px]" />
@@ -285,7 +285,7 @@ export default async function CityPage({ params, searchParams }: Props) {
           {/* BROWSE BY AREA */}
           {localities.length > 0 && (
             <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12 bb-hair bt-hair">
-              <h2 className="h2 text-text-primary mb-8">Browse Gyms by Area in {cityName}</h2>
+              <h2 className="h2 text-text mb-8">Browse Gyms by Area in {cityName}</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {localities.map((loc: { id: string; name: string; slug: string; gym_count: number }) => (
                   <Link
@@ -293,11 +293,11 @@ export default async function CityPage({ params, searchParams }: Props) {
                     href={`/gyms/${citySlug}/${loc.slug}`}
                     className="bg-surface b-hair rounded-md p-4 hover:bg-raised hover:border-border-hi transition-colors"
                   >
-                    <div className="text-[14px] font-semibold text-text-primary">
+                    <div className="text-[14px] font-semibold text-text">
                       Gyms in {loc.name}
                     </div>
                     {loc.gym_count > 0 && (
-                      <div className="text-[12px] text-text-muted mt-1">{loc.gym_count} gyms</div>
+                      <div className="text-[12px] text-accent mt-1">{loc.gym_count} gyms</div>
                     )}
                   </Link>
                 ))}
@@ -309,15 +309,15 @@ export default async function CityPage({ params, searchParams }: Props) {
 
             {/* About */}
             <div className="max-w-[780px] mb-12">
-              <h2 className="h2 text-text-primary mb-4">About Gyms in {cityName}</h2>
-              <p className="text-[15px] text-text-secondary leading-relaxed">
+              <h2 className="h2 text-text mb-4">About Gyms in {cityName}</h2>
+              <p className="text-[15px] text-accent leading-relaxed">
                 {city.about_text || `${cityName}'s fitness scene spans 24-hour franchise gyms to boutique strength studios. Monthly memberships range from ₹1,200 for neighbourhood gyms to ₹6,000+ for premium clubs.`}
               </p>
             </div>
 
             {/* What to look for */}
             <div className="max-w-[780px] mb-12">
-              <h2 className="h2 text-text-primary mb-4">What to Look for in a Gym in {cityName}</h2>
+              <h2 className="h2 text-text mb-4">What to Look for in a Gym in {cityName}</h2>
               <ul className="space-y-3">
                 {(city.what_to_look_for?.length > 0
                   ? city.what_to_look_for
@@ -330,7 +330,7 @@ export default async function CityPage({ params, searchParams }: Props) {
                       'Women-only timings or dedicated zones if relevant to you',
                     ]
                 ).map((point: string) => (
-                  <li key={point} className="flex items-start gap-3 text-[15px] text-text-secondary">
+                  <li key={point} className="flex items-start gap-3 text-[15px] text-accent">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
                     {point}
                   </li>
@@ -340,15 +340,15 @@ export default async function CityPage({ params, searchParams }: Props) {
 
             {/* Pricing table */}
             <div className="max-w-[780px] mb-12">
-              <h2 className="h2 text-text-primary mb-4">Average Gym Membership Cost in {cityName}</h2>
+              <h2 className="h2 text-text mb-4">Average Gym Membership Cost in {cityName}</h2>
               <div className="b-hair rounded-md overflow-hidden">
                 <table className="w-full text-[14px]">
                   <thead>
                     <tr className="bg-surface">
-                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Tier</th>
-                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Monthly</th>
-                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Annual</th>
-                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair hidden md:table-cell">Includes</th>
+                      <th className="text-left p-4 text-accent font-semibold bb-hair">Tier</th>
+                      <th className="text-left p-4 text-accent font-semibold bb-hair">Monthly</th>
+                      <th className="text-left p-4 text-accent font-semibold bb-hair">Annual</th>
+                      <th className="text-left p-4 text-accent font-semibold bb-hair hidden md:table-cell">Includes</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -358,10 +358,10 @@ export default async function CityPage({ params, searchParams }: Props) {
                       { tier: 'Premium', monthly: city.price_premium_monthly || '₹4,000–8,000+', annual: city.price_premium_annual || '₹35,000–80,000', includes: '+ Pool, steam/sauna, dedicated PT' },
                     ].map((row, i) => (
                       <tr key={row.tier} className={i < 2 ? 'bb-hair' : ''}>
-                        <td className="p-4 font-semibold text-text-primary">{row.tier}</td>
-                        <td className="p-4 text-text-secondary">{row.monthly}</td>
-                        <td className="p-4 text-text-secondary">{row.annual}</td>
-                        <td className="p-4 text-text-muted hidden md:table-cell">{row.includes}</td>
+                        <td className="p-4 font-semibold text-text">{row.tier}</td>
+                        <td className="p-4 text-accent">{row.monthly}</td>
+                        <td className="p-4 text-accent">{row.annual}</td>
+                        <td className="p-4 text-accent hidden md:table-cell">{row.includes}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -371,15 +371,15 @@ export default async function CityPage({ params, searchParams }: Props) {
 
             {/* FAQ */}
             <div className="max-w-[780px] mb-12">
-              <h2 className="h2 text-text-primary mb-6">Frequently Asked Questions</h2>
+              <h2 className="h2 text-text mb-6">Frequently Asked Questions</h2>
               <div className="space-y-3">
                 {faqs.map((faq: { q: string; a: string }, i: number) => (
                   <details key={i} className="bg-surface b-hair rounded-md group">
-                    <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text-primary list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
+                    <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
                       {faq.q}
-                      <i className="ti ti-chevron-down text-[16px] text-text-muted flex-shrink-0 group-open:rotate-180 transition-transform" />
+                      <i className="ti ti-chevron-down text-[16px] text-accent flex-shrink-0 group-open:rotate-180 transition-transform" />
                     </summary>
-                    <div className="px-4 pb-4 text-[14px] text-text-secondary leading-relaxed bt-hair pt-3">
+                    <div className="px-4 pb-4 text-[14px] text-accent leading-relaxed bt-hair pt-3">
                       {faq.a}
                     </div>
                   </details>
@@ -389,7 +389,7 @@ export default async function CityPage({ params, searchParams }: Props) {
 
             {/* Popular searches */}
             <div className="max-w-[780px]">
-              <h2 className="h2 text-text-primary mb-6">Popular Searches in {cityName}</h2>
+              <h2 className="h2 text-text mb-6">Popular Searches in {cityName}</h2>
               <div className="flex flex-wrap gap-2">
                 {popularSearches
                   .filter((s) =>
@@ -402,7 +402,7 @@ export default async function CityPage({ params, searchParams }: Props) {
                     <Link
                       key={s.label}
                       href={s.href}
-                      className="text-[13px] text-text-muted px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text-primary transition-colors"
+                      className="text-[13px] text-accent px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text transition-colors"
                     >
                       {s.label}
                     </Link>

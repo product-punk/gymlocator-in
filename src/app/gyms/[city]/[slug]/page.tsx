@@ -156,21 +156,21 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
 
       {/* BREADCRUMB */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-6">
-        <nav className="flex items-center gap-2 text-[12px] text-text-muted flex-wrap">
+        <nav className="flex items-center gap-2 text-[12px] text-accent flex-wrap">
           <Link href="/" className="ghost">Home</Link>
           <span>›</span>
           <Link href="/cities" className="ghost">Cities</Link>
           <span>›</span>
           <Link href={`/gyms/${citySlug}`} className="ghost">{cityName}</Link>
           <span>›</span>
-          <span className="text-text-secondary">{displayLabel}</span>
+          <span className="text-accent">{displayLabel}</span>
         </nav>
       </div>
 
       {/* HERO */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-8 pb-6 bb-hair">
-        <h1 className="h1 text-text-primary">{pageTitle}</h1>
-        <p className="text-[16px] text-text-secondary mt-3 max-w-[640px]">
+        <h1 className="h1 text-text">{pageTitle}</h1>
+        <p className="text-[16px] text-accent mt-3 max-w-[640px]">
           {currentPage === 1
             ? pageSubtitle
             : `Showing gyms ${offset + 1}–${Math.min(offset + GYMS_PER_PAGE, total)} of ${total}.`}
@@ -181,7 +181,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
       <div className="silver-section bb-hair bt-hair">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-4 overflow-x-auto scrollbar-none flex items-center gap-x-8 text-[12px] font-bold uppercase tracking-[0.12em] font-mono whitespace-nowrap">
           <span className="inline-flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#0C0C0C]" />
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-base" />
             {displayLabel}
           </span>
           <span className="opacity-25">———</span>
@@ -203,12 +203,12 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
       {/* GYM GRID */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12">
 
-        <h2 className="h2 text-text-primary mb-8">
+        <h2 className="h2 text-text mb-8">
           Top Gyms {localityName ? `in ${localityName}, ${cityName}` : `in ${cityName}`}
         </h2>
 
         {gyms.length === 0 ? (
-          <div className="text-center py-20 text-text-muted">
+          <div className="text-center py-20 text-accent">
             <i className="ti ti-building-skyscraper text-[48px] mb-4 block" />
             <p className="text-[16px]">No gyms found here yet.</p>
             <p className="text-[14px] mt-2">
@@ -231,7 +231,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
             {currentPage > 1 && (
               <Link
                 href={`/gyms/${citySlug}/${slug}?page=${currentPage - 1}`}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-surface b-hair rounded-md text-[13px] text-text-secondary hover:border-border-hi hover:text-text-primary transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-surface b-hair rounded-md text-[13px] text-accent hover:border-border-hi hover:text-text transition-colors"
               >
                 <i className="ti ti-chevron-left text-[14px]" />
                 Previous
@@ -240,7 +240,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
 
             {pages.map((p, idx) =>
               p === '...' ? (
-                <span key={`e-${idx}`} className="px-2 text-text-muted text-[13px]">…</span>
+                <span key={`e-${idx}`} className="px-2 text-accent text-[13px]">…</span>
               ) : (
                 <Link
                   key={`p-${p}`}
@@ -248,7 +248,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
                   className={`w-10 h-10 flex items-center justify-center rounded-md text-[13px] font-semibold transition-colors ${
                     p === currentPage
                       ? 'bg-accent text-[#0C0C0C]'
-                      : 'bg-surface b-hair text-text-secondary hover:border-border-hi hover:text-text-primary'
+                      : 'bg-surface b-hair text-accent hover:border-border-hi hover:text-text'
                   }`}
                 >
                   {p}
@@ -259,7 +259,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
             {currentPage < totalPages && (
               <Link
                 href={`/gyms/${citySlug}/${slug}?page=${currentPage + 1}`}
-                className="flex items-center gap-1.5 px-4 py-2.5 bg-surface b-hair rounded-md text-[13px] text-text-secondary hover:border-border-hi hover:text-text-primary transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2.5 bg-surface b-hair rounded-md text-[13px] text-accent hover:border-border-hi hover:text-text transition-colors"
               >
                 Next
                 <i className="ti ti-chevron-right text-[14px]" />
@@ -270,7 +270,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
 
         {/* BACK TO CITY */}
         <div className="mt-12 pt-8 bt-hair">
-          <p className="text-[14px] text-text-secondary">
+          <p className="text-[14px] text-accent">
             Looking for more options?{' '}
             <Link href={`/gyms/${citySlug}`} className="text-accent hover:underline font-semibold">
               Browse all gyms in {cityName}
@@ -287,8 +287,8 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
           {/* About */}
           {locality.about_text && (
             <div className="max-w-[780px]">
-              <h2 className="h2 text-text-primary mb-4">About Gyms in {localityName}</h2>
-              <p className="text-[15px] text-text-secondary leading-relaxed">
+              <h2 className="h2 text-text mb-4">About Gyms in {localityName}</h2>
+              <p className="text-[15px] text-accent leading-relaxed">
                 {locality.about_text as string}
               </p>
             </div>
@@ -297,10 +297,10 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
           {/* What to look for */}
           {locality.what_to_look_for?.length > 0 && (
             <div className="max-w-[780px]">
-              <h2 className="h2 text-text-primary mb-4">What to Look for in a Gym in {localityName}</h2>
+              <h2 className="h2 text-text mb-4">What to Look for in a Gym in {localityName}</h2>
               <ul className="space-y-3">
                 {(locality.what_to_look_for as string[]).map((point) => (
-                  <li key={point} className="flex items-start gap-3 text-[15px] text-text-secondary">
+                  <li key={point} className="flex items-start gap-3 text-[15px] text-accent">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
                     {point}
                   </li>
@@ -312,13 +312,13 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
           {/* Pricing */}
           {locality.price_budget_monthly && (
             <div className="max-w-[780px]">
-              <h2 className="h2 text-text-primary mb-4">Gym Membership Cost in {localityName}</h2>
+              <h2 className="h2 text-text mb-4">Gym Membership Cost in {localityName}</h2>
               <div className="b-hair rounded-md overflow-hidden">
                 <table className="w-full text-[14px]">
                   <thead>
                     <tr className="bg-surface">
-                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Tier</th>
-                      <th className="text-left p-4 text-text-secondary font-semibold bb-hair">Monthly</th>
+                      <th className="text-left p-4 text-accent font-semibold bb-hair">Tier</th>
+                      <th className="text-left p-4 text-accent font-semibold bb-hair">Monthly</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -328,8 +328,8 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
                       { tier: 'Premium', price: locality.price_premium_monthly },
                     ] as { tier: string; price: unknown }[]).filter((r) => r.price).map((row, i, arr) => (
                       <tr key={row.tier} className={i < arr.length - 1 ? 'bb-hair' : ''}>
-                        <td className="p-4 font-semibold text-text-primary">{row.tier}</td>
-                        <td className="p-4 text-text-secondary">{row.price as string}</td>
+                        <td className="p-4 font-semibold text-text">{row.tier}</td>
+                        <td className="p-4 text-accent">{row.price as string}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -341,15 +341,15 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
           {/* FAQ */}
           {locality.faqs?.length > 0 && (
             <div className="max-w-[780px]">
-              <h2 className="h2 text-text-primary mb-6">Frequently Asked Questions</h2>
+              <h2 className="h2 text-text mb-6">Frequently Asked Questions</h2>
               <div className="space-y-3">
                 {(locality.faqs as { q: string; a: string }[]).map((faq, i) => (
                   <details key={i} className="bg-surface b-hair rounded-md group">
-                    <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text-primary list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
+                    <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
                       {faq.q}
-                      <i className="ti ti-chevron-down text-[16px] text-text-muted flex-shrink-0 group-open:rotate-180 transition-transform" />
+                      <i className="ti ti-chevron-down text-[16px] text-accent flex-shrink-0 group-open:rotate-180 transition-transform" />
                     </summary>
-                    <div className="px-4 pb-4 text-[14px] text-text-secondary leading-relaxed bt-hair pt-3">
+                    <div className="px-4 pb-4 text-[14px] text-accent leading-relaxed bt-hair pt-3">
                       {faq.a}
                     </div>
                   </details>
@@ -361,7 +361,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
           {/* Popular searches */}
           {locality.popular_searches?.length > 0 && (
             <div className="max-w-[780px]">
-              <h2 className="h2 text-text-primary mb-6">Popular Searches in {localityName}</h2>
+              <h2 className="h2 text-text mb-6">Popular Searches in {localityName}</h2>
               <div className="flex flex-wrap gap-2">
                 {(locality.popular_searches as { label: string; href: string }[])
                   .filter((s) =>
@@ -374,7 +374,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
                     <Link
                       key={s.label}
                       href={s.href}
-                      className="text-[13px] text-text-muted px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text-primary transition-colors"
+                      className="text-[13px] text-accent px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text transition-colors"
                     >
                       {s.label}
                     </Link>

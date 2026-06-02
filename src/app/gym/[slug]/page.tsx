@@ -69,7 +69,7 @@ export default async function GymDetailPage({ params }: Props) {
 
       {/* BREADCRUMB */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-6">
-        <nav className="flex items-center gap-2 text-[12px] text-text-muted flex-wrap">
+        <nav className="flex items-center gap-2 text-[12px] text-accent flex-wrap">
           <Link href="/" className="ghost">Home</Link>
           <span>›</span>
           <Link href="/cities" className="ghost">Cities</Link>
@@ -84,7 +84,7 @@ export default async function GymDetailPage({ params }: Props) {
             </>
           )}
           <span>›</span>
-          <span className="text-text-secondary">{gym.name}</span>
+          <span className="text-accent">{gym.name}</span>
         </nav>
       </div>
 
@@ -108,7 +108,7 @@ export default async function GymDetailPage({ params }: Props) {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <i className="ti ti-building-skyscraper text-[48px] text-text-disabled" />
+                    <i className="ti ti-building-skyscraper text-[48px] text-accent" />
                   </div>
                 )}
                 {gym.is_featured && (
@@ -137,7 +137,7 @@ export default async function GymDetailPage({ params }: Props) {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <i className="ti ti-photo text-[24px] text-text-disabled" />
+                        <i className="ti ti-photo text-[24px] text-accent" />
                       </div>
                     )}
                   </div>
@@ -148,23 +148,23 @@ export default async function GymDetailPage({ params }: Props) {
 
             {/* GYM NAME + RATING */}
             <div className="mb-4">
-              <h1 className="text-[28px] md:text-[40px] font-black tracking-tight text-text-primary leading-tight mb-3">
+              <h1 className="text-[28px] md:text-[40px] font-black tracking-tight text-text leading-tight mb-3">
                 {gym.name}
               </h1>
               {gym.rating > 0 && (
                 <div className="inline-flex items-center gap-2 bg-surface b-hair rounded-md px-3 py-2">
                   <span className="w-2 h-2 rounded-full bg-accent" />
-                  <span className="text-[16px] font-bold text-text-primary">{gym.rating}</span>
+                  <span className="text-[16px] font-bold text-text">{gym.rating}</span>
                   {gym.review_count > 0 && (
-                    <span className="text-[13px] text-text-muted">({gym.review_count} reviews)</span>
+                    <span className="text-[13px] text-accent">({gym.review_count} reviews)</span>
                   )}
                 </div>
               )}
             </div>
 
             {/* ADDRESS */}
-            <div className="flex items-start gap-2 text-[14px] text-text-secondary mb-6">
-              <i className="ti ti-map-pin text-[16px] text-text-muted mt-0.5 flex-shrink-0" />
+            <div className="flex items-start gap-2 text-[14px] text-accent mb-6">
+              <i className="ti ti-map-pin text-[16px] text-accent mt-0.5 flex-shrink-0" />
               <span>{gym.address}</span>
             </div>
 
@@ -192,12 +192,12 @@ export default async function GymDetailPage({ params }: Props) {
                   icon: 'ti-air-conditioning',
                 },
               ].map((item) => (
-                <div key={item.label} className="bg-base p-4 md:p-5">
-                  <div className="flex items-center gap-1.5 label !text-text-muted mb-2">
+                <div key={item.label} className="bg-surface p-4 md:p-5">
+                  <div className="flex items-center gap-1.5 label !text-accent mb-2">
                     <i className={`ti ${item.icon} text-[13px]`} />
                     {item.label}
                   </div>
-                  <div className="text-[15px] font-bold text-text-primary">{item.value}</div>
+                  <div className="text-[15px] font-bold text-text">{item.value}</div>
                 </div>
               ))}
             </div>
@@ -205,12 +205,12 @@ export default async function GymDetailPage({ params }: Props) {
             {/* AMENITIES */}
             {gym.amenities?.length > 0 && (
               <div className="mb-8">
-                <h2 className="h2 text-text-primary mb-5">Amenities at {gym.name}</h2>
+                <h2 className="h2 text-text mb-5">Amenities at {gym.name}</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {gym.amenities.map((amenity: string) => (
                     <div key={amenity} className="flex items-center gap-3 bg-surface b-hair rounded-md px-4 py-3">
                       <i className={`ti ${AMENITY_ICONS[amenity] || 'ti-check'} text-[18px] text-accent flex-shrink-0`} />
-                      <span className="text-[14px] text-text-secondary">{amenity}</span>
+                      <span className="text-[14px] text-accent">{amenity}</span>
                     </div>
                   ))}
                 </div>
@@ -219,8 +219,8 @@ export default async function GymDetailPage({ params }: Props) {
 
             {/* ABOUT */}
             <div className="mb-8 max-w-[680px]">
-              <h2 className="h2 text-text-primary mb-4">About {gym.name}</h2>
-              <p className="text-[15px] text-text-secondary leading-relaxed">
+              <h2 className="h2 text-text mb-4">About {gym.name}</h2>
+              <p className="text-[15px] text-accent leading-relaxed">
                 {gym.name} is a {gym.price_range === 'premium' ? 'premium' : gym.price_range === 'budget' ? 'budget-friendly' : 'well-equipped'} gym located in {localityName}, {cityName}.
                 {gym.amenities?.length > 0 && ` The facility offers ${gym.amenities.slice(0, 4).join(', ')} among other amenities.`}
                 {gym.is_247 ? ' It operates 24 hours a day, 7 days a week.' : gym.timing_open ? ` Timings are ${gym.timing_open} to ${gym.timing_close}.` : ''}
@@ -231,7 +231,7 @@ export default async function GymDetailPage({ params }: Props) {
             {/* MAP */}
             {gym.lat && gym.lng && (
               <div className="mb-8">
-                <h2 className="h2 text-text-primary mb-5">Location</h2>
+                <h2 className="h2 text-text mb-5">Location</h2>
                 <div className="b-hair rounded-md overflow-hidden h-[300px]">
                   <iframe
                     title={`${gym.name} location map`}
@@ -241,7 +241,7 @@ export default async function GymDetailPage({ params }: Props) {
                     src={`https://maps.google.com/maps?q=${gym.lat},${gym.lng}&z=15&output=embed`}
                   />
                 </div>
-                <div className="flex items-start gap-2 text-[13px] text-text-muted mt-3">
+                <div className="flex items-start gap-2 text-[13px] text-accent mt-3">
                   <i className="ti ti-map-pin text-[14px] mt-0.5" />
                   {gym.address}
                 </div>
@@ -251,7 +251,7 @@ export default async function GymDetailPage({ params }: Props) {
             {/* NEARBY LOCALITY LINK */}
             {gym.locality_slug && (
               <div className="bg-surface b-hair rounded-md p-5 mb-8">
-                <p className="text-[14px] text-text-secondary">
+                <p className="text-[14px] text-accent">
                   Looking for more options?{' '}
                   <Link href={`/gyms/${gym.city_slug}/${gym.locality_slug}`} className="text-accent hover:underline font-semibold">
                     Browse all gyms in {localityName}
@@ -276,12 +276,12 @@ export default async function GymDetailPage({ params }: Props) {
                 {/* Price */}
                 {gym.price_monthly ? (
                   <div className="mb-4 pb-4 bb-hair">
-                    <div className="text-[28px] font-bold tracking-tight text-text-primary">
+                    <div className="text-[28px] font-bold tracking-tight text-text">
                       Rs {gym.price_monthly.toLocaleString('en-IN')}
-                      <span className="text-[14px] font-normal text-text-muted"> / month</span>
+                      <span className="text-[14px] font-normal text-accent"> / month</span>
                     </div>
                     {gym.price_annually && (
-                      <div className="text-[12px] text-text-muted mt-1">
+                      <div className="text-[12px] text-accent mt-1">
                         Rs {gym.price_annually.toLocaleString('en-IN')} / year{' '}
                         <span className="text-accent text-[11px] font-bold">
                           (Save Rs {(gym.price_monthly * 12 - gym.price_annually).toLocaleString('en-IN')})
@@ -290,7 +290,7 @@ export default async function GymDetailPage({ params }: Props) {
                     )}
                   </div>
                 ) : (
-                  <div className="text-[16px] text-text-muted mb-4 pb-4 bb-hair">
+                  <div className="text-[16px] text-accent mb-4 pb-4 bb-hair">
                     Price on request
                   </div>
                 )}
@@ -299,13 +299,13 @@ export default async function GymDetailPage({ params }: Props) {
                 {gym.phone ? (
                   <a
                     href={`tel:${gym.phone}`}
-                    className="w-full flex items-center justify-center gap-2 bg-accent text-base font-bold text-[15px] py-3.5 rounded-sm hover:bg-white transition-colors mb-3"
+                    className="w-full flex items-center justify-center gap-2 bg-accent text-base font-bold text-[15px] py-3.5 rounded-sm hover:bg-text transition-colors mb-3"
                   >
                     <i className="ti ti-phone text-[18px]" />
                     Call Now
                   </a>
                 ) : (
-                  <div className="w-full flex items-center justify-center gap-2 bg-raised b-hair text-text-muted text-[14px] py-3.5 rounded-sm mb-3">
+                  <div className="w-full flex items-center justify-center gap-2 bg-raised b-hair text-accent text-[14px] py-3.5 rounded-sm mb-3">
                     Phone not available
                   </div>
                 )}

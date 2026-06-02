@@ -13,11 +13,11 @@ export default function AboutPage() {
 
       {/* HERO */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-16 pb-12 bb-hair">
-        <div className="label !text-text-muted mb-4">About us</div>
-        <h1 className="h1 text-text-primary max-w-[640px]">
+        <div className="label !text-accent mb-4">About us</div>
+        <h1 className="h1 text-text max-w-[640px]">
           India&apos;s most honest gym discovery platform.
         </h1>
-        <p className="text-[17px] text-text-secondary mt-5 max-w-[600px] leading-relaxed">
+        <p className="text-[17px] text-accent mt-5 max-w-[600px] leading-relaxed">
           Gymlocator.in helps you find, compare and connect with the best gyms in your city — no
           signup required, no hidden booking fees, no middlemen.
         </p>
@@ -28,8 +28,8 @@ export default function AboutPage() {
 
         {/* Our Story */}
         <div>
-          <h2 className="h2 text-text-primary mb-5">Why we built this</h2>
-          <div className="space-y-4 text-[15px] text-text-secondary leading-relaxed">
+          <h2 className="h2 text-text mb-5">Why we built this</h2>
+          <div className="space-y-4 text-[15px] text-accent leading-relaxed">
             <p>
               Finding a gym in India is harder than it should be. You search Google, get a mix of
               outdated listings, paid ads, and aggregator sites that want you to sign up before
@@ -50,7 +50,7 @@ export default function AboutPage() {
 
         {/* What we offer */}
         <div>
-          <h2 className="h2 text-text-primary mb-5">What you get</h2>
+          <h2 className="h2 text-text mb-5">What you get</h2>
           <div className="space-y-4">
             {[
               {
@@ -77,8 +77,8 @@ export default function AboutPage() {
               <div key={item.title} className="flex items-start gap-4 bg-surface b-hair rounded-md p-4">
                 <i className={`ti ${item.icon} text-[20px] text-accent flex-shrink-0 mt-0.5`} />
                 <div>
-                  <div className="text-[14px] font-bold text-text-primary mb-1">{item.title}</div>
-                  <div className="text-[13px] text-text-secondary">{item.desc}</div>
+                  <div className="text-[14px] font-bold text-text mb-1">{item.title}</div>
+                  <div className="text-[13px] text-accent">{item.desc}</div>
                 </div>
               </div>
             ))}
@@ -97,10 +97,10 @@ export default function AboutPage() {
             { number: '100%', label: 'Free to use' },
           ].map((stat) => (
             <div key={stat.label}>
-              <div className="text-[32px] font-black tracking-tight text-[#0C0C0C]">
+              <div className="text-[32px] font-black tracking-tight text-base">
                 {stat.number}
               </div>
-              <div className="text-[13px] font-bold uppercase tracking-[0.08em] text-[#444444] mt-1">
+              <div className="text-[13px] font-bold uppercase tracking-[0.08em] text-accent mt-1">
                 {stat.label}
               </div>
             </div>
@@ -112,14 +112,14 @@ export default function AboutPage() {
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-16">
         <div className="bg-surface b-hair rounded-md p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
-            <h2 className="h2 text-text-primary mb-2">Own a gym?</h2>
-            <p className="text-[15px] text-text-secondary">
+            <h2 className="h2 text-text mb-2">Own a gym?</h2>
+            <p className="text-[15px] text-accent">
               Get your gym listed on Gymlocator.in for free. Verified listings get priority placement.
             </p>
           </div>
           <Link
             href="/list-your-gym"
-            className="inline-flex items-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[14px] px-6 py-3 rounded-sm hover:bg-white transition-colors flex-shrink-0"
+            className="inline-flex items-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[14px] px-6 py-3 rounded-sm hover:bg-text transition-colors flex-shrink-0"
           >
             List your gym free
             <i className="ti ti-arrow-right text-[14px]" />

@@ -12,9 +12,9 @@ export default function ContactPage() {
     <main className="min-h-screen bg-base">
 
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-16 pb-12 bb-hair">
-        <div className="label !text-text-muted mb-4">Contact</div>
-        <h1 className="h1 text-text-primary">Get in touch</h1>
-        <p className="text-[17px] text-text-secondary mt-4 max-w-[520px]">
+        <div className="label !text-accent mb-4">Contact</div>
+        <h1 className="h1 text-text">Get in touch</h1>
+        <p className="text-[17px] text-accent mt-4 max-w-[520px]">
           Questions, corrections, partnership enquiries or feedback — we read every message.
         </p>
       </div>
@@ -60,10 +60,10 @@ export default function ContactPage() {
             >
               <i className={`ti ${item.icon} text-[22px] text-accent flex-shrink-0 mt-0.5`} />
               <div>
-                <div className="text-[14px] font-bold text-text-primary group-hover:text-accent transition-colors">
+                <div className="text-[14px] font-bold text-text group-hover:text-accent transition-colors">
                   {item.title}
                 </div>
-                <div className="text-[13px] text-text-muted mb-1">{item.desc}</div>
+                <div className="text-[13px] text-accent mb-1">{item.desc}</div>
                 <div className="text-[13px] text-accent">{item.value}</div>
               </div>
             </a>
@@ -72,7 +72,7 @@ export default function ContactPage() {
 
         {/* FAQ */}
         <div>
-          <h2 className="h2 text-text-primary mb-6">Common questions</h2>
+          <h2 className="h2 text-text mb-6">Common questions</h2>
           <div className="space-y-3">
             {[
               {
@@ -93,11 +93,11 @@ export default function ContactPage() {
               },
             ].map((faq, i) => (
               <details key={i} className="bg-surface b-hair rounded-md group">
-                <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text-primary list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
+                <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
                   {faq.q}
-                  <i className="ti ti-chevron-down text-[16px] text-text-muted flex-shrink-0 group-open:rotate-180 transition-transform" />
+                  <i className="ti ti-chevron-down text-[16px] text-accent flex-shrink-0 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="px-4 pb-4 text-[14px] text-text-secondary leading-relaxed bt-hair pt-3">
+                <div className="px-4 pb-4 text-[14px] text-accent leading-relaxed bt-hair pt-3">
                   {faq.a}
                 </div>
               </details>

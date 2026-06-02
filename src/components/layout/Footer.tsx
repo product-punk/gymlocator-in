@@ -69,7 +69,7 @@ export default function Footer() {
                 className="h-7 w-auto object-contain"
               />
             </Link>
-            <p className="text-[13px] text-text-muted leading-relaxed max-w-[200px] mt-3">
+            <p className="text-[13px] text-accent leading-relaxed max-w-[200px] mt-3">
               India&apos;s most trusted gym discovery platform.
             </p>
             <div className="flex gap-3 mt-5">
@@ -78,7 +78,7 @@ export default function Footer() {
                   key={icon}
                   href="#"
                   aria-label={label}
-                  className="w-8 h-8 rounded-sm bg-raised b-hair flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-border transition-colors"
+                  className="w-8 h-8 rounded-sm bg-raised b-hair flex items-center justify-center text-accent hover:text-text hover:bg-border transition-colors"
                 >
                   <i className={`ti ${icon} text-[16px]`} />
                 </a>
@@ -90,17 +90,17 @@ export default function Footer() {
           <div className="md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-8">
             {FOOTER_SECTIONS.map(({ heading, links }) => (
               <div key={heading}>
-                <div className="text-[12px] font-bold uppercase tracking-[0.08em] text-text-primary mb-4">
+                <div className="text-[12px] font-bold uppercase tracking-[0.08em] text-text mb-4">
                   {heading}
                 </div>
                 <div className="flex flex-col gap-2.5">
                   {links.map(({ label, href, comingSoon }) =>
                     comingSoon ? (
-                      <span key={label} className="text-[13px] text-text-disabled cursor-not-allowed">
+                      <span key={label} className="text-[13px] text-accent cursor-not-allowed">
                         {label} (coming soon)
                       </span>
                     ) : (
-                      <Link key={href} href={href} className="ghost text-[13px] text-text-muted">
+                      <Link key={href} href={href} className="ghost text-[13px] text-accent">
                         {label}
                       </Link>
                     )
@@ -116,10 +116,10 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="bt-hair py-5">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="text-[12px] text-text-muted">
+          <div className="text-[12px] text-accent">
             © 2026 Gymlocator.in — All rights reserved.
           </div>
-          <div className="text-[12px] text-text-muted">
+          <div className="text-[12px] text-accent">
             Built with ❤️ for Indian fitness enthusiasts.
           </div>
         </div>
