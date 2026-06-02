@@ -147,7 +147,9 @@
   background: #E5E5E5 !important;
   border-color: #C8C8C8 !important;
 }
+.light-card .text-text           { color: #0C0C0C !important; }
 .light-card .text-text-primary   { color: #0C0C0C !important; }
+.light-card .text-accent         { color: #444444 !important; }
 .light-card .text-text-secondary { color: #444444 !important; }
 .light-card .bg-accent           { background: #0C0C0C !important;
                                    color: #D4D4D4 !important; }
