@@ -38,7 +38,7 @@ export default function TrendingCities({ cities }: Props) {
               href={"/gyms/" + city.slug}
               className="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors"
             >
-              <div className="w-10 h-10 flex-shrink-0">
+              <div className="w-12 h-12 rounded-md overflow-hidden flex-shrink-0 bg-[#E5E5E5] flex items-center justify-center p-1.5">
                 <img
                   src={`/cities/${city.slug}.png`}
                   alt={city.name}
