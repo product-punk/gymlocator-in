@@ -93,13 +93,13 @@ export default async function GymDetailPage({ params }: Props) {
         <div className="flex flex-col lg:flex-row gap-8">
 
           {/* LEFT — main content */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 order-2 lg:order-1">
 
             {/* IMAGE GALLERY */}
-            <div className="grid grid-cols-4 gap-2 mb-8 rounded-md overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-8 rounded-md overflow-hidden">
 
-              {/* Hero image — takes 2 cols */}
-              <div className="col-span-4 md:col-span-2 relative h-[280px] bg-raised">
+              {/* Hero image - full width on mobile */}
+              <div className="col-span-1 md:col-span-2 relative h-[240px] md:h-[280px] bg-raised rounded-md overflow-hidden">
                 {gym.images?.[0] && gym.images[0] !== '' && gym.images[0] !== 'nan' ? (
                   <img
                     src={gym.images[0]}
@@ -124,10 +124,10 @@ export default async function GymDetailPage({ params }: Props) {
                 )}
               </div>
 
-              {/* Thumbnail grid — 2x2 */}
+              {/* Thumbnails - desktop only */}
               <div className="hidden md:grid col-span-2 grid-rows-2 gap-2">
                 {[1, 2, 3, 4].map((n) => (
-                  <div key={n} className="relative h-[134px] bg-raised">
+                  <div key={n} className="relative h-[134px] bg-raised rounded-md overflow-hidden">
                     {gym.images?.[n] && gym.images[n] !== '' && gym.images[n] !== 'nan' ? (
                       <img
                         src={gym.images[n]}
@@ -147,12 +147,14 @@ export default async function GymDetailPage({ params }: Props) {
             </div>
 
             {/* GYM NAME + RATING */}
-            <div className="flex items-start justify-between gap-4 mb-2">
-              <h1 className="h1 text-text-primary leading-tight">{gym.name}</h1>
+            <div className="mb-4">
+              <h1 className="text-[28px] md:text-[40px] font-black tracking-tight text-text-primary leading-tight mb-3">
+                {gym.name}
+              </h1>
               {gym.rating > 0 && (
-                <div className="flex items-center gap-2 flex-shrink-0 bg-surface b-hair rounded-md px-3 py-2">
+                <div className="inline-flex items-center gap-2 bg-surface b-hair rounded-md px-3 py-2">
                   <span className="w-2 h-2 rounded-full bg-accent" />
-                  <span className="text-[18px] font-bold text-text-primary">{gym.rating}</span>
+                  <span className="text-[16px] font-bold text-text-primary">{gym.rating}</span>
                   {gym.review_count > 0 && (
                     <span className="text-[13px] text-text-muted">({gym.review_count} reviews)</span>
                   )}
@@ -265,7 +267,7 @@ export default async function GymDetailPage({ params }: Props) {
           </div>
 
           {/* RIGHT — sticky CTA sidebar */}
-          <div className="lg:w-[320px] flex-shrink-0">
+          <div className="lg:w-[320px] flex-shrink-0 order-1 lg:order-2">
             <div className="sticky top-20">
 
               {/* CTA CARD */}
