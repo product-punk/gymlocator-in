@@ -391,15 +391,22 @@ export default async function CityPage({ params, searchParams }: Props) {
             <div className="max-w-[780px]">
               <h2 className="h2 text-text-primary mb-6">Popular Searches in {cityName}</h2>
               <div className="flex flex-wrap gap-2">
-                {popularSearches.map((s) => (
-                  <Link
-                    key={s.label}
-                    href={s.href}
-                    className="text-[13px] text-text-muted px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text-primary transition-colors"
-                  >
-                    {s.label}
-                  </Link>
-                ))}
+                {popularSearches
+                  .filter((s) =>
+                    !s.href.includes('/24-7') &&
+                    !s.href.includes('/women-only') &&
+                    !s.href.includes('/budget') &&
+                    !s.href.includes('/premium')
+                  )
+                  .map((s) => (
+                    <Link
+                      key={s.label}
+                      href={s.href}
+                      className="text-[13px] text-text-muted px-3 py-1.5 bg-surface b-hair rounded-pill hover:border-border-hi hover:text-text-primary transition-colors"
+                    >
+                      {s.label}
+                    </Link>
+                  ))}
               </div>
             </div>
 

@@ -1,7 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-const FOOTER_SECTIONS = [
+type FooterLink = { label: string; href: string; comingSoon?: boolean }
+
+const FOOTER_SECTIONS: { heading: string; links: FooterLink[] }[] = [
   {
     heading: 'Discover',
     links: [
@@ -11,36 +13,29 @@ const FOOTER_SECTIONS = [
       { label: 'Gyms in Hyderabad', href: '/gyms/hyderabad' },
       { label: 'Gyms in Chennai',   href: '/gyms/chennai' },
       { label: 'Gyms in Pune',      href: '/gyms/pune' },
+      { label: 'Gyms in Kolkata',   href: '/gyms/kolkata' },
+      { label: 'Gyms in Ahmedabad', href: '/gyms/ahmedabad' },
     ],
   },
   {
     heading: 'By Category',
     links: [
-      { label: 'CrossFit Gyms',   href: '/gyms/bangalore/crossfit' },
-      { label: 'Women-only Gyms', href: '/gyms/bangalore/women-only' },
-      { label: '24/7 Gyms',       href: '/gyms/bangalore/24-7' },
-      { label: 'Swimming Pools',  href: '/gyms/bangalore/swimming' },
-      { label: 'Yoga Studios',    href: '/gyms/bangalore/yoga' },
-      { label: 'Budget Gyms',     href: '/gyms/bangalore/budget' },
+      { label: 'CrossFit Gyms',  href: '/gyms/bangalore/crossfit' },
+      { label: 'Swimming Pools', href: '/gyms/bangalore/swimming' },
+      { label: 'Yoga Studios',   href: '/gyms/bangalore/yoga' },
     ],
   },
   {
     heading: 'Content',
     links: [
-      { label: 'Fitness Blog',       href: '/blog' },
-      { label: 'Nutrition Guides',   href: '/blog/nutrition' },
-      { label: 'Workout Plans',      href: '/blog/workout-plans' },
-      { label: 'Gym Buying Guide',   href: '/blog/gym-buying-guide' },
-      { label: 'Supplement Reviews', href: '/blog/supplements' },
-      { label: 'Trainer Tips',       href: '/blog/trainer-tips' },
+      { label: 'Fitness Blog', href: '', comingSoon: true },
     ],
   },
   {
     heading: 'Company',
     links: [
-      { label: 'About Us',       href: '/about' },
-      { label: 'Contact',        href: '/contact' },
-      { label: 'List Your Gym',  href: '/list-your-gym' },
+      { label: 'About Us',       href: '', comingSoon: true },
+      { label: 'Contact',        href: '', comingSoon: true },
       { label: 'Privacy Policy', href: '/privacy' },
       { label: 'Terms of Use',   href: '/terms' },
       { label: 'Sitemap',        href: '/sitemap.xml' },
@@ -98,11 +93,17 @@ export default function Footer() {
                   {heading}
                 </div>
                 <div className="flex flex-col gap-2.5">
-                  {links.map(({ label, href }) => (
-                    <Link key={href} href={href} className="ghost text-[13px] text-text-muted">
-                      {label}
-                    </Link>
-                  ))}
+                  {links.map(({ label, href, comingSoon }) =>
+                    comingSoon ? (
+                      <span key={label} className="text-[13px] text-text-disabled cursor-not-allowed">
+                        {label} (coming soon)
+                      </span>
+                    ) : (
+                      <Link key={href} href={href} className="ghost text-[13px] text-text-muted">
+                        {label}
+                      </Link>
+                    )
+                  )}
                 </div>
               </div>
             ))}
