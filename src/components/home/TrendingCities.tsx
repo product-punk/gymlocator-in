@@ -13,17 +13,6 @@ type Props = {
   cities: City[]
 }
 
-const CITY_ICONS: Record<string, string> = {
-  bangalore: 'ti-building-skyscraper',
-  mumbai:    'ti-buildings',
-  delhi:     'ti-building-monument',
-  hyderabad: 'ti-building-arch',
-  chennai:   'ti-building-pavilion',
-  pune:      'ti-building-community',
-  kolkata:   'ti-building-bridge',
-  ahmedabad: 'ti-building-factory-2',
-}
-
 export default function TrendingCities({ cities }: Props) {
   if (!cities || cities.length === 0) {
     return null
@@ -49,7 +38,13 @@ export default function TrendingCities({ cities }: Props) {
               href={"/gyms/" + city.slug}
               className="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors"
             >
-              <i className={`ti ${CITY_ICONS[city.slug] || 'ti-building-skyscraper'} text-[28px] text-text-primary`} />
+              <div className="w-10 h-10 flex-shrink-0">
+                <img
+                  src={`/cities/${city.slug}.png`}
+                  alt={city.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
               <div className="mt-8 flex items-end justify-between gap-3">
                 <div>
                   <div className="text-[17px] font-bold tracking-tight text-text-primary">
