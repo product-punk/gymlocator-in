@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'About Gymlocator.in - Find the Best Gyms in India',
-  description: 'Gymlocator.in helps you find, compare and connect with the best gyms across India. No signup, no booking fees - just honest gym discovery.',
+  title: 'About Gymlocator.in — Built by a Fitness Obsessive',
+  description: 'Gymlocator.in was built by someone who has spent 10+ years training across gyms in India — from luxury wellness clubs to basement iron rooms. Real experience behind every recommendation.',
   alternates: { canonical: 'https://gymlocator.in/about' },
   robots: { index: true, follow: true },
 }
@@ -14,77 +14,154 @@ export default function AboutPage() {
       {/* HERO */}
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-16 pb-12 bb-hair">
         <div className="label !text-accent mb-4">About us</div>
-        <h1 className="h1 text-text max-w-[640px]">
-          India&apos;s most honest gym discovery platform.
+        <h1 className="h1 text-text max-w-[700px]">
+          Built by someone who has trained in 100+ gyms across India.
         </h1>
-        <p className="text-[17px] text-accent mt-5 max-w-[600px] leading-relaxed">
-          Gymlocator.in helps you find, compare and connect with the best gyms in your city - no
-          signup required, no hidden booking fees, no middlemen.
+        <p className="text-[17px] text-accent mt-5 max-w-[620px] leading-relaxed">
+          Not a tech company that discovered fitness. A fitness obsessive who got frustrated with
+          every gym discovery tool available in India and decided to build something better.
         </p>
       </div>
 
-      {/* CONTENT */}
-      <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-16 grid md:grid-cols-2 gap-16">
+      {/* FOUNDER STORY */}
+      <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-16 bb-hair">
+        <div className="grid md:grid-cols-2 gap-16 items-start">
 
-        {/* Our Story */}
-        <div>
-          <h2 className="h2 text-text mb-5">Why we built this</h2>
-          <div className="space-y-4 text-[15px] text-accent leading-relaxed">
-            <p>
-              Finding a gym in India is harder than it should be. You search Google, get a mix of
-              outdated listings, paid ads, and aggregator sites that want you to sign up before
-              showing you anything useful.
-            </p>
-            <p>
-              We built Gymlocator.in to fix that. Every gym listing shows you real fees, real
-              timings, real photos from Google Maps, and a direct phone number - so you can call
-              the gym yourself, without a platform taking a cut.
-            </p>
-            <p>
-              We are starting with Mumbai, Delhi, Bangalore and Pune, and expanding to every major
-              Indian city. Our goal is to make gym discovery in India as fast and transparent as
-              checking a restaurant on Zomato.
-            </p>
+          <div>
+            <h2 className="h2 text-text mb-6">The experience behind this</h2>
+            <div className="space-y-4 text-[15px] text-accent leading-relaxed">
+              <p>
+                The founder of Gymlocator.in has been training consistently for over 10 years.
+                Not occasionally - religiously. Weights, running, cycling, basketball. The kind of
+                person who researches a gym before checking into a hotel, and has opinions about
+                squat rack depth.
+              </p>
+              <p>
+                Across those years, he has trained in gyms that span the full spectrum of what
+                India offers. Luxury wellness clubs in Bandra and Jubilee Hills with ice baths and
+                Rs 10,000 monthly fees. Old-school iron rooms in Laxmi Nagar and Baranagar where
+                the equipment is 20 years old but the gains are real. Corporate 24-hour gyms in
+                HITEC City and Whitefield built for shift workers. Women-only studios in South
+                Chennai. Boutique CrossFit boxes in Koramangala. Budget gyms in Mira Road where
+                Rs 1,000 gets you more than you expect.
+              </p>
+              <p>
+                That range of experience is what makes Gymlocator.in different. Every locality
+                page, every pricing tier, every &ldquo;what to look for&rdquo; bullet is informed
+                by someone who has actually trained in that market - not scraped it from a dataset.
+              </p>
+            </div>
           </div>
-        </div>
 
-        {/* What we offer */}
-        <div>
-          <h2 className="h2 text-text mb-5">What you get</h2>
           <div className="space-y-4">
+            <h2 className="h2 text-text mb-6">What 10 years teaches you</h2>
             {[
               {
-                icon: 'ti-search',
-                title: 'No signup needed',
-                desc: 'Browse every gym, compare fees and timings without creating an account or giving us your phone number.',
+                icon: 'ti-barbell',
+                title: 'The equipment gap is real',
+                desc: 'A Rs 5,000 gym is not always better than a Rs 1,500 gym. The best squat rack in India I ever used was in a basement gym in Dwarka charging Rs 1,200 a month. Equipment quality and price have a weak correlation in India.',
               },
               {
-                icon: 'ti-phone',
-                title: 'Direct gym contact',
-                desc: 'Every listing shows a real phone number. Call the gym directly - no booking fees, no commissions.',
+                icon: 'ti-clock',
+                title: 'Timing matters more than most admit',
+                desc: 'A great gym at the wrong time is worse than an average gym at the right time. Crowd density at 7:30 PM in Indian gyms is a genuine problem. 24-hour access is not a luxury for shift workers - it is a productivity tool.',
               },
               {
                 icon: 'ti-map-pin',
-                title: 'Hyper-local data',
-                desc: 'Locality-level pages with real pricing, crowd insights and what to look for in each specific area.',
+                title: 'Proximity is the only filter that matters long-term',
+                desc: 'Every fitness professional will tell you this. The best gym is the one you actually go to. Anything more than 15 minutes from home or office has a 90 percent dropout rate within 60 days, regardless of quality.',
               },
               {
-                icon: 'ti-star',
-                title: 'Real Google ratings',
-                desc: 'Ratings and review counts pulled directly from Google Maps - no fake reviews or paid placements.',
+                icon: 'ti-users',
+                title: 'Women-only spaces are underrated',
+                desc: 'Having trained alongside members who switched from mixed to women-only gyms, the retention and consistency improvement is significant. This is not a niche preference. It is a structural need in the Indian fitness market.',
+              },
+              {
+                icon: 'ti-run',
+                title: 'Cross-training changes your standards',
+                desc: 'Running, cycling, and basketball alongside weight training gives you a sharper eye for what a well-rounded facility looks like. A gym that only serves powerlifters serves one demographic. The best gyms serve all of them.',
               },
             ].map((item) => (
               <div key={item.title} className="flex items-start gap-4 bg-surface b-hair rounded-md p-4">
                 <i className={`ti ${item.icon} text-[20px] text-accent flex-shrink-0 mt-0.5`} />
                 <div>
                   <div className="text-[14px] font-bold text-text mb-1">{item.title}</div>
-                  <div className="text-[13px] text-accent">{item.desc}</div>
+                  <div className="text-[13px] text-accent leading-relaxed">{item.desc}</div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
 
+        </div>
+      </div>
+
+      {/* WHY THIS EXISTS */}
+      <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-16 bb-hair">
+        <div className="max-w-[720px]">
+          <h2 className="h2 text-text mb-6">Why Gymlocator.in exists</h2>
+          <div className="space-y-4 text-[15px] text-accent leading-relaxed">
+            <p>
+              Every time someone asked for a gym recommendation in a new city, the answer required
+              10 minutes of explaining - which locality, what budget, what time of day, what fitness
+              goals, whether they care about crowds. None of the existing platforms captured that
+              nuance.
+            </p>
+            <p>
+              Justdial shows listings but not context. Google Maps shows ratings but not pricing.
+              Cult.fit shows only its own gyms. Fitternity requires a signup before showing anything
+              useful. Every platform prioritizes its own revenue over your decision.
+            </p>
+            <p>
+              Gymlocator.in was built to be the recommendation you would get from someone who has
+              actually trained in that city - specific, honest, and free.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* WHAT WE OFFER */}
+      <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-16 bb-hair">
+        <h2 className="h2 text-text mb-8">How we make recommendations</h2>
+        <div className="grid md:grid-cols-3 gap-4">
+          {[
+            {
+              icon: 'ti-star',
+              title: 'Real Google ratings',
+              desc: 'Every rating and review count is pulled directly from Google Maps. No paid placements, no inflated scores.',
+            },
+            {
+              icon: 'ti-currency-rupee',
+              title: 'Real pricing tiers',
+              desc: 'Budget, standard, and premium tiers are based on actual market research per locality - not generic city-wide averages.',
+            },
+            {
+              icon: 'ti-map-pin',
+              title: 'Hyper-local context',
+              desc: 'Each locality page is written with knowledge of the actual neighbourhood - traffic patterns, demographics, gym culture, and what to watch out for.',
+            },
+            {
+              icon: 'ti-phone',
+              title: 'Direct gym contact',
+              desc: 'Real phone numbers so you call the gym directly. No booking commissions, no platform cut, no middlemen.',
+            },
+            {
+              icon: 'ti-photo',
+              title: 'Real gym photos',
+              desc: 'Photos sourced from Google Maps - actual gym interiors and exteriors, not marketing shots from the gym itself.',
+            },
+            {
+              icon: 'ti-shield-check',
+              title: 'No paid rankings',
+              desc: 'Gyms cannot pay to rank higher on Gymlocator.in. Default sort is by genuine Google Maps rating, highest first.',
+            },
+          ].map((item) => (
+            <div key={item.title} className="bg-surface b-hair rounded-md p-5">
+              <i className={`ti ${item.icon} text-[22px] text-accent mb-3 block`} />
+              <div className="text-[14px] font-bold text-text mb-1.5">{item.title}</div>
+              <div className="text-[13px] text-accent leading-relaxed">{item.desc}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* STATS */}
@@ -94,12 +171,10 @@ export default function AboutPage() {
             { number: '1,090+', label: 'Gyms listed' },
             { number: '8',      label: 'Cities covered' },
             { number: '60',     label: 'Localities' },
-            { number: '100%', label: 'Free to use' },
+            { number: '100%',   label: 'Free to use' },
           ].map((stat) => (
             <div key={stat.label}>
-              <div className="text-[32px] font-black tracking-tight text-base">
-                {stat.number}
-              </div>
+              <div className="text-[32px] font-black tracking-tight text-base">{stat.number}</div>
               <div className="text-[13px] font-bold uppercase tracking-[0.08em] text-accent mt-1">
                 {stat.label}
               </div>
@@ -114,7 +189,8 @@ export default function AboutPage() {
           <div>
             <h2 className="h2 text-text mb-2">Own a gym?</h2>
             <p className="text-[15px] text-accent">
-              Get your gym listed on Gymlocator.in for free. Verified listings get priority placement.
+              Get your gym listed on Gymlocator.in for free. Verified listings get priority
+              placement on city and locality pages.
             </p>
           </div>
           <Link
