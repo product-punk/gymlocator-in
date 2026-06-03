@@ -10,13 +10,6 @@ const POPULAR_CITIES = [
   { name: 'Chennai', slug: 'chennai' },
 ]
 
-const STATS = [
-  { value: '2,580+', label: 'Gyms listed' },
-  { value: '8', label: 'Cities' },
-  { value: '15', label: 'Localities' },
-  { value: '100%', label: 'Free' },
-]
-
 export default function Hero() {
   return (
     <section className="bb-hair min-h-[80vh] flex flex-col justify-center">
@@ -62,21 +55,8 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Stats strip */}
-        <div className="mt-16 max-w-[780px]">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border b-hair rounded-md overflow-hidden">
-            {STATS.map(({ value, label }) => (
-              <div key={label} className="bg-surface p-5">
-                <div className="text-[24px] font-bold tracking-tight text-text">
-                  {value}
-                </div>
-                <div className="label !text-accent mt-1">{label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
 
-      </div>
+</div>
     </section>
   )
 }
