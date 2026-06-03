@@ -123,7 +123,7 @@ export default function ListYourGymPage() {
       <div className="silver-section bt-hair bb-hair">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-10 flex flex-wrap gap-x-16 gap-y-6">
           {[
-            { n: '554+',  l: 'Gyms listed' },
+            { n: '1,090+', l: 'Gyms listed' },
             { n: '8',     l: 'Cities' },
             { n: 'Free',  l: 'Forever for gyms' },
             { n: '24hrs', l: 'Listing turnaround' },

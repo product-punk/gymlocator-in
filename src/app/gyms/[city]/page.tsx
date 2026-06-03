@@ -34,7 +34,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
   const city = await getCityBySlug(citySlug)
   if (!city) return {}
   return {
-    title: `Best Gyms in ${city.name} – Compare Fees, Timings & Ratings | Gymlocator`,
+    title: `Best Gyms in ${city.name} - Compare Fees, Timings & Ratings | Gymlocator`,
     description: city.meta_description || `Find the best gyms in ${city.name} on Gymlocator. Compare ${city.gym_count}+ gyms by fees, ratings, timings & amenities.`,
     robots: {
       index: currentPage === 1 && !gender && !is247 && !min_rating,
@@ -81,7 +81,7 @@ export default async function CityPage({ params, searchParams }: Props) {
     : [
         {
           q: `How much does a gym membership cost in ${cityName}?`,
-          a: `Gym memberships in ${cityName} typically range from ${city.price_budget_monthly || '₹1,200–₹1,800'}/month for budget gyms to ${city.price_premium_monthly || '₹4,000–₹8,000+'}/month for premium clubs.`,
+          a: `Gym memberships in ${cityName} typically range from ${city.price_budget_monthly || '₹1,200-₹1,800'}/month for budget gyms to ${city.price_premium_monthly || '₹4,000-₹8,000+'}/month for premium clubs.`,
         },
         {
           q: `Which is the best 24-hour gym in ${cityName}?`,
@@ -147,7 +147,7 @@ export default async function CityPage({ params, searchParams }: Props) {
         <p className="text-[16px] text-accent mt-3 max-w-[640px]">
           {currentPage === 1
             ? city.seo_subtitle || `Compare ${city.gym_count || total}+ gyms across ${cityName} by fees, ratings, timings and amenities.`
-            : `Showing gyms ${offset + 1}–${Math.min(offset + GYMS_PER_PAGE, total)} of ${total} in ${cityName}.`
+            : `Showing gyms ${offset + 1}-${Math.min(offset + GYMS_PER_PAGE, total)} of ${total} in ${cityName}.`
           }
         </p>
 
@@ -175,11 +175,11 @@ export default async function CityPage({ params, searchParams }: Props) {
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-base" />
             {cityName}
           </span>
-          <span className="opacity-25">———</span>
+          <span className="opacity-25">---</span>
           <span>
             <strong className="text-[15px] mr-1">{city.gym_count || total}</strong> gyms
           </span>
-          <span className="opacity-25">———</span>
+          <span className="opacity-25">---</span>
           <span>
             <strong className="text-[15px] mr-1">{localities.length}</strong> localities
           </span>
@@ -199,7 +199,7 @@ export default async function CityPage({ params, searchParams }: Props) {
           <div className="text-center py-20 text-accent">
             <i className="ti ti-building-skyscraper text-[48px] mb-4 block" />
             <p className="text-[16px]">No gyms listed yet in {cityName}.</p>
-            <p className="text-[14px] mt-2">Check back soon — we&apos;re adding new listings daily.</p>
+            <p className="text-[14px] mt-2">Check back soon - we&apos;re adding new listings daily.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -279,7 +279,7 @@ export default async function CityPage({ params, searchParams }: Props) {
         )}
       </div>
 
-      {/* SEO SECTIONS — page 1 only */}
+      {/* SEO SECTIONS - page 1 only */}
       {currentPage === 1 && (
         <>
           {/* BROWSE BY AREA */}
@@ -353,9 +353,9 @@ export default async function CityPage({ params, searchParams }: Props) {
                   </thead>
                   <tbody>
                     {[
-                      { tier: 'Budget', monthly: city.price_budget_monthly || '₹1,200–1,800', annual: city.price_budget_annual || '₹10,000–15,000', includes: 'Equipment, locker, basic trainer' },
-                      { tier: 'Standard', monthly: city.price_standard_monthly || '₹2,000–3,500', annual: city.price_standard_annual || '₹18,000–28,000', includes: '+ Group classes, shower, personal plan' },
-                      { tier: 'Premium', monthly: city.price_premium_monthly || '₹4,000–8,000+', annual: city.price_premium_annual || '₹35,000–80,000', includes: '+ Pool, steam/sauna, dedicated PT' },
+                      { tier: 'Budget', monthly: city.price_budget_monthly || '₹1,200-1,800', annual: city.price_budget_annual || '₹10,000-15,000', includes: 'Equipment, locker, basic trainer' },
+                      { tier: 'Standard', monthly: city.price_standard_monthly || '₹2,000-3,500', annual: city.price_standard_annual || '₹18,000-28,000', includes: '+ Group classes, shower, personal plan' },
+                      { tier: 'Premium', monthly: city.price_premium_monthly || '₹4,000-8,000+', annual: city.price_premium_annual || '₹35,000-80,000', includes: '+ Pool, steam/sauna, dedicated PT' },
                     ].map((row, i) => (
                       <tr key={row.tier} className={i < 2 ? 'bb-hair' : ''}>
                         <td className="p-4 font-semibold text-text">{row.tier}</td>

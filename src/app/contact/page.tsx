@@ -15,7 +15,7 @@ export default function ContactPage() {
         <div className="label !text-accent mb-4">Contact</div>
         <h1 className="h1 text-text">Get in touch</h1>
         <p className="text-[17px] text-accent mt-4 max-w-[520px]">
-          Questions, corrections, partnership enquiries or feedback — we read every message.
+          Questions, corrections, partnership enquiries or feedback - we read every message.
         </p>
       </div>
 

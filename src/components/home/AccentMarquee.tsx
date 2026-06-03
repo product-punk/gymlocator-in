@@ -6,19 +6,19 @@ export default function AccentMarquee() {
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-base" />
           Live across India
         </span>
-        <span className="opacity-25">———</span>
+        <span className="opacity-25">---</span>
         <span>
-          <strong className="text-[15px] mr-1">2,580+</strong> gyms listed
+          <strong className="text-[15px] mr-1">1,090+</strong> gyms listed
         </span>
-        <span className="opacity-25">———</span>
+        <span className="opacity-25">---</span>
         <span>
           <strong className="text-[15px] mr-1">8</strong> cities
         </span>
-        <span className="opacity-25">———</span>
+        <span className="opacity-25">---</span>
         <span>
-          <strong className="text-[15px] mr-1">13</strong> amenities
+          <strong className="text-[15px] mr-1">60</strong> localities
         </span>
-        <span className="opacity-25">———</span>
+        <span className="opacity-25">---</span>
         <span>
           <strong className="text-[15px] mr-1">24/7</strong> open access
         </span>

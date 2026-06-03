@@ -84,7 +84,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
   if (isAmenity) {
     const label = AMENITY_LABELS[slug] || formatSlug(slug)
     return {
-      title: `${label} Gyms in ${cityName} — Find & Compare | Gymlocator`,
+      title: `${label} Gyms in ${cityName} - Find & Compare | Gymlocator`,
       description: `Find the best ${label} gyms in ${cityName} on Gymlocator. Compare fees, ratings, timings & amenities.`,
       robots: { index: currentPage === 1, follow: true },
       alternates: { canonical: `https://gymlocator.in/gyms/${citySlug}/${slug}` },
@@ -93,7 +93,7 @@ export async function generateMetadata({ params, searchParams }: Props) {
 
   const localityName = formatSlug(slug)
   return {
-    title: `Best Gyms in ${localityName}, ${cityName} — Fees, Timings & Reviews | Gymlocator`,
+    title: `Best Gyms in ${localityName}, ${cityName} - Fees, Timings & Reviews | Gymlocator`,
     description: `Discover top gyms in ${localityName}, ${cityName}. Compare fees, ratings, timings & amenities. Filter by 24x7, women-only, personal trainer & more.`,
     robots: { index: currentPage === 1 && !hasFilters, follow: true },
     alternates: { canonical: `https://gymlocator.in/gyms/${citySlug}/${slug}` },
@@ -173,7 +173,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
         <p className="text-[16px] text-accent mt-3 max-w-[640px]">
           {currentPage === 1
             ? pageSubtitle
-            : `Showing gyms ${offset + 1}–${Math.min(offset + GYMS_PER_PAGE, total)} of ${total}.`}
+            : `Showing gyms ${offset + 1}-${Math.min(offset + GYMS_PER_PAGE, total)} of ${total}.`}
         </p>
       </div>
 
@@ -184,16 +184,16 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-base" />
             {displayLabel}
           </span>
-          <span className="opacity-25">———</span>
+          <span className="opacity-25">---</span>
           <span>
             <strong className="text-[15px] mr-1">{total}</strong> gyms
           </span>
-          <span className="opacity-25">———</span>
+          <span className="opacity-25">---</span>
           <span>{cityName}</span>
         </div>
       </div>
 
-      {/* FILTERS — locality pages only */}
+      {/* FILTERS - locality pages only */}
       {!isAmenity && (
         <Suspense fallback={<div />}>
           <GymFilters citySlug={citySlug} localitySlug={slug} total={total} />

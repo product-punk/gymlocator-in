@@ -49,7 +49,7 @@ export default function Navbar() {
             List your gym
           </Link>
 
-          {/* Hamburger — mobile only */}
+          {/* Hamburger - mobile only */}
           <button
             className="md:hidden ghost text-accent p-1 -mr-1"
             onClick={() => setMenuOpen((prev) => !prev)}

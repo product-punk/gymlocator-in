@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     default: 'Find Best Gyms in India | Gymlocator.in',
     template: '%s | Gymlocator.in',
   },
-  description: 'Discover and compare gyms across India. Compare fees, timings, amenities and ratings — no signup needed.',
+  description: 'Discover and compare gyms across India. Compare fees, timings, amenities and ratings - no signup needed.',
   robots: {
     index: true,
     follow: true,

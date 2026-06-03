@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'About Gymlocator.in — Find the Best Gyms in India',
-  description: 'Gymlocator.in helps you find, compare and connect with the best gyms across India. No signup, no booking fees — just honest gym discovery.',
+  title: 'About Gymlocator.in - Find the Best Gyms in India',
+  description: 'Gymlocator.in helps you find, compare and connect with the best gyms across India. No signup, no booking fees - just honest gym discovery.',
   alternates: { canonical: 'https://gymlocator.in/about' },
   robots: { index: true, follow: true },
 }
@@ -18,7 +18,7 @@ export default function AboutPage() {
           India&apos;s most honest gym discovery platform.
         </h1>
         <p className="text-[17px] text-accent mt-5 max-w-[600px] leading-relaxed">
-          Gymlocator.in helps you find, compare and connect with the best gyms in your city — no
+          Gymlocator.in helps you find, compare and connect with the best gyms in your city - no
           signup required, no hidden booking fees, no middlemen.
         </p>
       </div>
@@ -37,7 +37,7 @@ export default function AboutPage() {
             </p>
             <p>
               We built Gymlocator.in to fix that. Every gym listing shows you real fees, real
-              timings, real photos from Google Maps, and a direct phone number — so you can call
+              timings, real photos from Google Maps, and a direct phone number - so you can call
               the gym yourself, without a platform taking a cut.
             </p>
             <p>
@@ -61,7 +61,7 @@ export default function AboutPage() {
               {
                 icon: 'ti-phone',
                 title: 'Direct gym contact',
-                desc: 'Every listing shows a real phone number. Call the gym directly — no booking fees, no commissions.',
+                desc: 'Every listing shows a real phone number. Call the gym directly - no booking fees, no commissions.',
               },
               {
                 icon: 'ti-map-pin',
@@ -71,7 +71,7 @@ export default function AboutPage() {
               {
                 icon: 'ti-star',
                 title: 'Real Google ratings',
-                desc: 'Ratings and review counts pulled directly from Google Maps — no fake reviews or paid placements.',
+                desc: 'Ratings and review counts pulled directly from Google Maps - no fake reviews or paid placements.',
               },
             ].map((item) => (
               <div key={item.title} className="flex items-start gap-4 bg-surface b-hair rounded-md p-4">
@@ -91,9 +91,9 @@ export default function AboutPage() {
       <div className="silver-section bt-hair bb-hair">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { number: '554+', label: 'Gyms listed' },
-            { number: '8',    label: 'Cities covered' },
-            { number: '28',   label: 'Localities' },
+            { number: '1,090+', label: 'Gyms listed' },
+            { number: '8',      label: 'Cities covered' },
+            { number: '60',     label: 'Localities' },
             { number: '100%', label: 'Free to use' },
           ].map((stat) => (
             <div key={stat.label}>

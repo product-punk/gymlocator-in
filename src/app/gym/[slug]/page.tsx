@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props) {
   const gym = await getGymBySlug(slug)
   if (!gym) return {}
   return {
-    title: `${gym.name}, ${gym.locality_slug ? formatSlug(gym.locality_slug) + ' ' : ''}${formatSlug(gym.city_slug)} — Timings, Fees & Reviews | Gymlocator`,
+    title: `${gym.name}, ${gym.locality_slug ? formatSlug(gym.locality_slug) + ' ' : ''}${formatSlug(gym.city_slug)} - Timings, Fees & Reviews | Gymlocator`,
     description: `${gym.name} in ${gym.locality_slug ? formatSlug(gym.locality_slug) + ', ' : ''}${formatSlug(gym.city_slug)}. ${gym.price_monthly ? 'Membership from Rs ' + gym.price_monthly + '/month. ' : ''}Timings, amenities, contact and directions on Gymlocator.`,
     robots: {
       index: true,
@@ -92,7 +92,7 @@ export default async function GymDetailPage({ params }: Props) {
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
 
-          {/* LEFT — main content */}
+          {/* LEFT - main content */}
           <div className="flex-1 min-w-0 order-2 lg:order-1">
 
             {/* IMAGE GALLERY */}
@@ -173,7 +173,7 @@ export default async function GymDetailPage({ params }: Props) {
               {[
                 {
                   label: 'Timings',
-                  value: gym.is_247 ? '24 / 7 Open' : gym.timing_open ? `${gym.timing_open} – ${gym.timing_close}` : 'Call to confirm',
+                  value: gym.is_247 ? '24 / 7 Open' : gym.timing_open ? `${gym.timing_open} - ${gym.timing_close}` : 'Call to confirm',
                   icon: 'ti-clock',
                 },
                 {
@@ -266,7 +266,7 @@ export default async function GymDetailPage({ params }: Props) {
 
           </div>
 
-          {/* RIGHT — sticky CTA sidebar */}
+          {/* RIGHT - sticky CTA sidebar */}
           <div className="lg:w-[320px] flex-shrink-0 order-1 lg:order-2">
             <div className="sticky top-20">
 

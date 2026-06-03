@@ -58,7 +58,7 @@ export default function Footer() {
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-14 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-10 md:gap-8">
 
-          {/* Left — brand */}
+          {/* Left - brand */}
           <div className="md:col-span-1">
             <Link href="/">
               <Image
@@ -86,7 +86,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Right — link columns */}
+          {/* Right - link columns */}
           <div className="md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-8">
             {FOOTER_SECTIONS.map(({ heading, links }) => (
               <div key={heading}>
@@ -117,7 +117,7 @@ export default function Footer() {
       <div className="bt-hair py-5">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="text-[12px] text-accent">
-            © 2026 Gymlocator.in — All rights reserved.
+            © 2026 Gymlocator.in - All rights reserved.
           </div>
           <div className="text-[12px] text-accent">
             Built with ❤️ for Indian fitness enthusiasts.

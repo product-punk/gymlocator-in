@@ -110,7 +110,7 @@ export default function GymCard({ gym }: { gym: {
             <i className="ti ti-clock text-[12px]" />
             {gym.is_247
               ? '24 / 7 Open'
-              : `${gym.timing_open} – ${gym.timing_close}`}
+              : `${gym.timing_open} - ${gym.timing_close}`}
           </div>
         )}
 

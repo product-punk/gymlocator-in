@@ -13,7 +13,7 @@ const STEPS = [
     icon: 'ti-arrows-shuffle-2',
     title: 'Compare gyms',
     description:
-      'Side-by-side filters for price tier, AC, timings, gender policy and 13 amenities — including 24/7 and women-only.',
+      'Side-by-side filters for price tier, AC, timings, gender policy and 13 amenities - including 24/7 and women-only.',
   },
   {
     number: '03',
