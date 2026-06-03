@@ -1,16 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type FormState = {
   weight: string
   height: string
   age: string
   gender: string
-  breakfast: string
-  lunch: string
-  dinner: string
   experience: string
   condition: string
   goal: string
@@ -34,35 +31,24 @@ type Result = {
   warning: string
 }
 
-const BREAKFAST_OPTIONS = [
-  'Roti and sabzi',
-  'Poha or upma',
-  'Idli or dosa',
-  'Paratha with curd',
-  'Eggs and toast',
-  'Oats or muesli',
-  'Protein shake',
-  'Nothing (skip breakfast)',
+const BREAKFAST_CHIPS = [
+  'Roti and sabzi', 'Poha', 'Upma', 'Idli', 'Dosa',
+  'Paratha with curd', 'Eggs', 'Toast', 'Oats',
+  'Protein shake', 'Fruits', 'Curd', 'Milk', 'Nothing',
 ]
 
-const LUNCH_OPTIONS = [
-  'Dal rice',
-  'Roti dal sabzi',
-  'Chicken or fish with rice',
-  'Paneer or tofu curry',
-  'Curd rice',
-  'Salad only',
-  'Outside food (restaurant or canteen)',
+const LUNCH_CHIPS = [
+  'Dal rice', 'Roti dal sabzi', 'Chicken with rice',
+  'Fish with rice', 'Paneer curry', 'Tofu curry',
+  'Curd rice', 'Salad', 'Rajma chawal',
+  'Chhole with roti', 'Outside food', 'Skipped',
 ]
 
-const DINNER_OPTIONS = [
-  'Dal roti sabzi',
-  'Chicken or mutton curry with roti',
-  'Fish curry with rice',
-  'Paneer or tofu dish',
-  'Light salad or soup',
-  'Same as lunch',
-  'Outside food',
+const DINNER_CHIPS = [
+  'Dal roti sabzi', 'Chicken curry', 'Mutton curry',
+  'Fish curry', 'Paneer dish', 'Tofu dish',
+  'Khichdi', 'Light salad', 'Soup', 'Same as lunch',
+  'Outside food', 'Skipped',
 ]
 
 const EXPERIENCE_OPTIONS = [
@@ -89,6 +75,14 @@ const GOAL_OPTIONS = [
   'Athletic performance',
 ]
 
+const LOADING_MESSAGES = [
+  'Analysing your diet...',
+  'Calculating protein gaps...',
+  'Checking your workout intensity...',
+  'Preparing Indian food suggestions...',
+  'Almost ready...',
+]
+
 const INPUT_CLASS = 'w-full bg-raised b-hair rounded-sm px-3 py-2.5 text-[14px] text-text placeholder:text-accent outline-none focus:border-border-hi transition-colors'
 
 const verdictStyle = (verdict: string) => {
@@ -100,25 +94,55 @@ const verdictStyle = (verdict: string) => {
   return 'bg-surface text-accent'
 }
 
+const combineMeal = (chips: string[], custom: string) => {
+  const parts = [...chips, custom.trim()].filter(Boolean)
+  return parts.length ? parts.join(', ') : 'Not specified'
+}
+
 export default function ProteinCalculator() {
   const [form, setForm] = useState<FormState>({
     weight: '',
     height: '',
     age: '',
     gender: 'Male',
-    breakfast: BREAKFAST_OPTIONS[0],
-    lunch: LUNCH_OPTIONS[0],
-    dinner: DINNER_OPTIONS[0],
     experience: EXPERIENCE_OPTIONS[0],
     condition: CONDITION_OPTIONS[0],
     goal: GOAL_OPTIONS[0],
   })
+
+  const [breakfastChips, setBreakfastChips] = useState<string[]>([])
+  const [breakfastCustom, setBreakfastCustom] = useState('')
+  const [lunchChips, setLunchChips] = useState<string[]>([])
+  const [lunchCustom, setLunchCustom] = useState('')
+  const [dinnerChips, setDinnerChips] = useState<string[]>([])
+  const [dinnerCustom, setDinnerCustom] = useState('')
+
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<Result | null>(null)
   const [error, setError] = useState<string>('')
+  const [messageIndex, setMessageIndex] = useState(0)
+
+  useEffect(() => {
+    if (!loading) {
+      setMessageIndex(0)
+      return
+    }
+    const id = setInterval(() => {
+      setMessageIndex((i) => (i + 1) % LOADING_MESSAGES.length)
+    }, 2000)
+    return () => clearInterval(id)
+  }, [loading])
 
   const update = (key: keyof FormState, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const toggleChip = (
+    chips: string[],
+    setChips: (v: string[]) => void,
+    value: string,
+  ) => {
+    setChips(chips.includes(value) ? chips.filter((c) => c !== value) : [...chips, value])
   }
 
   const submit = async (e: React.FormEvent) => {
@@ -126,10 +150,16 @@ export default function ProteinCalculator() {
     setError('')
     setLoading(true)
     try {
+      const payload = {
+        ...form,
+        breakfast: combineMeal(breakfastChips, breakfastCustom),
+        lunch:     combineMeal(lunchChips, lunchCustom),
+        dinner:    combineMeal(dinnerChips, dinnerCustom),
+      }
       const res = await fetch('/api/protein-calculator', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       })
       if (!res.ok) throw new Error('Calculation failed')
       const data: Result = await res.json()
@@ -148,17 +178,8 @@ export default function ProteinCalculator() {
 
   if (result) {
     return (
-      <main className="min-h-screen bg-base">
-
-        {/* HEADER */}
-        <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-16 pb-10 bb-hair">
-          <div className="label !text-accent mb-4">Your protein plan</div>
-          <h1 className="h1 text-text max-w-[640px]">
-            Here is what your body actually needs.
-          </h1>
-        </div>
-
-        <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12 grid md:grid-cols-3 gap-8">
+      <section className="max-w-[1280px] mx-auto px-5 md:px-10 py-12">
+        <div className="grid md:grid-cols-3 gap-8">
 
           {/* LEFT - HEADLINE NUMBER */}
           <div className="md:col-span-1">
@@ -251,206 +272,201 @@ export default function ProteinCalculator() {
         </div>
 
         {/* CTA */}
-        <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-16">
-          <div className="bg-surface b-hair rounded-md p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div>
-              <h2 className="h2 text-text mb-2">Ready to find a gym that fits your goals?</h2>
-              <p className="text-[15px] text-accent">
-                Browse top-rated gyms across India with real pricing and Google ratings.
-              </p>
-            </div>
-            <Link
-              href="/cities"
-              className="inline-flex items-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[14px] px-6 py-3 rounded-sm hover:bg-text transition-colors flex-shrink-0"
-            >
-              Browse gyms by city
-              <i className="ti ti-arrow-right text-[14px]" />
-            </Link>
+        <div className="mt-12 bg-surface b-hair rounded-md p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <h2 className="h2 text-text mb-2">Ready to find a gym that fits your goals?</h2>
+            <p className="text-[15px] text-accent">
+              Browse top-rated gyms across India with real pricing and Google ratings.
+            </p>
           </div>
+          <Link
+            href="/cities"
+            className="inline-flex items-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[14px] px-6 py-3 rounded-sm hover:bg-text transition-colors flex-shrink-0"
+          >
+            Browse gyms by city
+            <i className="ti ti-arrow-right text-[14px]" />
+          </Link>
         </div>
-
-      </main>
+      </section>
     )
   }
 
   return (
-    <main className="min-h-screen bg-base">
+    <form onSubmit={submit} className="max-w-[1280px] mx-auto px-5 md:px-10 py-12 grid md:grid-cols-2 gap-6">
 
-      {/* HERO */}
-      <div className="max-w-[1280px] mx-auto px-5 md:px-10 pt-16 pb-12 bb-hair">
-        <div className="label !text-accent mb-4">Free calculator</div>
-        <h1 className="h1 text-text max-w-[700px]">
-          Protein intake calculator for gym-goers in India.
-        </h1>
-        <p className="text-[17px] text-accent mt-5 max-w-[620px] leading-relaxed">
-          Get a personalized daily protein target based on your weight, training, diet and goals.
-          Tuned for Indian meals - dal, paneer, eggs, roti and the rest.
-        </p>
+      {/* PERSONAL */}
+      <div className="bg-surface b-hair rounded-md p-6">
+        <h2 className="h2 text-text mb-5">About you</h2>
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Weight (kg)">
+              <input
+                type="number"
+                min="20"
+                max="250"
+                required
+                value={form.weight}
+                onChange={(e) => update('weight', e.target.value)}
+                placeholder="e.g. 72"
+                className={INPUT_CLASS}
+              />
+            </Field>
+            <Field label="Height (cm)">
+              <input
+                type="number"
+                min="100"
+                max="230"
+                required
+                value={form.height}
+                onChange={(e) => update('height', e.target.value)}
+                placeholder="e.g. 175"
+                className={INPUT_CLASS}
+              />
+            </Field>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Age">
+              <input
+                type="number"
+                min="13"
+                max="100"
+                required
+                value={form.age}
+                onChange={(e) => update('age', e.target.value)}
+                placeholder="e.g. 28"
+                className={INPUT_CLASS}
+              />
+            </Field>
+            <Field label="Gender">
+              <select
+                value={form.gender}
+                onChange={(e) => update('gender', e.target.value)}
+                className={INPUT_CLASS}
+              >
+                <option>Male</option>
+                <option>Female</option>
+              </select>
+            </Field>
+          </div>
+        </div>
       </div>
 
-      <form onSubmit={submit} className="max-w-[1280px] mx-auto px-5 md:px-10 py-12 grid md:grid-cols-2 gap-6">
+      {/* FITNESS */}
+      <div className="bg-surface b-hair rounded-md p-6">
+        <h2 className="h2 text-text mb-5">Your training</h2>
+        <div className="space-y-4">
+          <Field label="Years of experience working out">
+            <select
+              value={form.experience}
+              onChange={(e) => update('experience', e.target.value)}
+              className={INPUT_CLASS}
+            >
+              {EXPERIENCE_OPTIONS.map((o) => <option key={o}>{o}</option>)}
+            </select>
+          </Field>
 
-        {/* PERSONAL */}
-        <div className="bg-surface b-hair rounded-md p-6">
-          <h2 className="h2 text-text mb-5">About you</h2>
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="Weight (kg)">
-                <input
-                  type="number"
-                  min="20"
-                  max="250"
-                  required
-                  value={form.weight}
-                  onChange={(e) => update('weight', e.target.value)}
-                  placeholder="e.g. 72"
-                  className={INPUT_CLASS}
-                />
-              </Field>
-              <Field label="Height (cm)">
-                <input
-                  type="number"
-                  min="100"
-                  max="230"
-                  required
-                  value={form.height}
-                  onChange={(e) => update('height', e.target.value)}
-                  placeholder="e.g. 175"
-                  className={INPUT_CLASS}
-                />
-              </Field>
+          <Field label="Current workout condition">
+            <select
+              value={form.condition}
+              onChange={(e) => update('condition', e.target.value)}
+              className={INPUT_CLASS}
+            >
+              {CONDITION_OPTIONS.map((o) => <option key={o}>{o}</option>)}
+            </select>
+          </Field>
+
+          <Field label="Primary fitness goal">
+            <select
+              value={form.goal}
+              onChange={(e) => update('goal', e.target.value)}
+              className={INPUT_CLASS}
+            >
+              {GOAL_OPTIONS.map((o) => <option key={o}>{o}</option>)}
+            </select>
+          </Field>
+        </div>
+      </div>
+
+      {/* DIET */}
+      <div className="bg-surface b-hair rounded-md p-6 md:col-span-2">
+        <h2 className="h2 text-text mb-2">Your typical day of eating</h2>
+        <p className="text-[13px] text-accent mb-6">
+          Tap everything you commonly eat. Add anything missing in the text box below each meal.
+        </p>
+
+        <div className="space-y-7">
+          <MealBlock
+            label="Breakfast"
+            options={BREAKFAST_CHIPS}
+            selected={breakfastChips}
+            onToggle={(v) => toggleChip(breakfastChips, setBreakfastChips, v)}
+            custom={breakfastCustom}
+            onCustom={setBreakfastCustom}
+          />
+
+          <MealBlock
+            label="Lunch"
+            options={LUNCH_CHIPS}
+            selected={lunchChips}
+            onToggle={(v) => toggleChip(lunchChips, setLunchChips, v)}
+            custom={lunchCustom}
+            onCustom={setLunchCustom}
+          />
+
+          <MealBlock
+            label="Dinner"
+            options={DINNER_CHIPS}
+            selected={dinnerChips}
+            onToggle={(v) => toggleChip(dinnerChips, setDinnerChips, v)}
+            custom={dinnerCustom}
+            onCustom={setDinnerCustom}
+          />
+        </div>
+      </div>
+
+      {/* CTA / LOADING */}
+      <div className="md:col-span-2">
+        {error && (
+          <div className="bg-red-950 border border-red-900 rounded-md p-4 mb-4 text-[13px] text-red-200">
+            {error}
+          </div>
+        )}
+
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-12 gap-4">
+            <div className="relative">
+              <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center animate-pulse">
+                <i className="ti ti-barbell text-[32px] text-accent" />
+              </div>
+              <div className="absolute inset-0 rounded-full border-2 border-accent/40 animate-ping" />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="Age">
-                <input
-                  type="number"
-                  min="13"
-                  max="100"
-                  required
-                  value={form.age}
-                  onChange={(e) => update('age', e.target.value)}
-                  placeholder="e.g. 28"
-                  className={INPUT_CLASS}
-                />
-              </Field>
-              <Field label="Gender">
-                <select
-                  value={form.gender}
-                  onChange={(e) => update('gender', e.target.value)}
-                  className={INPUT_CLASS}
-                >
-                  <option>Male</option>
-                  <option>Female</option>
-                </select>
-              </Field>
-            </div>
+            <p className="text-[14px] text-accent transition-opacity duration-300">
+              {LOADING_MESSAGES[messageIndex]}
+            </p>
+
+            <p className="text-[12px] text-accent opacity-60">
+              GPT-4o-mini is reviewing your profile
+            </p>
           </div>
-        </div>
+        ) : (
+          <>
+            <button
+              type="submit"
+              className="w-full flex items-center justify-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[15px] py-4 rounded-sm hover:bg-text transition-colors"
+            >
+              <i className="ti ti-calculator text-[16px]" />
+              Calculate my protein needs
+            </button>
+            <p className="text-[12px] text-accent text-center mt-3">
+              Powered by AI nutrition analysis. Results are estimates, not medical advice.
+            </p>
+          </>
+        )}
+      </div>
 
-        {/* FITNESS */}
-        <div className="bg-surface b-hair rounded-md p-6">
-          <h2 className="h2 text-text mb-5">Your training</h2>
-          <div className="space-y-4">
-            <Field label="Years of experience working out">
-              <select
-                value={form.experience}
-                onChange={(e) => update('experience', e.target.value)}
-                className={INPUT_CLASS}
-              >
-                {EXPERIENCE_OPTIONS.map((o) => <option key={o}>{o}</option>)}
-              </select>
-            </Field>
-
-            <Field label="Current workout condition">
-              <select
-                value={form.condition}
-                onChange={(e) => update('condition', e.target.value)}
-                className={INPUT_CLASS}
-              >
-                {CONDITION_OPTIONS.map((o) => <option key={o}>{o}</option>)}
-              </select>
-            </Field>
-
-            <Field label="Primary fitness goal">
-              <select
-                value={form.goal}
-                onChange={(e) => update('goal', e.target.value)}
-                className={INPUT_CLASS}
-              >
-                {GOAL_OPTIONS.map((o) => <option key={o}>{o}</option>)}
-              </select>
-            </Field>
-          </div>
-        </div>
-
-        {/* DIET */}
-        <div className="bg-surface b-hair rounded-md p-6 md:col-span-2">
-          <h2 className="h2 text-text mb-5">Your typical day of eating</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            <Field label="Breakfast">
-              <select
-                value={form.breakfast}
-                onChange={(e) => update('breakfast', e.target.value)}
-                className={INPUT_CLASS}
-              >
-                {BREAKFAST_OPTIONS.map((o) => <option key={o}>{o}</option>)}
-              </select>
-            </Field>
-
-            <Field label="Lunch">
-              <select
-                value={form.lunch}
-                onChange={(e) => update('lunch', e.target.value)}
-                className={INPUT_CLASS}
-              >
-                {LUNCH_OPTIONS.map((o) => <option key={o}>{o}</option>)}
-              </select>
-            </Field>
-
-            <Field label="Dinner">
-              <select
-                value={form.dinner}
-                onChange={(e) => update('dinner', e.target.value)}
-                className={INPUT_CLASS}
-              >
-                {DINNER_OPTIONS.map((o) => <option key={o}>{o}</option>)}
-              </select>
-            </Field>
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div className="md:col-span-2">
-          {error && (
-            <div className="bg-red-950 border border-red-900 rounded-md p-4 mb-4 text-[13px] text-red-200">
-              {error}
-            </div>
-          )}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full flex items-center justify-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[15px] py-4 rounded-sm hover:bg-text transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            {loading ? (
-              <>
-                <span className="inline-block w-4 h-4 border-2 border-[#0C0C0C] border-t-transparent rounded-full animate-spin" />
-                Calculating...
-              </>
-            ) : (
-              <>
-                <i className="ti ti-calculator text-[16px]" />
-                Calculate my protein needs
-              </>
-            )}
-          </button>
-          <p className="text-[12px] text-accent text-center mt-3">
-            Powered by AI nutrition analysis. Results are estimates, not medical advice.
-          </p>
-        </div>
-
-      </form>
-    </main>
+    </form>
   )
 }
 
@@ -459,6 +475,49 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     <div>
       <label className="block text-[13px] font-semibold text-accent mb-1.5">{label}</label>
       {children}
+    </div>
+  )
+}
+
+function MealBlock({
+  label, options, selected, onToggle, custom, onCustom,
+}: {
+  label: string
+  options: string[]
+  selected: string[]
+  onToggle: (v: string) => void
+  custom: string
+  onCustom: (v: string) => void
+}) {
+  return (
+    <div>
+      <div className="text-[14px] font-bold text-text mb-3">{label}</div>
+      <div className="flex flex-wrap gap-2 mb-3">
+        {options.map((o) => {
+          const active = selected.includes(o)
+          return (
+            <button
+              key={o}
+              type="button"
+              onClick={() => onToggle(o)}
+              className={`text-[12px] px-3 py-1.5 rounded-full transition-colors ${
+                active
+                  ? 'bg-accent text-[#0C0C0C] font-bold'
+                  : 'bg-surface b-hair text-accent hover:border-border-hi'
+              }`}
+            >
+              {o}
+            </button>
+          )
+        })}
+      </div>
+      <input
+        type="text"
+        value={custom}
+        onChange={(e) => onCustom(e.target.value)}
+        placeholder="Add something else (e.g. whey shake, sprouts chaat)"
+        className={INPUT_CLASS}
+      />
     </div>
   )
 }

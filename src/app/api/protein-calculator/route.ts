@@ -1,4 +1,9 @@
-// Requires OPENAI_API_KEY in .env.local (local) and Netlify environment variables (prod).
+// OPENAI_API_KEY setup:
+// Local: add to .env.local -> OPENAI_API_KEY=sk-...
+// Production: Netlify -> Site settings ->
+//   Environment variables -> OPENAI_API_KEY=sk-...
+// Get key from: https://platform.openai.com/api-keys
+// Model: gpt-4o-mini (cost-efficient, fast)
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
