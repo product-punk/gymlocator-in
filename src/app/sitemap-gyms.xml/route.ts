@@ -11,10 +11,12 @@ export async function GET() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 
-  const { data: gyms } = await supabase
+  const { data: gyms, error } = await supabase
     .from('gyms')
     .select('slug, updated_at')
-    .eq('is_active', true)
+
+  console.log('Gyms count:', gyms?.length)
+  console.log('Gyms error:', error)
 
   const urls = (gyms ?? []).map((g: { slug: string; updated_at: string | null }) => ({
     loc: `${baseUrl}/gym/${g.slug}`,
