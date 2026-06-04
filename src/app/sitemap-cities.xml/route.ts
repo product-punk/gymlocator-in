@@ -13,13 +13,13 @@ export async function GET() {
 
   const { data: cities } = await supabase
     .from('cities')
-    .select('slug, updated_at')
+    .select('slug, created_at')
     .eq('is_active', true)
 
-  const urls = (cities ?? []).map((c: { slug: string; updated_at: string | null }) => ({
+  const urls = (cities ?? []).map((c: { slug: string; created_at: string | null }) => ({
     loc: `${baseUrl}/gyms/${c.slug}`,
-    lastmod: c.updated_at
-      ? new Date(c.updated_at).toISOString()
+    lastmod: c.created_at
+      ? new Date(c.created_at).toISOString()
       : new Date().toISOString(),
   }))
 

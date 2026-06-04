@@ -1,54 +1,24 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-export const revalidate = 0
+export const revalidate = 3600
 
 export async function GET() {
   const baseUrl = 'https://gymlocator.in'
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
-  console.log('Supabase URL:', supabaseUrl)
-  console.log('Supabase Key exists:', !!supabaseKey)
-
-  if (!supabaseUrl || !supabaseKey) {
-    return new NextResponse(
-      `<!-- ERROR: Missing env vars. URL: ${supabaseUrl}, Key: ${!!supabaseKey} -->`,
-      { headers: { 'Content-Type': 'text/xml' } }
-    )
-  }
-
-  const supabase = createClient(supabaseUrl, supabaseKey)
-
-  const { data: gyms, error, count } = await supabase
+  const { data: gyms } = await supabase
     .from('gyms')
-    .select('slug, updated_at', { count: 'exact' })
-    .limit(5)
+    .select('slug, created_at')
 
-  console.log('Gyms fetched:', gyms?.length)
-  console.log('Total count:', count)
-  console.log('Error:', error)
-  console.log('First gym:', gyms?.[0])
-
-  if (error) {
-    return new NextResponse(
-      `<!-- DB ERROR: ${error.message} | Code: ${error.code} -->`,
-      { headers: { 'Content-Type': 'text/xml' } }
-    )
-  }
-
-  if (!gyms || gyms.length === 0) {
-    return new NextResponse(
-      `<!-- NO DATA: Table empty or wrong table name. Count: ${count} -->`,
-      { headers: { 'Content-Type': 'text/xml' } }
-    )
-  }
-
-  const urls = gyms.map((g: { slug: string; updated_at: string | null }) => ({
+  const urls = (gyms ?? []).map((g: { slug: string; created_at: string | null }) => ({
     loc: `${baseUrl}/gym/${g.slug}`,
-    lastmod: g.updated_at
-      ? new Date(g.updated_at).toISOString()
+    lastmod: g.created_at
+      ? new Date(g.created_at).toISOString()
       : new Date().toISOString(),
   }))
 
@@ -63,6 +33,9 @@ ${urls.map(u => `  <url>
 </urlset>`
 
   return new NextResponse(xml, {
-    headers: { 'Content-Type': 'application/xml' },
+    headers: {
+      'Content-Type': 'application/xml',
+      'Cache-Control': 's-maxage=3600, stale-while-revalidate',
+    },
   })
 }
