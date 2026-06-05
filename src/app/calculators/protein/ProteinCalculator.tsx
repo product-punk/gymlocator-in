@@ -156,16 +156,23 @@ export default function ProteinCalculator() {
         lunch:     combineMeal(lunchChips, lunchCustom),
         dinner:    combineMeal(dinnerChips, dinnerCustom),
       }
+      console.log('Sending payload:', payload)
       const res = await fetch('/api/protein-calculator', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
-      if (!res.ok) throw new Error('Calculation failed')
-      const data: Result = await res.json()
-      setResult(data)
-    } catch {
-      setError('Something went wrong. Please try again.')
+      const data = await res.json()
+      console.log('Client received:', data)
+      if (!res.ok || data.error) {
+        setError(data.error || 'API call failed: ' + res.status)
+        return
+      }
+      setResult(data as Result)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Something went wrong. Please try again.'
+      setError(message)
     } finally {
       setLoading(false)
     }
