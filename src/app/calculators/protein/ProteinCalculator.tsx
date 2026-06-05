@@ -454,7 +454,7 @@ export default function ProteinCalculator() {
             </p>
 
             <p className="text-[12px] text-accent opacity-60">
-              GPT-4o-mini is reviewing your profile
+              Personalising protein recommendations to meet your goals
             </p>
           </div>
         ) : (
