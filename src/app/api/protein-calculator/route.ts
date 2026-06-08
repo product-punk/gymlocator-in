@@ -7,15 +7,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const body = await req.json()
+  try {
+    const body = await req.json()
+    console.log('API hit — body received:', JSON.stringify(body).slice(0, 200))
 
-  const {
-    weight, height, age, gender,
-    breakfast, lunch, dinner,
-    experience, condition, goal,
-  } = body
+    console.log('API key present:', !!process.env.OPENAI_API_KEY)
+    console.log('API key prefix:', process.env.OPENAI_API_KEY?.slice(0, 7))
 
-  const prompt = `You are a certified sports nutritionist specializing in Indian fitness and diet. Analyze this person's profile and give personalized protein recommendations.
+    const {
+      weight, height, age, gender,
+      breakfast, lunch, dinner,
+      experience, condition, goal,
+    } = body
+
+    const payload = { weight, height, age, gender, breakfast, lunch, dinner, experience, condition, goal }
+    console.log('Sending payload to OpenAI:', JSON.stringify(payload).slice(0, 300))
+
+    const prompt = `You are a certified sports nutritionist specializing in Indian fitness and diet. Analyze this person's profile and give personalized protein recommendations.
 
 Profile:
 - Weight: ${weight}kg, Height: ${height}cm, Age: ${age}, Gender: ${gender}
@@ -49,27 +57,41 @@ Respond in this exact JSON format only, no extra text:
   "warning": "optional - only include if there is something important to flag, otherwise empty string"
 }`
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o-mini',
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 800,
-      temperature: 0.3,
-      response_format: { type: 'json_object' },
-    }),
-  })
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 800,
+        temperature: 0.3,
+        response_format: { type: 'json_object' },
+      }),
+    })
 
-  if (!response.ok) {
-    return NextResponse.json({ error: 'Failed to get recommendation' }, { status: 500 })
+    console.log('OpenAI status:', response.status)
+
+    if (!response.ok) {
+      const errText = await response.text()
+      console.error('OpenAI error body:', errText)
+      return NextResponse.json({ error: errText }, { status: response.status })
+    }
+
+    const data = await response.json()
+    console.log('OpenAI response received')
+
+    const content = data.choices?.[0]?.message?.content
+    console.log('Content preview:', content?.slice(0, 200))
+
+    const result = JSON.parse(content)
+    return NextResponse.json(result)
+
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('Route error:', message)
+    return NextResponse.json({ error: message }, { status: 500 })
   }
-
-  const data = await response.json()
-  const result = JSON.parse(data.choices[0].message.content)
-
-  return NextResponse.json(result)
 }
