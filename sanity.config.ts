@@ -1,6 +1,5 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
-import { visionTool } from '@sanity/vision'
 import { schemaTypes } from './src/sanity/schemaTypes'
 
 export default defineConfig({
@@ -8,8 +7,11 @@ export default defineConfig({
   title: 'Gymlocator.in',
   projectId: 'o0nhrf5u',
   dataset: 'production',
-  plugins: [structureTool(), visionTool()],
+  plugins: [structureTool()],
   schema: {
     types: schemaTypes,
+  },
+  document: {
+    actions: (prev) => prev,
   },
 })
