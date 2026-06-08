@@ -1,16 +1,15 @@
-import { client } from '@/sanity/lib/client'
-import { postQuery, postsQuery } from '@/sanity/lib/queries'
-import { urlFor } from '@/sanity/lib/image'
-import { PortableText } from '@portabletext/react'
+import { getAllPosts, getPostBySlug } from '@/lib/contentful'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import { BLOCKS, INLINES } from '@contentful/rich-text-types'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
+export const revalidate = 3600
+
 export async function generateStaticParams() {
-  const posts = await client.fetch(postsQuery)
-  return posts.map((post: { slug: { current: string } }) => ({
-    slug: post.slug.current,
-  }))
+  const posts = await getAllPosts()
+  return posts.map((post: any) => ({ slug: post.fields.slug }))
 }
 
 export async function generateMetadata({
@@ -19,29 +18,65 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const post = await client.fetch(postQuery, { slug })
+  const post = await getPostBySlug(slug)
   if (!post) return {}
   return {
-    title: post.seoTitle || post.title,
-    description: post.seoDescription || post.excerpt,
+    title: post.fields.seoTitle || post.fields.title,
+    description: post.fields.seoDescription || post.fields.excerpt,
     openGraph: {
-      title: post.seoTitle || post.title,
-      description: post.seoDescription || post.excerpt,
-      images: post.coverImage
-        ? [urlFor(post.coverImage).width(1200).height(630).url()]
+      title: post.fields.seoTitle || post.fields.title,
+      description: post.fields.seoDescription || post.fields.excerpt,
+      images: post.fields.coverImage
+        ? [`https:${post.fields.coverImage.fields.file.url}?w=1200&h=630&fit=fill`]
         : [],
     },
   }
 }
 
-const ptComponents = {
-  types: {
-    image: ({ value }: { value: { alt?: string } }) => (
-      <img
-        src={urlFor(value).width(800).url()}
-        alt={value.alt || ''}
-        className="rounded-lg my-8 w-full"
-      />
+const richTextOptions = {
+  renderNode: {
+    [BLOCKS.PARAGRAPH]: (node: any, children: any) => (
+      <p className="mb-6 text-[#C0C0C0] leading-relaxed">{children}</p>
+    ),
+    [BLOCKS.HEADING_1]: (node: any, children: any) => (
+      <h1 className="text-3xl font-bold text-white mt-10 mb-4">{children}</h1>
+    ),
+    [BLOCKS.HEADING_2]: (node: any, children: any) => (
+      <h2 className="text-2xl font-bold text-white mt-8 mb-4">{children}</h2>
+    ),
+    [BLOCKS.HEADING_3]: (node: any, children: any) => (
+      <h3 className="text-xl font-semibold text-white mt-6 mb-3">{children}</h3>
+    ),
+    [BLOCKS.UL_LIST]: (node: any, children: any) => (
+      <ul className="list-disc list-inside mb-6 text-[#C0C0C0] space-y-2">{children}</ul>
+    ),
+    [BLOCKS.OL_LIST]: (node: any, children: any) => (
+      <ol className="list-decimal list-inside mb-6 text-[#C0C0C0] space-y-2">{children}</ol>
+    ),
+    [BLOCKS.QUOTE]: (node: any, children: any) => (
+      <blockquote className="border-l-4 border-[#444] pl-6 my-6 text-[#999] italic">
+        {children}
+      </blockquote>
+    ),
+    [BLOCKS.EMBEDDED_ASSET]: (node: any) => {
+      const { file, title } = node.data.target.fields
+      return (
+        <img
+          src={`https:${file.url}`}
+          alt={title || ''}
+          className="rounded-lg my-8 w-full"
+        />
+      )
+    },
+    [INLINES.HYPERLINK]: (node: any, children: any) => (
+      <a
+        href={node.data.uri}
+        className="text-white underline hover:text-[#E0E0E0]"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {children}
+      </a>
     ),
   },
 }
@@ -52,8 +87,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = await client.fetch(postQuery, { slug })
-
+  const post = await getPostBySlug(slug)
   if (!post) notFound()
 
   return (
@@ -66,21 +100,21 @@ export default async function BlogPostPage({
           ← Back to Blog
         </Link>
 
-        {post.categories?.[0] && (
+        {post.fields.categories?.[0] && (
           <span className="text-xs text-[#888] uppercase tracking-wider">
-            {post.categories[0].title}
+            {post.fields.categories[0]}
           </span>
         )}
 
         <h1 className="text-3xl md:text-4xl font-bold text-white mt-3 mb-4">
-          {post.title}
+          {post.fields.title}
         </h1>
 
         <div className="flex items-center gap-4 text-sm text-[#666] mb-8">
-          {post.author?.name && <span>By {post.author.name}</span>}
-          {post.publishedAt && (
+          {post.fields.author && <span>By {post.fields.author}</span>}
+          {post.fields.publishedDate && (
             <span>
-              {new Date(post.publishedAt).toLocaleDateString('en-IN', {
+              {new Date(post.fields.publishedDate).toLocaleDateString('en-IN', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric',
@@ -89,24 +123,16 @@ export default async function BlogPostPage({
           )}
         </div>
 
-        {post.coverImage && (
+        {post.fields.coverImage && (
           <img
-            src={urlFor(post.coverImage).width(800).height(450).url()}
-            alt={post.coverImage.alt || post.title}
+            src={`https:${post.fields.coverImage.fields.file.url}?w=800&h=450&fit=fill`}
+            alt={post.fields.coverImage.fields.title || post.fields.title}
             className="w-full rounded-xl mb-10 aspect-video object-cover"
           />
         )}
 
-        <div className="prose prose-invert prose-lg max-w-none
-          prose-headings:text-white
-          prose-p:text-[#C0C0C0]
-          prose-a:text-[#E0E0E0] prose-a:underline
-          prose-strong:text-white
-          prose-li:text-[#C0C0C0]
-          prose-blockquote:border-[#444] prose-blockquote:text-[#999]
-          prose-code:text-[#E0E0E0] prose-code:bg-[#1A1A1A]
-        ">
-          <PortableText value={post.body} components={ptComponents} />
+        <div>
+          {documentToReactComponents(post.fields.body, richTextOptions)}
         </div>
       </div>
     </main>

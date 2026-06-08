@@ -1,8 +1,8 @@
-import { client } from '@/sanity/lib/client'
-import { postsQuery } from '@/sanity/lib/queries'
-import { urlFor } from '@/sanity/lib/image'
+import { getAllPosts } from '@/lib/contentful'
 import Link from 'next/link'
 import { Metadata } from 'next'
+
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Gym & Fitness Blog – Tips, Guides & More | Gymlocator',
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage() {
-  const posts = await client.fetch(postsQuery)
+  const posts = await getAllPosts()
 
   return (
     <main className="min-h-screen bg-[#0C0C0C] text-[#E0E0E0]">
@@ -27,51 +27,43 @@ export default async function BlogPage() {
           <p className="text-[#666]">No posts published yet. Check back soon.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map((post: {
-              _id: string
-              title: string
-              slug: { current: string }
-              excerpt?: string
-              publishedAt?: string
-              coverImage?: { alt?: string }
-              categories?: { title: string }[]
-            }) => (
+            {posts.map((post: any) => (
               <Link
-                key={post._id}
-                href={`/blog/${post.slug.current}`}
+                key={post.sys.id}
+                href={`/blog/${post.fields.slug}`}
                 className="group block bg-[#141414] rounded-xl overflow-hidden border border-[#222] hover:border-[#444] transition-colors"
               >
-                {post.coverImage && (
+                {post.fields.coverImage && (
                   <div className="aspect-video overflow-hidden">
                     <img
-                      src={urlFor(post.coverImage).width(600).height(338).url()}
-                      alt={post.coverImage.alt || post.title}
+                      src={`https:${post.fields.coverImage.fields.file.url}?w=600&h=338&fit=fill`}
+                      alt={post.fields.coverImage.fields.title || post.fields.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                 )}
                 <div className="p-6">
-                  {post.categories?.[0] && (
+                  {post.fields.categories?.[0] && (
                     <span className="text-xs text-[#888] uppercase tracking-wider">
-                      {post.categories[0].title}
+                      {post.fields.categories[0]}
                     </span>
                   )}
                   <h2 className="text-white font-semibold text-lg mt-2 mb-3 line-clamp-2">
-                    {post.title}
+                    {post.fields.title}
                   </h2>
-                  {post.excerpt && (
+                  {post.fields.excerpt && (
                     <p className="text-[#888] text-sm line-clamp-3">
-                      {post.excerpt}
+                      {post.fields.excerpt}
                     </p>
                   )}
                   <div className="mt-4 text-xs text-[#666]">
-                    {post.publishedAt
-                      ? new Date(post.publishedAt).toLocaleDateString('en-IN', {
+                    {post.fields.publishedDate
+                      ? new Date(post.fields.publishedDate).toLocaleDateString('en-IN', {
                           day: 'numeric',
                           month: 'long',
                           year: 'numeric',
                         })
-                      : 'Draft'}
+                      : ''}
                   </div>
                 </div>
               </Link>

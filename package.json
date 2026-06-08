@@ -9,19 +9,17 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@portabletext/react": "^6.2.0",
-    "@sanity/image-url": "^2.1.1",
-    "@sanity/vision": "^5.30.0",
+    "@contentful/rich-text-react-renderer": "^16.2.1",
+    "@contentful/rich-text-types": "^17.2.7",
     "@supabase/supabase-js": "^2.106.2",
     "@tabler/icons-webfont": "^3.44.0",
     "@tailwindcss/typography": "^0.5.19",
     "cloudinary": "^2.10.0",
+    "contentful": "^11.12.4",
     "next": "16.2.6",
     "next-cloudinary": "^6.17.5",
-    "next-sanity": "^13.0.11",
     "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "sanity": "^5.30.0"
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.11",
