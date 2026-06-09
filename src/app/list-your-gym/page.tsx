@@ -1,3 +1,5 @@
+import ListGymForm from './ListGymForm'
+
 export const metadata = {
   title: 'List Your Gym Free on Gymlocator.in',
   description: 'Get your gym listed on Gymlocator.in for free. Reach thousands of people searching for gyms in your city every month.',
@@ -71,50 +73,7 @@ export default function ListYourGymPage() {
         {/* Form */}
         <div>
           <h2 className="h2 text-text mb-6">Submit your gym</h2>
-          <div className="bg-surface b-hair rounded-md p-6 space-y-4">
-
-            {[
-              { label: 'Gym name',          type: 'text',  placeholder: "e.g. Gold's Gym Andheri" },
-              { label: 'City',              type: 'text',  placeholder: 'e.g. Mumbai' },
-              { label: 'Locality',          type: 'text',  placeholder: 'e.g. Andheri West' },
-              { label: 'Your phone number', type: 'tel',   placeholder: '+91 98XXX XXXXX' },
-              { label: 'Email address',     type: 'email', placeholder: 'you@example.com' },
-            ].map((field) => (
-              <div key={field.label}>
-                <label className="block text-[13px] font-semibold text-accent mb-1.5">
-                  {field.label}
-                </label>
-                <input
-                  type={field.type}
-                  placeholder={field.placeholder}
-                  className="w-full bg-raised b-hair rounded-sm px-3 py-2.5 text-[14px] text-text placeholder:text-accent outline-none focus:border-border-hi transition-colors"
-                />
-              </div>
-            ))}
-
-            <div>
-              <label className="block text-[13px] font-semibold text-accent mb-1.5">
-                Additional details (optional)
-              </label>
-              <textarea
-                rows={3}
-                placeholder="Monthly fees, timings, amenities, special offerings..."
-                className="w-full bg-raised b-hair rounded-sm px-3 py-2.5 text-[14px] text-text placeholder:text-accent outline-none focus:border-border-hi transition-colors resize-none"
-              />
-            </div>
-
-            <a
-              href="mailto:hello@gymlocator.in?subject=List my gym on Gymlocator.in"
-              className="w-full flex items-center justify-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[14px] py-3.5 rounded-sm hover:bg-text transition-colors mt-2"
-            >
-              <i className="ti ti-mail text-[16px]" />
-              Send listing request
-            </a>
-
-            <p className="text-[12px] text-accent text-center">
-              We will review and publish your listing within 24 hours
-            </p>
-          </div>
+          <ListGymForm />
         </div>
 
       </div>
@@ -124,9 +83,9 @@ export default function ListYourGymPage() {
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-10 flex flex-wrap gap-x-16 gap-y-6">
           {[
             { n: '1,090+', l: 'Gyms listed' },
-            { n: '8',     l: 'Cities' },
-            { n: 'Free',  l: 'Forever for gyms' },
-            { n: '24hrs', l: 'Listing turnaround' },
+            { n: '8',      l: 'Cities' },
+            { n: 'Free',   l: 'Forever for gyms' },
+            { n: '24hrs',  l: 'Listing turnaround' },
           ].map((s) => (
             <div key={s.l}>
               <div className="text-[28px] font-black tracking-tight text-base">{s.n}</div>
