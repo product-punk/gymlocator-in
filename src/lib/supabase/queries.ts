@@ -5,7 +5,7 @@ export async function getCities() {
     .from('cities')
     .select('*')
     .eq('is_active', true)
-    .order('order_index', { ascending: true })
+    .order('gym_count', { ascending: false })
   return data ?? []
 }
 
