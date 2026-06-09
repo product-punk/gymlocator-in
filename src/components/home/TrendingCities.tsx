@@ -32,7 +32,7 @@ export default function TrendingCities({ cities }: Props) {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {cities.map((city) => (
+          {cities.slice(0, 8).map((city) => (
             <Link
               key={city.id}
               href={"/gyms/" + city.slug}
