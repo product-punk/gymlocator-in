@@ -24,6 +24,9 @@ export async function generateStaticParams() {
     { city: 'pune' },
     { city: 'kolkata' },
     { city: 'ahmedabad' },
+    { city: 'gurgaon' },
+    { city: 'noida' },
+    { city: 'ghaziabad' },
   ]
 }
 
@@ -77,7 +80,10 @@ export default async function CityPage({ params, searchParams }: Props) {
   const cityName = city.name
 
   const faqs = city.faqs?.length > 0
-    ? city.faqs
+    ? city.faqs.map((faq: { q?: string; a?: string; question?: string; answer?: string }) => ({
+        q: faq.q || faq.question || '',
+        a: faq.a || faq.answer || '',
+      }))
     : [
         {
           q: `How much does a gym membership cost in ${cityName}?`,
