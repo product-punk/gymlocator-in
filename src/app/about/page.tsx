@@ -168,9 +168,9 @@ export default function AboutPage() {
       <div className="silver-section bt-hair bb-hair">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { number: '1,090+', label: 'Gyms listed' },
-            { number: '8',      label: 'Cities covered' },
-            { number: '60',     label: 'Localities' },
+            { number: '1,626+', label: 'Gyms listed' },
+            { number: '11',     label: 'Cities covered' },
+            { number: '113+',   label: 'Localities' },
             { number: '100%',   label: 'Free to use' },
           ].map((stat) => (
             <div key={stat.label}>

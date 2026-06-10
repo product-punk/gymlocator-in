@@ -8,15 +8,15 @@ export default function AccentMarquee() {
         </span>
         <span className="opacity-25">---</span>
         <span>
-          <strong className="text-[15px] mr-1">1,090+</strong> gyms listed
+          <strong className="text-[15px] mr-1">1,626+</strong> gyms listed
         </span>
         <span className="opacity-25">---</span>
         <span>
-          <strong className="text-[15px] mr-1">8</strong> cities
+          <strong className="text-[15px] mr-1">11</strong> cities
         </span>
         <span className="opacity-25">---</span>
         <span>
-          <strong className="text-[15px] mr-1">60</strong> localities
+          <strong className="text-[15px] mr-1">113+</strong> localities
         </span>
         <span className="opacity-25">---</span>
         <span>
