@@ -6,6 +6,7 @@ import {
   getLocalityBySlug,
   getGymsByLocality,
   getGymsByAmenity,
+  getGymsByFacet,
 } from '@/lib/supabase/queries'
 import GymCard from '@/components/shared/GymCard'
 import GymFilters from '@/components/shared/GymFilters'
@@ -34,6 +35,87 @@ const AMENITY_LABELS: Record<string, string> = {
   'functional-training': 'Functional Training',
   'powerlifting':        'Powerlifting',
   'cardio-only':         'Cardio',
+}
+
+const ALL_CITY_SLUGS = [
+  'bangalore', 'mumbai', 'delhi', 'hyderabad', 'chennai',
+  'pune', 'kolkata', 'ahmedabad', 'gurgaon', 'noida', 'ghaziabad',
+]
+
+type FacetConfig = {
+  label: string
+  pageTitle: (city: string) => string
+  subtitle: (total: number, city: string) => string
+  seoTitle: (city: string) => string
+  seoDescription: (city: string) => string
+  seoContent: (city: string) => string
+  cities: string[] | 'all'
+}
+
+const FACETS: Record<string, FacetConfig> = {
+  'women': {
+    label: 'Women-Only Gyms',
+    pageTitle: (city) => `Women-Only Gyms in ${city}`,
+    subtitle: (total, city) => `Compare ${total} women-only gyms in ${city} — dedicated spaces with female trainers and women-exclusive equipment floors.`,
+    seoTitle: (city) => `Women-Only Gyms in ${city} - Safe & Comfortable | Gymlocator`,
+    seoDescription: (city) => `Find women-only gyms in ${city}. Compare fees, timings and amenities at all-female fitness spaces near you.`,
+    seoContent: (city) => `Women-only gyms in ${city} provide a comfortable, distraction-free environment for women of all fitness levels. These gyms feature dedicated equipment floors, female trainers, and flexible timings designed around working women. Many also offer group classes like Zumba, yoga, and aerobics. Memberships typically range from ₹1,200 to ₹4,500 per month depending on the area and facilities.`,
+    cities: ['ahmedabad', 'mumbai', 'hyderabad', 'pune', 'chennai'],
+  },
+  'budget': {
+    label: 'Budget Gyms',
+    pageTitle: (city) => `Budget Gyms in ${city} Under ₹1,500/Month`,
+    subtitle: (total, city) => `${total} affordable gyms in ${city} with memberships under ₹1,500 per month.`,
+    seoTitle: (city) => `Budget Gyms in ${city} - Under ₹1,500/Month | Gymlocator`,
+    seoDescription: (city) => `Find affordable gyms in ${city} with monthly fees under ₹1,500. Compare equipment, timings and trainers at cheap gyms near you.`,
+    seoContent: (city) => `Budget gyms in ${city} offer everything you need to build a solid fitness routine without breaking the bank. Most budget gyms include cardio equipment, free weights, and basic machines for under ₹1,500 per month. Some offer annual plans starting at ₹8,000–₹12,000. Look for gyms in neighbourhood markets and residential areas — they tend to be more affordable than gym chains.`,
+    cities: 'all',
+  },
+  'premium': {
+    label: 'Premium Gyms',
+    pageTitle: (city) => `Premium Gyms in ${city}`,
+    subtitle: (total, city) => `${total} high-end gyms in ${city} with top-tier equipment, personal trainers and luxury amenities.`,
+    seoTitle: (city) => `Premium Gyms in ${city} - Top-Tier Fitness Centers | Gymlocator`,
+    seoDescription: (city) => `Discover the best premium gyms in ${city}. Compare luxury fitness clubs with pools, saunas, personal trainers and state-of-the-art equipment.`,
+    seoContent: (city) => `Premium gyms in ${city} offer an elevated fitness experience with commercial-grade equipment, dedicated personal trainers, swimming pools, steam rooms and recovery facilities. Memberships typically range from ₹3,500 to ₹10,000 per month and often include group classes, nutrition consultations and guest passes. Brands like Anytime Fitness, Gold's Gym, and boutique studios dominate this segment.`,
+    cities: 'all',
+  },
+  'cardio': {
+    label: 'Cardio Gyms',
+    pageTitle: (city) => `Best Cardio Gyms in ${city}`,
+    subtitle: (total, city) => `${total} gyms in ${city} with dedicated cardio floors — treadmills, cycles, ellipticals and steppers.`,
+    seoTitle: (city) => `Cardio Gyms in ${city} - Treadmills, Cycles & More | Gymlocator`,
+    seoDescription: (city) => `Find gyms in ${city} with excellent cardio equipment. Compare cardio-focused gyms by fees, timings and machine variety near you.`,
+    seoContent: (city) => `Cardio gyms in ${city} are ideal for weight loss, endurance training, and heart health. Look for gyms with a wide variety of machines: treadmills, ellipticals, stationary bikes, rowing machines and stair climbers. The best cardio gyms also offer group fitness classes like cycling, aerobics and HIIT to keep your routine varied.`,
+    cities: 'all',
+  },
+  'with-personal-trainer': {
+    label: 'Gyms with Personal Trainer',
+    pageTitle: (city) => `Gyms with Personal Trainer in ${city}`,
+    subtitle: (total, city) => `${total} gyms in ${city} offering certified personal training sessions.`,
+    seoTitle: (city) => `Gyms with Personal Trainer in ${city} - Find PT Sessions | Gymlocator`,
+    seoDescription: (city) => `Find gyms in ${city} that offer personal training. Compare PT-enabled gyms by fees, trainer certifications and session rates.`,
+    seoContent: (city) => `Personal trainers at gyms in ${city} help you set realistic goals, learn correct form, and stay accountable. PT sessions typically cost ₹500–₹2,000 per hour depending on the trainer's experience and gym tier. Many gyms include a few free PT sessions with annual memberships. Look for gyms where trainers hold ACSM, NASM, or ACE certifications for the best guidance.`,
+    cities: 'all',
+  },
+  'with-swimming-pool': {
+    label: 'Gyms with Swimming Pool',
+    pageTitle: (city) => `Gyms with Swimming Pool in ${city}`,
+    subtitle: (total, city) => `${total} gyms in ${city} with swimming pools — full-body training and active recovery.`,
+    seoTitle: (city) => `Gyms with Swimming Pool in ${city} - Find & Compare | Gymlocator`,
+    seoDescription: (city) => `Find gyms and fitness clubs in ${city} with swimming pools. Compare pool facilities, membership fees and timings near you.`,
+    seoContent: (city) => `Gyms with swimming pools in ${city} offer a complete fitness experience combining strength training with aquatic exercise. Swimming is one of the best low-impact full-body workouts — ideal for weight loss, joint recovery and endurance. Pool-equipped gyms in ${city} tend to be mid-to-premium priced (₹2,500–₹8,000/month) but often include the pool in the base membership.`,
+    cities: 'all',
+  },
+  'with-steam-sauna': {
+    label: 'Gyms with Steam & Sauna',
+    pageTitle: (city) => `Gyms with Steam Room & Sauna in ${city}`,
+    subtitle: (total, city) => `${total} gyms in ${city} with steam rooms and saunas for post-workout recovery.`,
+    seoTitle: (city) => `Gyms with Steam & Sauna in ${city} - Recovery Facilities | Gymlocator`,
+    seoDescription: (city) => `Find gyms in ${city} with steam rooms and saunas. Compare recovery-focused fitness centers by fees, amenities and timings near you.`,
+    seoContent: (city) => `Steam rooms and saunas at gyms in ${city} help speed up muscle recovery, improve circulation, and reduce post-workout soreness. Many gyms include steam and sauna in premium memberships alongside pools and jacuzzis. Regular use can also support respiratory health and stress reduction. Look for gyms that maintain their steam rooms with proper hygiene and temperature controls.`,
+    cities: 'all',
+  },
 }
 
 type Gym = {
@@ -76,10 +158,21 @@ export async function generateMetadata({ params, searchParams }: Props) {
   const { page, gender, '247': is247, min_rating } = await searchParams
   const currentPage = parseInt(page || '1')
   const hasFilters = !!(gender || is247 || min_rating)
+  const isFacet = slug in FACETS
   const isAmenity = AMENITIES.includes(slug as typeof AMENITIES[number])
   const cityName = formatSlug(citySlug)
   const city = await getCityBySlug(citySlug)
   if (!city) return {}
+
+  if (isFacet) {
+    const facet = FACETS[slug]
+    return {
+      title: facet.seoTitle(cityName),
+      description: facet.seoDescription(cityName),
+      robots: { index: currentPage === 1, follow: true },
+      alternates: { canonical: `https://gymlocator.in/gyms/${citySlug}/${slug}` },
+    }
+  }
 
   if (isAmenity) {
     const label = AMENITY_LABELS[slug] || formatSlug(slug)
@@ -112,12 +205,20 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
     sort,
   }
 
+  const isFacet = slug in FACETS
   const isAmenity = AMENITIES.includes(slug as typeof AMENITIES[number])
 
   const city = await getCityBySlug(citySlug)
   if (!city) notFound()
 
   const cityName = city.name as string
+
+  // Validate facet is available for this city
+  if (isFacet) {
+    const facetConfig = FACETS[slug]
+    const allowedCities = facetConfig.cities === 'all' ? ALL_CITY_SLUGS : facetConfig.cities
+    if (!allowedCities.includes(citySlug)) notFound()
+  }
 
   let gymData: { gyms: Gym[]; total: number }
   let pageTitle: string
@@ -126,7 +227,13 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let locality: Record<string, any> | null = null
 
-  if (isAmenity) {
+  if (isFacet) {
+    const facet = FACETS[slug]
+    gymData = await getGymsByFacet(citySlug, slug, GYMS_PER_PAGE, offset)
+    if (gymData.total === 0) notFound()
+    pageTitle = facet.pageTitle(cityName)
+    pageSubtitle = facet.subtitle(gymData.total, cityName)
+  } else if (isAmenity) {
     const label = AMENITY_LABELS[slug] || formatSlug(slug)
     gymData = await getGymsByAmenity(citySlug, slug, GYMS_PER_PAGE, offset)
     pageTitle = `${label} Gyms in ${cityName}`
@@ -141,7 +248,9 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
 
   const { gyms, total } = gymData
   const totalPages = Math.ceil(total / GYMS_PER_PAGE)
-  const displayLabel = localityName ?? AMENITY_LABELS[slug] ?? formatSlug(slug)
+  const displayLabel = isFacet
+    ? FACETS[slug].label
+    : localityName ?? AMENITY_LABELS[slug] ?? formatSlug(slug)
 
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
     .filter((p) => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 2)
@@ -194,7 +303,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
       </div>
 
       {/* FILTERS - locality pages only */}
-      {!isAmenity && (
+      {!isAmenity && !isFacet && (
         <Suspense fallback={<div />}>
           <GymFilters citySlug={citySlug} localitySlug={slug} total={total} />
         </Suspense>
@@ -204,7 +313,9 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12">
 
         <h2 className="h2 text-text mb-8">
-          Top Gyms {localityName ? `in ${localityName}, ${cityName}` : `in ${cityName}`}
+          {isFacet
+            ? `${FACETS[slug].label} in ${cityName}`
+            : localityName ? `Top Gyms in ${localityName}, ${cityName}` : `Top Gyms in ${cityName}`}
         </h2>
 
         {gyms.length === 0 ? (
@@ -280,8 +391,20 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
 
       </div>
 
+      {/* FACET SEO CONTENT */}
+      {currentPage === 1 && isFacet && (
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10 pb-16 bt-hair">
+          <div className="max-w-[780px] mt-12">
+            <h2 className="h2 text-text mb-4">About {FACETS[slug].label} in {cityName}</h2>
+            <p className="text-[15px] text-accent leading-relaxed">
+              {FACETS[slug].seoContent(cityName)}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* LOCALITY CONTENT SECTIONS */}
-      {currentPage === 1 && !isAmenity && locality && (
+      {currentPage === 1 && !isAmenity && !isFacet && locality && (
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 pb-16 mt-12 space-y-12">
 
           {/* About */}
@@ -440,7 +563,7 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
                   },
                 })),
               },
-              ...(currentPage === 1 && !isAmenity && locality?.faqs?.length > 0 ? [{
+              ...(currentPage === 1 && !isAmenity && !isFacet && locality?.faqs?.length > 0 ? [{
                 '@type': 'FAQPage',
                 mainEntity: (locality!.faqs as { q: string; a: string }[]).map((faq) => ({
                   '@type': 'Question',

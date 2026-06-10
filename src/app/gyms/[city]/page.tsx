@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getCityBySlug, getGymsByCity, getLocalitiesByCity } from '@/lib/supabase/queries'
+import { getCityBySlug, getGymsByCity, getLocalitiesByCity, getActiveFacetsForCity } from '@/lib/supabase/queries'
 import GymCard from '@/components/shared/GymCard'
 import GymFilters from '@/components/shared/GymFilters'
 
@@ -67,10 +67,11 @@ export default async function CityPage({ params, searchParams }: Props) {
     sort,
   }
 
-  const [city, gymData, localities] = await Promise.all([
+  const [city, gymData, localities, activeFacets] = await Promise.all([
     getCityBySlug(citySlug),
     getGymsByCity(citySlug, GYMS_PER_PAGE, offset, filters),
     getLocalitiesByCity(citySlug),
+    currentPage === 1 ? getActiveFacetsForCity(citySlug) : Promise.resolve([]),
   ])
 
   if (!city) notFound()
@@ -307,6 +308,38 @@ export default async function CityPage({ params, searchParams }: Props) {
                     )}
                   </Link>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* BROWSE BY CATEGORY */}
+          {activeFacets.length > 0 && (
+            <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-12 bb-hair bt-hair">
+              <h2 className="h2 text-text mb-8">Browse by Category</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {[
+                  { label: 'Budget Gyms', slug: 'budget', icon: 'ti-currency-rupee', sub: 'Under ₹1,500/month' },
+                  { label: 'Premium Gyms', slug: 'premium', icon: 'ti-star', sub: 'Top-tier equipment' },
+                  { label: 'Gyms with Pool', slug: 'with-swimming-pool', icon: 'ti-swimming', sub: 'Swimming included' },
+                  { label: 'Gyms with PT', slug: 'with-personal-trainer', icon: 'ti-user-check', sub: 'Personal training' },
+                  { label: 'Cardio Gyms', slug: 'cardio', icon: 'ti-run', sub: 'Treadmills & cycles' },
+                  { label: 'Steam & Sauna', slug: 'with-steam-sauna', icon: 'ti-flame', sub: 'Recovery facilities' },
+                  { label: 'Women-Only Gyms', slug: 'women', icon: 'ti-heart', sub: 'Female-only spaces' },
+                ]
+                  .filter((cat) => activeFacets.includes(cat.slug))
+                  .map((cat) => (
+                    <Link
+                      key={cat.slug}
+                      href={`/gyms/${citySlug}/${cat.slug}`}
+                      className="bg-surface b-hair rounded-md p-4 hover:bg-raised hover:border-border-hi transition-colors"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <i className={`ti ${cat.icon} text-[16px] text-accent`} />
+                        <div className="text-[14px] font-semibold text-text">{cat.label}</div>
+                      </div>
+                      <div className="text-[12px] text-accent">{cat.sub}</div>
+                    </Link>
+                  ))}
               </div>
             </div>
           )}
