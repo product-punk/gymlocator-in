@@ -60,7 +60,7 @@ const FACETS: Record<string, FacetConfig> = {
     seoTitle: (city) => `Women-Only Gyms in ${city} - Safe & Comfortable | Gymlocator`,
     seoDescription: (city) => `Find women-only gyms in ${city}. Compare fees, timings and amenities at all-female fitness spaces near you.`,
     seoContent: (city) => `Women-only gyms in ${city} provide a comfortable, distraction-free environment for women of all fitness levels. These gyms feature dedicated equipment floors, female trainers, and flexible timings designed around working women. Many also offer group classes like Zumba, yoga, and aerobics. Memberships typically range from ₹1,200 to ₹4,500 per month depending on the area and facilities.`,
-    cities: ['ahmedabad', 'mumbai', 'hyderabad', 'pune', 'chennai'],
+    cities: ['ahmedabad', 'mumbai', 'hyderabad', 'pune', 'chennai', 'bangalore', 'kolkata', 'delhi'],
   },
   'budget': {
     label: 'Budget Gyms',

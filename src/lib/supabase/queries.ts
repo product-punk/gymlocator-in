@@ -154,7 +154,7 @@ export async function getActiveFacetsForCity(citySlug: string): Promise<string[]
   const base = () =>
     supabase.from('gyms').select('id').eq('city_slug', citySlug).eq('is_active', true).limit(1)
 
-  const WOMEN_CITIES = ['ahmedabad', 'mumbai', 'hyderabad', 'pune', 'chennai']
+  const WOMEN_CITIES = ['ahmedabad', 'mumbai', 'hyderabad', 'pune', 'chennai', 'bangalore', 'kolkata', 'delhi']
 
   const checks = await Promise.allSettled([
     base().not('price_monthly', 'is', null).lte('price_monthly', 1500),       // 0: budget
@@ -162,7 +162,7 @@ export async function getActiveFacetsForCity(citySlug: string): Promise<string[]
     base().contains('amenities', ['Cardio']),                                  // 2: cardio
     base().contains('amenities', ['Personal Trainer']),                        // 3: with-personal-trainer
     base().contains('amenities', ['Swimming']),                                // 4: with-swimming-pool
-    base().overlaps('amenities', ['Sauna', 'Steam']),                          // 5: with-steam-sauna
+    base().contains('amenities', ['Sauna']),                                   // 5: with-steam-sauna
     WOMEN_CITIES.includes(citySlug)
       ? base().eq('gender', 'women-only')
       : Promise.resolve({ data: [] as { id: string }[] }),                    // 6: women
@@ -216,7 +216,7 @@ export async function getGymsByFacet(
       query = query.contains('amenities', ['Swimming'])
       break
     case 'with-steam-sauna':
-      query = query.overlaps('amenities', ['Sauna', 'Steam'])
+      query = query.contains('amenities', ['Sauna'])
       break
   }
 
