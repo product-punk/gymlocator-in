@@ -1,28 +1,30 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import CountUpNumber from './CountUpNumber'
 
 export default function AccentMarquee() {
   // Same SSR-visible / remount-to-animate pattern as HeroSection: the bar is
   // fully rendered for crawlers and no-JS, then fades in last (1.4s) with
-  // counters running once it enters the viewport.
-  const ref = useRef<HTMLDivElement>(null)
+  // counters running once it enters the viewport. Viewport detection uses
+  // whileInView/onViewportEnter (not useInView) so it re-binds when the
+  // key flip remounts the element.
   const [mounted, setMounted] = useState(false)
+  const [inView, setInView] = useState(false)
   const reduceMotion = useReducedMotion()
-  const inView = useInView(ref, { once: true, amount: 0.5 })
   useEffect(() => setMounted(true), [])
   const animated = mounted && !reduceMotion
   const play = animated && inView
 
   return (
     <motion.section
-      ref={ref}
       key={animated ? 'animated' : 'static'}
       className="silver-section bb-hair bt-hair"
       initial={animated ? { opacity: 0 } : false}
-      animate={play ? { opacity: 1 } : undefined}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.3 }}
+      onViewportEnter={() => setInView(true)}
       transition={{ delay: 1.4, duration: 0.6, ease: 'easeOut' }}
     >
       <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-4 overflow-x-auto scrollbar-none flex items-center gap-x-8 gap-y-0 text-[12px] font-bold uppercase tracking-[0.14em] font-mono whitespace-nowrap">
