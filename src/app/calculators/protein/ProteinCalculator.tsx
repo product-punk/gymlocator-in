@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
+import CountUpNumber from '@/components/home/CountUpNumber'
 
 type FormState = {
   weight: string
@@ -94,6 +96,15 @@ const verdictStyle = (verdict: string) => {
   return 'bg-surface text-accent'
 }
 
+const mealIcon = (meal: string) => {
+  const m = meal.toLowerCase()
+  if (m.includes('breakfast')) return 'ti-sunrise'
+  if (m.includes('lunch'))     return 'ti-sun'
+  if (m.includes('dinner'))    return 'ti-moon'
+  if (m.includes('snack'))     return 'ti-cookie'
+  return 'ti-tools-kitchen-2'
+}
+
 const combineMeal = (chips: string[], custom: string) => {
   const parts = [...chips, custom.trim()].filter(Boolean)
   return parts.length ? parts.join(', ') : 'Not specified'
@@ -121,6 +132,8 @@ export default function ProteinCalculator() {
   const [result, setResult] = useState<Result | null>(null)
   const [error, setError] = useState<string>('')
   const [messageIndex, setMessageIndex] = useState(0)
+
+  const reduceMotion = useReducedMotion()
 
   useEffect(() => {
     if (!loading) {
@@ -183,17 +196,33 @@ export default function ProteinCalculator() {
     setError('')
   }
 
+  const fadeUp = (delay: number) => ({
+    initial: reduceMotion ? false : { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: { delay, duration: 0.5, ease: 'easeOut' as const },
+  })
+
   if (result) {
+    const target = result.daily_protein_grams
+    const progressPct = target > 0
+      ? Math.min(100, Math.round((result.current_estimate_grams / target) * 100))
+      : 0
+
     return (
       <section className="max-w-[1280px] mx-auto px-5 md:px-10 py-12">
-        <div className="grid md:grid-cols-3 gap-8">
+        <motion.div className="label flex items-center gap-2 mb-8" {...fadeUp(0)}>
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
+          Your personalised protein plan
+        </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
 
           {/* LEFT - HEADLINE NUMBER */}
-          <div className="md:col-span-1">
-            <div className="bg-surface b-hair rounded-md p-8 text-center">
+          <motion.div className="md:col-span-1" {...fadeUp(0.05)}>
+            <div className="relative overflow-hidden bg-surface b-hair rounded-md p-8 text-center bg-[radial-gradient(120%_140%_at_50%_-20%,#1D1D1D,transparent_60%)]">
               <div className="label !text-accent mb-3">Daily target</div>
-              <div className="text-[64px] font-black tracking-tight text-text leading-none">
-                {result.daily_protein_grams}
+              <div className="text-[72px] font-black tracking-tight leading-none bg-clip-text text-transparent bg-[linear-gradient(180deg,#FFFFFF_20%,#A8A8A8)]">
+                <CountUpNumber value={result.daily_protein_grams} play={!reduceMotion} duration={1.2} />
                 <span className="text-[20px] font-bold text-accent ml-1">g/day</span>
               </div>
               <div className="text-[13px] text-accent mt-3">
@@ -204,18 +233,32 @@ export default function ProteinCalculator() {
               </div>
             </div>
 
-            <div className="bg-surface b-hair rounded-md p-5 mt-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-[13px] text-accent">Current estimate</span>
-                <span className="text-[14px] font-bold text-text">
-                  {result.current_estimate_grams}g
-                </span>
+            <div className="bg-surface b-hair rounded-md p-5 mt-4">
+              <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.08em] text-accent mb-2">
+                <span>You eat now</span>
+                <span>Target</span>
               </div>
-              <div className="bt-hair pt-3 flex items-center justify-between">
-                <span className="text-[13px] text-accent">Protein gap</span>
-                <span className="text-[14px] font-bold text-text">
-                  {result.protein_gap_grams}g
-                </span>
+              <div className="h-2 rounded-full bg-raised overflow-hidden">
+                <motion.div
+                  className="h-full rounded-full bg-[linear-gradient(90deg,#8A8A8A,#F0F0F0)]"
+                  initial={reduceMotion ? false : { width: 0 }}
+                  animate={{ width: `${progressPct}%` }}
+                  transition={{ delay: 0.4, duration: 1, ease: 'easeOut' }}
+                />
+              </div>
+              <div className="mt-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[13px] text-accent">Current estimate</span>
+                  <span className="text-[14px] font-bold text-text">
+                    {result.current_estimate_grams}g
+                  </span>
+                </div>
+                <div className="bt-hair pt-3 flex items-center justify-between">
+                  <span className="text-[13px] text-accent">Protein gap</span>
+                  <span className="text-[14px] font-bold text-text">
+                    {result.protein_gap_grams}g
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -226,34 +269,43 @@ export default function ProteinCalculator() {
               <i className="ti ti-refresh text-[14px]" />
               Recalculate
             </button>
-          </div>
+          </motion.div>
 
           {/* RIGHT - DETAILS */}
           <div className="md:col-span-2 space-y-6">
 
-            <div className="bg-surface b-hair rounded-md p-6">
-              <h2 className="text-[16px] font-bold text-text mb-3">Summary</h2>
+            <motion.div className="bg-surface b-hair rounded-md p-6" {...fadeUp(0.15)}>
+              <h2 className="flex items-center gap-2 text-[16px] font-bold text-text mb-3">
+                <i className="ti ti-file-analytics text-[18px] text-accent" />
+                Summary
+              </h2>
               <p className="text-[14px] text-accent leading-relaxed">{result.summary}</p>
-            </div>
+            </motion.div>
 
             {result.warning && (
-              <div className="bg-red-950 border border-red-900 rounded-md p-5 flex items-start gap-3">
+              <motion.div className="bg-red-950 border border-red-900 rounded-md p-5 flex items-start gap-3" {...fadeUp(0.2)}>
                 <i className="ti ti-alert-triangle text-[20px] text-red-300 flex-shrink-0 mt-0.5" />
                 <div>
                   <div className="text-[13px] font-bold text-red-300 mb-1">Important</div>
                   <p className="text-[13px] text-red-200 leading-relaxed">{result.warning}</p>
                 </div>
-              </div>
+              </motion.div>
             )}
 
-            <div>
-              <h2 className="text-[16px] font-bold text-text mb-3">Meal suggestions</h2>
+            <motion.div {...fadeUp(0.25)}>
+              <h2 className="flex items-center gap-2 text-[16px] font-bold text-text mb-3">
+                <i className="ti ti-tools-kitchen-2 text-[18px] text-accent" />
+                Meal suggestions
+              </h2>
               <div className="grid sm:grid-cols-2 gap-3">
                 {result.meal_suggestions.map((m, i) => (
-                  <div key={i} className="bg-surface b-hair rounded-md p-4">
+                  <div key={i} className="group bg-surface b-hair rounded-md p-4 hover:border-border-hi transition-colors">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="label !text-accent">{m.meal}</span>
-                      <span className="text-[12px] font-bold bg-accent-dim text-accent px-2 py-0.5 rounded-sm">
+                      <span className="label !text-accent inline-flex items-center gap-1.5">
+                        <i className={`ti ${mealIcon(m.meal)} text-[14px]`} />
+                        {m.meal}
+                      </span>
+                      <span className="text-[12px] font-bold bg-accent text-[#0C0C0C] px-2 py-0.5 rounded-sm">
                         +{m.protein_grams}g
                       </span>
                     </div>
@@ -261,10 +313,13 @@ export default function ProteinCalculator() {
                   </div>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-surface b-hair rounded-md p-6">
-              <h2 className="text-[16px] font-bold text-text mb-3">Top tips for you</h2>
+            <motion.div className="bg-surface b-hair rounded-md p-6" {...fadeUp(0.3)}>
+              <h2 className="flex items-center gap-2 text-[16px] font-bold text-text mb-3">
+                <i className="ti ti-bulb text-[18px] text-accent" />
+                Top tips for you
+              </h2>
               <ul className="space-y-3">
                 {result.top_tips.map((tip, i) => (
                   <li key={i} className="flex items-start gap-3 text-[14px] text-accent leading-relaxed">
@@ -273,27 +328,29 @@ export default function ProteinCalculator() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
           </div>
         </div>
 
         {/* CTA */}
-        <div className="mt-12 bg-surface b-hair rounded-md p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <h2 className="h2 text-text mb-2">Ready to find a gym that fits your goals?</h2>
-            <p className="text-[15px] text-accent">
-              Browse top-rated gyms across India with real pricing and Google ratings.
-            </p>
+        <motion.div className="mt-12 silver-section silver-elite rounded-md" {...fadeUp(0.35)}>
+          <div className="relative p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+              <h2 className="h2 text-text mb-2">Ready to find a gym that fits your goals?</h2>
+              <p className="text-[15px] text-accent">
+                Browse top-rated gyms across India with real pricing and Google ratings.
+              </p>
+            </div>
+            <Link
+              href="/cities"
+              className="btn-shimmer inline-flex items-center gap-2 bg-[#0C0C0C] text-[#F0F0F0] font-bold text-[14px] px-6 py-3 rounded-sm hover:bg-[#1A1A1A] transition-colors flex-shrink-0"
+            >
+              Browse gyms by city
+              <i className="ti ti-arrow-right text-[14px]" />
+            </Link>
           </div>
-          <Link
-            href="/cities"
-            className="inline-flex items-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[14px] px-6 py-3 rounded-sm hover:bg-text transition-colors flex-shrink-0"
-          >
-            Browse gyms by city
-            <i className="ti ti-arrow-right text-[14px]" />
-          </Link>
-        </div>
+        </motion.div>
       </section>
     )
   }
@@ -302,8 +359,8 @@ export default function ProteinCalculator() {
     <form onSubmit={submit} className="max-w-[1280px] mx-auto px-5 md:px-10 py-12 grid md:grid-cols-2 gap-6">
 
       {/* PERSONAL */}
-      <div className="bg-surface b-hair rounded-md p-6">
-        <h2 className="h2 text-text mb-5">About you</h2>
+      <div className="bg-surface b-hair rounded-md p-6 md:p-7 hover:border-border-hi transition-colors">
+        <StepHeader step="01" icon="ti-user" title="About you" />
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <Field label="Weight (kg)">
@@ -360,8 +417,8 @@ export default function ProteinCalculator() {
       </div>
 
       {/* FITNESS */}
-      <div className="bg-surface b-hair rounded-md p-6">
-        <h2 className="h2 text-text mb-5">Your training</h2>
+      <div className="bg-surface b-hair rounded-md p-6 md:p-7 hover:border-border-hi transition-colors">
+        <StepHeader step="02" icon="ti-barbell" title="Your training" />
         <div className="space-y-4">
           <Field label="Years of experience working out">
             <select
@@ -396,15 +453,16 @@ export default function ProteinCalculator() {
       </div>
 
       {/* DIET */}
-      <div className="bg-surface b-hair rounded-md p-6 md:col-span-2">
-        <h2 className="h2 text-text mb-2">Your typical day of eating</h2>
-        <p className="text-[13px] text-accent mb-6">
+      <div className="bg-surface b-hair rounded-md p-6 md:p-7 md:col-span-2 hover:border-border-hi transition-colors">
+        <StepHeader step="03" icon="ti-salad" title="Your typical day of eating" />
+        <p className="text-[13px] text-accent -mt-3 mb-6">
           Tap everything you commonly eat. Add anything missing in the text box below each meal.
         </p>
 
         <div className="space-y-7">
           <MealBlock
             label="Breakfast"
+            icon="ti-sunrise"
             options={BREAKFAST_CHIPS}
             selected={breakfastChips}
             onToggle={(v) => toggleChip(breakfastChips, setBreakfastChips, v)}
@@ -414,6 +472,7 @@ export default function ProteinCalculator() {
 
           <MealBlock
             label="Lunch"
+            icon="ti-sun"
             options={LUNCH_CHIPS}
             selected={lunchChips}
             onToggle={(v) => toggleChip(lunchChips, setLunchChips, v)}
@@ -423,6 +482,7 @@ export default function ProteinCalculator() {
 
           <MealBlock
             label="Dinner"
+            icon="ti-moon"
             options={DINNER_CHIPS}
             selected={dinnerChips}
             onToggle={(v) => toggleChip(dinnerChips, setDinnerChips, v)}
@@ -461,7 +521,7 @@ export default function ProteinCalculator() {
           <>
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[15px] py-4 rounded-sm hover:bg-text transition-colors"
+              className="btn-shimmer w-full flex items-center justify-center gap-2 bg-accent text-[#0C0C0C] font-bold text-[15px] py-4 rounded-sm hover:bg-text transition-colors"
             >
               <i className="ti ti-calculator text-[16px]" />
               Calculate my protein needs
@@ -477,6 +537,20 @@ export default function ProteinCalculator() {
   )
 }
 
+function StepHeader({ step, icon, title }: { step: string; icon: string; title: string }) {
+  return (
+    <div className="flex items-center gap-3 mb-6">
+      <span className="w-10 h-10 rounded-md bg-raised b-hair flex items-center justify-center flex-shrink-0">
+        <i className={`ti ${icon} text-[18px] text-accent`} />
+      </span>
+      <div>
+        <div className="label !text-accent">Step {step}</div>
+        <h2 className="text-[18px] font-bold text-text leading-tight">{title}</h2>
+      </div>
+    </div>
+  )
+}
+
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
@@ -487,9 +561,10 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 function MealBlock({
-  label, options, selected, onToggle, custom, onCustom,
+  label, icon, options, selected, onToggle, custom, onCustom,
 }: {
   label: string
+  icon: string
   options: string[]
   selected: string[]
   onToggle: (v: string) => void
@@ -498,7 +573,15 @@ function MealBlock({
 }) {
   return (
     <div>
-      <div className="text-[14px] font-bold text-text mb-3">{label}</div>
+      <div className="flex items-center gap-2 mb-3">
+        <i className={`ti ${icon} text-[16px] text-accent`} />
+        <span className="text-[14px] font-bold text-text">{label}</span>
+        {selected.length > 0 && (
+          <span className="text-[11px] font-bold bg-accent-dim text-accent px-2 py-0.5 rounded-full">
+            {selected.length} selected
+          </span>
+        )}
+      </div>
       <div className="flex flex-wrap gap-2 mb-3">
         {options.map((o) => {
           const active = selected.includes(o)
@@ -507,12 +590,13 @@ function MealBlock({
               key={o}
               type="button"
               onClick={() => onToggle(o)}
-              className={`text-[12px] px-3 py-1.5 rounded-full transition-colors ${
+              className={`text-[12px] px-3 py-1.5 rounded-full transition-all active:scale-95 ${
                 active
-                  ? 'bg-accent text-[#0C0C0C] font-bold'
-                  : 'bg-surface b-hair text-accent hover:border-border-hi'
+                  ? 'bg-accent text-[#0C0C0C] font-bold shadow-[0_0_12px_rgba(212,212,212,0.25)]'
+                  : 'bg-surface b-hair text-accent hover:border-border-hi hover:text-text'
               }`}
             >
+              {active && <i className="ti ti-check text-[11px] mr-1" />}
               {o}
             </button>
           )
