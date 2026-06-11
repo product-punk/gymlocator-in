@@ -20,14 +20,14 @@ export default function AccentMarquee() {
   return (
     <motion.section
       key={animated ? 'animated' : 'static'}
-      className="silver-section bb-hair bt-hair"
+      className="silver-section silver-elite bb-hair bt-hair"
       initial={animated ? { opacity: 0 } : false}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.3 }}
       onViewportEnter={() => setInView(true)}
       transition={{ delay: 1.4, duration: 0.6, ease: 'easeOut' }}
     >
-      <div className="max-w-[1280px] mx-auto px-5 md:px-10 py-4 overflow-x-auto scrollbar-none flex items-center gap-x-8 gap-y-0 text-[12px] font-bold uppercase tracking-[0.14em] font-mono whitespace-nowrap">
+      <div className="relative max-w-[1280px] mx-auto px-5 md:px-10 py-4 overflow-x-auto scrollbar-none flex items-center gap-x-8 gap-y-0 text-[12px] font-bold uppercase tracking-[0.14em] font-mono whitespace-nowrap">
         <span className="inline-flex items-center gap-2">
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-base" />
           Live across India

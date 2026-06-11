@@ -133,6 +133,34 @@
   background: #E0E0E0;
   color: #0C0C0C;
 }
+
+/* Elite metallic finish — layered gradient + edge highlights + slow sheen.
+   Pair with .silver-section; the gradient here wins by declaration order. */
+.silver-elite {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(100% 240% at 50% -80%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(180deg, #F5F5F5 0%, #E3E3E3 45%, #CDCDCD 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.12),
+    0 0 24px rgba(0, 0, 0, 0.45);
+}
+.silver-elite::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.6) 50%, transparent 62%);
+  transform: translateX(-100%);
+  animation: sheen-sweep 7s ease-in-out infinite;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .silver-elite::before {
+    animation: none;
+  }
+}
 .silver-section .text-text            { color: #0C0C0C !important; }
 .silver-section .text-text-primary    { color: #0C0C0C !important; }
 .silver-section .text-text-secondary  { color: #333333 !important; }
@@ -200,6 +228,10 @@
 @keyframes shimmer-sweep {
   0%   { transform: translateX(-150%) skewX(-18deg); }
   100% { transform: translateX(280%) skewX(-18deg); }
+}
+@keyframes sheen-sweep {
+  0%        { transform: translateX(-100%); }
+  55%, 100% { transform: translateX(100%); }
 }
 
 /* Register as utilities so Tailwind v4 PostCSS includes them */
