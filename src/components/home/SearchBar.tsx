@@ -97,7 +97,7 @@ export default function SearchBar() {
     <div ref={ref} className="relative w-full max-w-[680px]">
       <form
         onSubmit={handleSubmit}
-        className="flex items-center bg-surface b-hair rounded-md overflow-hidden focus-within:border-border-hi transition-colors"
+        className="search-glow flex items-center bg-surface b-hair rounded-md overflow-hidden focus-within:border-border-hi transition-colors"
       >
         <div className="flex items-center gap-3 pl-4 pr-2 flex-1 min-w-0">
           {loading
@@ -124,7 +124,7 @@ export default function SearchBar() {
         </div>
         <button
           type="submit"
-          className="bg-accent text-[#0C0C0C] font-bold text-[14px] px-6 py-4 hover:bg-text transition-colors flex-shrink-0 flex items-center gap-2"
+          className="btn-shimmer bg-accent text-[#0C0C0C] font-bold text-[14px] px-6 py-4 hover:bg-text transition-colors flex-shrink-0 flex items-center gap-2"
         >
           <i className="ti ti-search text-[15px]" />
           <span className="hidden sm:inline">Search</span>

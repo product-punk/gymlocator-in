@@ -182,6 +182,26 @@
   100% { transform: translateX(-50%); }
 }
 
+/* Hero animation keyframes — outside @layer so they're always global */
+@keyframes hero-breathe {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 1; }
+}
+@keyframes particle-rise {
+  0%   { transform: translateY(0); opacity: 0; }
+  8%   { opacity: 0.15; }
+  85%  { opacity: 0.15; }
+  100% { transform: translateY(-90vh); opacity: 0; }
+}
+@keyframes search-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(240, 240, 240, 0.15), 0 0 16px rgba(240, 240, 240, 0.04); }
+  50%      { box-shadow: 0 0 0 1px rgba(240, 240, 240, 0.30), 0 0 24px rgba(240, 240, 240, 0.09); }
+}
+@keyframes shimmer-sweep {
+  0%   { transform: translateX(-150%) skewX(-18deg); }
+  100% { transform: translateX(280%) skewX(-18deg); }
+}
+
 /* Register as utilities so Tailwind v4 PostCSS includes them */
 @layer utilities {
   .marquee-track {
@@ -201,6 +221,53 @@
   }
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Hero background glow — slow breathing pulse */
+  .hero-breathe {
+    animation: hero-breathe 3s ease-in-out infinite;
+  }
+
+  /* Floating hero particle — per-dot speed/offset via --dur / --delay */
+  .particle {
+    opacity: 0;
+    animation: particle-rise var(--dur, 18s) linear infinite;
+    animation-delay: var(--delay, 0s);
+    will-change: transform, opacity;
+  }
+
+  /* Search bar focus — gentle white box-shadow pulse */
+  .search-glow:focus-within {
+    animation: search-glow-pulse 2.4s ease-in-out infinite;
+  }
+
+  /* Shimmer sweep across a button on hover */
+  .btn-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 40%;
+    transform: translateX(-150%) skewX(-18deg);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    pointer-events: none;
+  }
+  .btn-shimmer:hover::after {
+    animation: shimmer-sweep 0.8s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-breathe,
+    .particle,
+    .search-glow:focus-within,
+    .btn-shimmer:hover::after {
+      animation: none;
+    }
   }
 
   .marquee-fade {
