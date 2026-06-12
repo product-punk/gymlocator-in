@@ -61,7 +61,7 @@ export default function ProteinCalculatorPage() {
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
             Free AI-powered calculator
           </div>
-          <h1 className="h1 max-w-[760px] bg-clip-text text-transparent bg-[linear-gradient(180deg,#FFFFFF_30%,#ABABAB)]">
+          <h1 className="h1 max-w-[760px] pb-2 mb-3 bg-clip-text text-transparent bg-[linear-gradient(180deg,#FFFFFF_30%,#ABABAB)]">
             Protein intake calculator for gym-goers in India.
           </h1>
           <p className="text-[17px] text-accent mt-5 max-w-[640px] leading-relaxed">
