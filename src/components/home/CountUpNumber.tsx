@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { animate } from 'framer-motion'
 
 type CountUpNumberProps = {
@@ -23,11 +23,12 @@ export default function CountUpNumber({
 }: CountUpNumberProps) {
   // SSR / no-JS / reduced-motion all show the final value.
   const [display, setDisplay] = useState(value)
-  const started = useRef(false)
 
+  // No "ran once" ref guard here: Strict Mode double-invokes effects, and a
+  // guard would let the cleanup stop the animation with no second start,
+  // freezing the display at 0. Restarting from cleanup is safe.
   useEffect(() => {
-    if (!play || started.current) return
-    started.current = true
+    if (!play) return
     setDisplay(0)
     const controls = animate(0, value, {
       delay,
