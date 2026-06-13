@@ -20,9 +20,12 @@ const FOOTER_SECTIONS: { heading: string; links: FooterLink[] }[] = [
   {
     heading: 'By Category',
     links: [
-      { label: 'CrossFit Gyms',  href: '/gyms/bangalore/crossfit' },
-      { label: 'Swimming Pools', href: '/gyms/bangalore/swimming' },
-      { label: 'Yoga Studios',   href: '/gyms/bangalore/yoga' },
+      { label: 'Budget Gyms',              href: '/gyms/bangalore/budget' },
+      { label: 'Premium Gyms',             href: '/gyms/bangalore/premium' },
+      { label: 'Women-Only Gyms',          href: '/gyms/bangalore/women' },
+      { label: 'Gyms with Swimming Pool',  href: '/gyms/bangalore/with-swimming-pool' },
+      { label: 'Gyms with Personal Trainer', href: '/gyms/bangalore/with-personal-trainer' },
+      { label: 'Gyms with Steam & Sauna',  href: '/gyms/bangalore/with-steam-sauna' },
     ],
   },
   {
