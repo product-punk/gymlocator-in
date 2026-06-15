@@ -20,12 +20,16 @@ const FOOTER_SECTIONS: { heading: string; links: FooterLink[] }[] = [
   {
     heading: 'By Category',
     links: [
-      { label: 'Budget Gyms',              href: '/gyms/bangalore/budget' },
-      { label: 'Premium Gyms',             href: '/gyms/bangalore/premium' },
-      { label: 'Women-Only Gyms',          href: '/gyms/bangalore/women' },
-      { label: 'Gyms with Swimming Pool',  href: '/gyms/bangalore/with-swimming-pool' },
-      { label: 'Gyms with Personal Trainer', href: '/gyms/bangalore/with-personal-trainer' },
-      { label: 'Gyms with Steam & Sauna',  href: '/gyms/bangalore/with-steam-sauna' },
+      { label: 'Budget Gyms in Mumbai',       href: '/gyms/mumbai/budget' },
+      { label: 'Budget Gyms in Delhi',        href: '/gyms/delhi/budget' },
+      { label: 'Budget Gyms in Bangalore',    href: '/gyms/bangalore/budget' },
+      { label: 'Budget Gyms in Pune',         href: '/gyms/pune/budget' },
+      { label: 'Women-Only Gyms in Mumbai',   href: '/gyms/mumbai/women' },
+      { label: 'Women-Only Gyms in Delhi',    href: '/gyms/delhi/women' },
+      { label: 'Women-Only Gyms in Bangalore', href: '/gyms/bangalore/women' },
+      { label: 'Premium Gyms in Bangalore',   href: '/gyms/bangalore/premium' },
+      { label: 'Premium Gyms in Mumbai',      href: '/gyms/mumbai/premium' },
+      { label: 'Gyms with Pool in Mumbai',    href: '/gyms/mumbai/with-swimming-pool' },
     ],
   },
   {
