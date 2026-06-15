@@ -505,20 +505,6 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
             </div>
           )}
 
-          {/* Popular searches */}
-          {facetContent?.popular_searches && facetContent.popular_searches.length > 0 && (
-            <div className="max-w-[780px]">
-              <h2 className="h2 text-text mb-6">Popular Searches</h2>
-              <div className="flex flex-wrap gap-2">
-                {facetContent.popular_searches.map((term, i) => (
-                  <span key={i} className="text-[13px] text-accent px-3 py-1.5 bg-surface b-hair rounded-pill">
-                    {term}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
         </div>
       )}
 
