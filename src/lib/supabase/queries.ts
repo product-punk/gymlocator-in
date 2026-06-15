@@ -270,3 +270,13 @@ export async function getCityBySlug(citySlug: string) {
     .single()
   return data
 }
+
+export async function getFacetContent(citySlug: string, facetSlug: string) {
+  const { data } = await supabase
+    .from('facet_content')
+    .select('*')
+    .eq('city_slug', citySlug)
+    .eq('facet_slug', facetSlug)
+    .single()
+  return data
+}

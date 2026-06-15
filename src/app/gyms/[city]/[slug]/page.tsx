@@ -7,6 +7,7 @@ import {
   getGymsByLocality,
   getGymsByAmenity,
   getGymsByFacet,
+  getFacetContent,
 } from '@/lib/supabase/queries'
 import GymCard from '@/components/shared/GymCard'
 import GymFilters from '@/components/shared/GymFilters'
@@ -118,6 +119,25 @@ const FACETS: Record<string, FacetConfig> = {
   },
 }
 
+type FacetContent = {
+  facet_slug: string
+  city_slug: string
+  seo_h1: string | null
+  meta_description: string | null
+  subtitle: string | null
+  seo_subtitle: string | null
+  about_text: string | null
+  price_budget_monthly: string | null
+  price_budget_annual: string | null
+  price_standard_monthly: string | null
+  price_standard_annual: string | null
+  price_premium_monthly: string | null
+  price_premium_annual: string | null
+  what_to_look_for: string[] | null
+  faqs: { question: string; answer: string }[] | null
+  popular_searches: string[] | null
+}
+
 type Gym = {
   id: string
   name: string
@@ -166,9 +186,11 @@ export async function generateMetadata({ params, searchParams }: Props) {
 
   if (isFacet) {
     const facet = FACETS[slug]
+    const facetContentRaw = await getFacetContent(citySlug, slug)
+    const facetContent = facetContentRaw as FacetContent | null
     return {
-      title: facet.seoTitle(cityName),
-      description: facet.seoDescription(cityName),
+      title: facetContent?.seo_h1 ? `${facetContent.seo_h1} | Gymlocator` : facet.seoTitle(cityName),
+      description: facetContent?.meta_description || facet.seoDescription(cityName),
       robots: { index: currentPage === 1, follow: true },
       alternates: { canonical: `https://gymlocator.in/gyms/${citySlug}/${slug}` },
     }
@@ -226,13 +248,19 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
   let localityName: string | null = null
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let locality: Record<string, any> | null = null
+  let facetContent: FacetContent | null = null
 
   if (isFacet) {
     const facet = FACETS[slug]
-    gymData = await getGymsByFacet(citySlug, slug, GYMS_PER_PAGE, offset)
+    const [gymDataResult, facetContentRaw] = await Promise.all([
+      getGymsByFacet(citySlug, slug, GYMS_PER_PAGE, offset),
+      getFacetContent(citySlug, slug),
+    ])
+    gymData = gymDataResult
+    facetContent = facetContentRaw as FacetContent | null
     if (gymData.total === 0) notFound()
-    pageTitle = facet.pageTitle(cityName)
-    pageSubtitle = facet.subtitle(gymData.total, cityName)
+    pageTitle = facetContent?.seo_h1 || facet.pageTitle(cityName)
+    pageSubtitle = facetContent?.subtitle || facetContent?.seo_subtitle || facet.subtitle(gymData.total, cityName)
   } else if (isAmenity) {
     const label = AMENITY_LABELS[slug] || formatSlug(slug)
     gymData = await getGymsByAmenity(citySlug, slug, GYMS_PER_PAGE, offset)
@@ -391,15 +419,106 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
 
       </div>
 
-      {/* FACET SEO CONTENT */}
+      {/* FACET RICH CONTENT */}
       {currentPage === 1 && isFacet && (
-        <div className="max-w-[1280px] mx-auto px-5 md:px-10 pb-16 bt-hair">
-          <div className="max-w-[780px] mt-12">
-            <h2 className="h2 text-text mb-4">About {FACETS[slug].label} in {cityName}</h2>
+        <div className="max-w-[1280px] mx-auto px-5 md:px-10 pb-16 space-y-12">
+
+          {/* About */}
+          <div className="max-w-[780px] bt-hair pt-12">
+            <h2 className="h2 text-text mb-4">
+              About {facetContent?.seo_h1?.split(':')[0] || FACETS[slug].label} in {cityName}
+            </h2>
             <p className="text-[15px] text-accent leading-relaxed">
-              {FACETS[slug].seoContent(cityName)}
+              {facetContent?.about_text || FACETS[slug].seoContent(cityName)}
             </p>
           </div>
+
+          {/* Pricing table */}
+          {facetContent?.price_standard_monthly && (
+            <div className="max-w-[780px]">
+              <h2 className="h2 text-text mb-4">Membership Costs in {cityName}</h2>
+              <div className="b-hair rounded-md overflow-hidden">
+                <table className="w-full text-[14px]">
+                  <thead>
+                    <tr className="bg-surface">
+                      <th className="text-left p-4 text-accent font-semibold bb-hair">Tier</th>
+                      <th className="text-left p-4 text-accent font-semibold bb-hair">Monthly</th>
+                      <th className="text-left p-4 text-accent font-semibold bb-hair">Annual</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {facetContent.price_budget_monthly && (
+                      <tr className="bb-hair">
+                        <td className="p-4 font-semibold text-text">Budget</td>
+                        <td className="p-4 text-accent">{facetContent.price_budget_monthly}</td>
+                        <td className="p-4 text-accent">{facetContent.price_budget_annual}</td>
+                      </tr>
+                    )}
+                    <tr className="bb-hair">
+                      <td className="p-4 font-semibold text-text">Standard</td>
+                      <td className="p-4 text-accent">{facetContent.price_standard_monthly}</td>
+                      <td className="p-4 text-accent">{facetContent.price_standard_annual}</td>
+                    </tr>
+                    <tr>
+                      <td className="p-4 font-semibold text-text">Premium</td>
+                      <td className="p-4 text-accent">{facetContent.price_premium_monthly}</td>
+                      <td className="p-4 text-accent">{facetContent.price_premium_annual}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* What to look for */}
+          {facetContent?.what_to_look_for && facetContent.what_to_look_for.length > 0 && (
+            <div className="max-w-[780px]">
+              <h2 className="h2 text-text mb-4">What to Look for</h2>
+              <ul className="space-y-3">
+                {facetContent.what_to_look_for.map((tip, i) => (
+                  <li key={i} className="flex items-start gap-3 text-[15px] text-accent">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* FAQs */}
+          {facetContent?.faqs && facetContent.faqs.length > 0 && (
+            <div className="max-w-[780px]">
+              <h2 className="h2 text-text mb-6">Frequently Asked Questions</h2>
+              <div className="space-y-3">
+                {facetContent.faqs.map((faq, i) => (
+                  <details key={i} className="bg-surface b-hair rounded-md group">
+                    <summary className="p-4 cursor-pointer text-[15px] font-semibold text-text list-none flex items-center justify-between gap-4 hover:text-accent transition-colors">
+                      {faq.question}
+                      <i className="ti ti-chevron-down text-[16px] text-accent flex-shrink-0 group-open:rotate-180 transition-transform" />
+                    </summary>
+                    <div className="px-4 pb-4 text-[14px] text-accent leading-relaxed bt-hair pt-3">
+                      {faq.answer}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Popular searches */}
+          {facetContent?.popular_searches && facetContent.popular_searches.length > 0 && (
+            <div className="max-w-[780px]">
+              <h2 className="h2 text-text mb-6">Popular Searches</h2>
+              <div className="flex flex-wrap gap-2">
+                {facetContent.popular_searches.map((term, i) => (
+                  <span key={i} className="text-[13px] text-accent px-3 py-1.5 bg-surface b-hair rounded-pill">
+                    {term}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
       )}
 
@@ -569,6 +688,14 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
                   '@type': 'Question',
                   name: faq.q,
                   acceptedAnswer: { '@type': 'Answer', text: faq.a },
+                })),
+              }] : []),
+              ...(currentPage === 1 && isFacet && facetContent?.faqs && facetContent.faqs.length > 0 ? [{
+                '@type': 'FAQPage',
+                mainEntity: facetContent.faqs.map((faq) => ({
+                  '@type': 'Question',
+                  name: faq.question,
+                  acceptedAnswer: { '@type': 'Answer', text: faq.answer },
                 })),
               }] : []),
             ],
