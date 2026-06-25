@@ -35,6 +35,9 @@ export async function getAllPosts(): Promise<BlogPost[]> {
       content_type: 'blogPost',
       order: ['-fields.publishedDate'],
     })
+    if (entries.items.length > 0) {
+      console.log('Sample post fields:', JSON.stringify(Object.keys(entries.items[0]?.fields || {})))
+    }
     return entries.items as unknown as BlogPost[]
   } catch (e) {
     console.error('Contentful getAllPosts error:', e)

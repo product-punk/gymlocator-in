@@ -36,7 +36,7 @@ const FOOTER_SECTIONS: { heading: string; links: FooterLink[] }[] = [
     heading: 'Tools',
     links: [
       { label: 'Protein Calculator', href: '/calculators/protein' },
-      { label: 'Fitness Blog',       href: '', comingSoon: true },
+      { label: 'Fitness Blog',       href: '/blog' },
     ],
   },
   {
