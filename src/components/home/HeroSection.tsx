@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import SearchBar from './SearchBar'
 import HeroParticles from './HeroParticles'
+import BeamsBackground from './BeamsBackground'
 
 const POPULAR_CITIES = [
   { name: 'Bangalore', slug: 'bangalore' },
@@ -33,11 +34,8 @@ export default function HeroSection() {
 
   return (
     <section className="bb-hair relative overflow-hidden min-h-[80vh] flex flex-col justify-center">
-      {/* Breathing warm radial glow */}
-      <div
-        aria-hidden
-        className="hero-breathe absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_55%_at_50%_40%,rgba(255,166,72,0.06),transparent_70%)]"
-      />
+      {/* Beams 3D background */}
+      <BeamsBackground />
       {animated && <HeroParticles />}
 
       <AnimatePresence>
