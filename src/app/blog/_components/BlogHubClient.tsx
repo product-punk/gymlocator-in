@@ -4,16 +4,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
 import type { BlogPost } from '@/lib/contentful'
-
-const CATEGORIES = [
-  'All',
-  'Workout Guides',
-  'Gym Reviews',
-  'Nutrition',
-  'Fitness Trends',
-  'Beginner Basics',
-  'Recovery',
-]
+import { getLabelFromSlug } from '@/lib/blog-categories'
+import BlogCategoryNav from './BlogCategoryNav'
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
@@ -41,7 +33,7 @@ function CategoryPill({ category }: { category?: string }) {
   if (!category) return null
   return (
     <span className="inline-flex items-center text-[11px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-pill bg-accent-dim text-accent whitespace-nowrap self-start">
-      {category}
+      {getLabelFromSlug(category)}
     </span>
   )
 }
@@ -207,7 +199,6 @@ function SectionHead({
 }
 
 export default function BlogHubClient({ posts }: { posts: BlogPost[] }) {
-  const [activeCategory, setActiveCategory] = useState('All')
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
 
@@ -217,15 +208,6 @@ export default function BlogHubClient({ posts }: { posts: BlogPost[] }) {
       setSubscribed(true)
     }
   }
-
-  const filteredPosts =
-    activeCategory === 'All'
-      ? posts
-      : posts.filter(p =>
-          p.fields.categories?.some(
-            c => c.toLowerCase().trim() === activeCategory.toLowerCase().trim()
-          ) ?? false
-        )
 
   const featured = posts[0]
   const sideCards = posts.slice(1, 4)
@@ -249,26 +231,7 @@ export default function BlogHubClient({ posts }: { posts: BlogPost[] }) {
         </div>
       </section>
 
-      {/* Category nav — sticks below the site nav (top-16 = 64px) */}
-      <div className="sticky top-16 z-40 bg-base/95 backdrop-blur-sm bb-hair">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-10 py-[14px]">
-          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`flex-none text-[13px] font-semibold px-4 py-[9px] rounded-pill border-[0.5px] whitespace-nowrap transition-all duration-150 cursor-pointer ${
-                  activeCategory === cat
-                    ? 'bg-accent text-base border-accent'
-                    : 'bg-surface text-text-secondary border-border hover:border-border-hi hover:text-text'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+      <BlogCategoryNav />
 
       {/* Trending */}
       {posts.length > 0 && (
@@ -358,11 +321,11 @@ export default function BlogHubClient({ posts }: { posts: BlogPost[] }) {
       {/* All articles */}
       <section className="max-w-[1200px] mx-auto px-5 md:px-10 pt-[72px]">
         <SectionHead label="The archive" title="All articles" />
-        {filteredPosts.length === 0 ? (
-          <p className="text-text-muted text-[15px] py-8">No articles in this category yet — check back soon.</p>
+        {posts.length === 0 ? (
+          <p className="text-text-muted text-[15px] py-8">No articles yet — check back soon.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredPosts.map(p => (
+            {posts.map(p => (
               <PostCard key={p.sys.id} post={p} />
             ))}
           </div>

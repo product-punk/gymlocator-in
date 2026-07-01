@@ -1,15 +1,19 @@
-import { getAllPosts, getPostBySlug } from '@/lib/contentful'
+import { getAllPosts, getPostBySlug, getPostsByCategory } from '@/lib/contentful'
+import { getCategoryBySlug, BLOG_CATEGORIES } from '@/lib/blog-categories'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
+import CategoryHubPage from '../_components/CategoryHubPage'
 
 export const revalidate = 3600
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts()
-  return posts.map((post: any) => ({ slug: post.fields.slug }))
+  const [posts] = await Promise.all([getAllPosts()])
+  const postParams = posts.map((post: { fields: { slug: string } }) => ({ slug: post.fields.slug }))
+  const categoryParams = BLOG_CATEGORIES.map(c => ({ slug: c.slug }))
+  return [...categoryParams, ...postParams]
 }
 
 export async function generateMetadata({
@@ -18,6 +22,19 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
+
+  const category = getCategoryBySlug(slug)
+  if (category) {
+    return {
+      title: `${category.label} — Guides, Tips & Advice | Gymlocator`,
+      description: category.description,
+      openGraph: {
+        title: `${category.label} | Gymlocator Fitness Hub`,
+        description: category.description,
+      },
+    }
+  }
+
   const post = await getPostBySlug(slug)
   if (!post) return {}
   return {
@@ -35,31 +52,32 @@ export async function generateMetadata({
 
 const richTextOptions = {
   renderNode: {
-    [BLOCKS.PARAGRAPH]: (node: any, children: any) => (
+    [BLOCKS.PARAGRAPH]: (node: unknown, children: React.ReactNode) => (
       <p className="mb-6 text-[#C0C0C0] leading-relaxed">{children}</p>
     ),
-    [BLOCKS.HEADING_1]: (node: any, children: any) => (
+    [BLOCKS.HEADING_1]: (node: unknown, children: React.ReactNode) => (
       <h1 className="text-3xl font-bold text-white mt-10 mb-4">{children}</h1>
     ),
-    [BLOCKS.HEADING_2]: (node: any, children: any) => (
+    [BLOCKS.HEADING_2]: (node: unknown, children: React.ReactNode) => (
       <h2 className="text-2xl font-bold text-white mt-8 mb-4">{children}</h2>
     ),
-    [BLOCKS.HEADING_3]: (node: any, children: any) => (
+    [BLOCKS.HEADING_3]: (node: unknown, children: React.ReactNode) => (
       <h3 className="text-xl font-semibold text-white mt-6 mb-3">{children}</h3>
     ),
-    [BLOCKS.UL_LIST]: (node: any, children: any) => (
+    [BLOCKS.UL_LIST]: (node: unknown, children: React.ReactNode) => (
       <ul className="list-disc list-inside mb-6 text-[#C0C0C0] space-y-2">{children}</ul>
     ),
-    [BLOCKS.OL_LIST]: (node: any, children: any) => (
+    [BLOCKS.OL_LIST]: (node: unknown, children: React.ReactNode) => (
       <ol className="list-decimal list-inside mb-6 text-[#C0C0C0] space-y-2">{children}</ol>
     ),
-    [BLOCKS.QUOTE]: (node: any, children: any) => (
+    [BLOCKS.QUOTE]: (node: unknown, children: React.ReactNode) => (
       <blockquote className="border-l-4 border-[#444] pl-6 my-6 text-[#999] italic">
         {children}
       </blockquote>
     ),
-    [BLOCKS.EMBEDDED_ASSET]: (node: any) => {
-      const { file, title } = node.data.target.fields
+    [BLOCKS.EMBEDDED_ASSET]: (node: unknown) => {
+      const n = node as { data: { target: { fields: { file: { url: string }; title: string } } } }
+      const { file, title } = n.data.target.fields
       return (
         <img
           src={`https:${file.url}`}
@@ -68,27 +86,41 @@ const richTextOptions = {
         />
       )
     },
-    [INLINES.HYPERLINK]: (node: any, children: any) => (
-      <a
-        href={node.data.uri}
-        className="text-white underline hover:text-[#E0E0E0]"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {children}
-      </a>
-    ),
+    [INLINES.HYPERLINK]: (node: unknown, children: React.ReactNode) => {
+      const n = node as { data: { uri: string } }
+      return (
+        <a
+          href={n.data.uri}
+          className="text-white underline hover:text-[#E0E0E0]"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {children}
+        </a>
+      )
+    },
   },
 }
 
-export default async function BlogPostPage({
+export default async function BlogSlugPage({
   params,
 }: {
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
+
+  // Category hub route
+  const category = getCategoryBySlug(slug)
+  if (category) {
+    const posts = await getPostsByCategory(slug)
+    return <CategoryHubPage category={category} posts={posts} />
+  }
+
+  // Blog post route
   const post = await getPostBySlug(slug)
   if (!post) notFound()
+
+  const categorySlug = post.fields.categories?.[0]
 
   return (
     <main className="min-h-screen bg-[#0C0C0C] text-[#E0E0E0]">
@@ -100,10 +132,13 @@ export default async function BlogPostPage({
           ← Back to Blog
         </Link>
 
-        {post.fields.categories?.[0] && (
-          <span className="text-xs text-[#888] uppercase tracking-wider">
-            {post.fields.categories[0]}
-          </span>
+        {categorySlug && (
+          <Link
+            href={`/blog/${categorySlug}`}
+            className="text-xs text-[#888] uppercase tracking-wider hover:text-white transition-colors block"
+          >
+            {post.fields.categories![0]}
+          </Link>
         )}
 
         <h1 className="text-3xl md:text-4xl font-bold text-white mt-3 mb-4">
@@ -132,7 +167,10 @@ export default async function BlogPostPage({
         )}
 
         <div>
-          {documentToReactComponents(post.fields.body, richTextOptions)}
+          {documentToReactComponents(
+          post.fields.body as Parameters<typeof documentToReactComponents>[0],
+          richTextOptions as unknown as Parameters<typeof documentToReactComponents>[1]
+        )}
         </div>
       </div>
     </main>

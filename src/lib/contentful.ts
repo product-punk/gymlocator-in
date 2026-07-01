@@ -1,8 +1,5 @@
 import { createClient } from 'contentful'
 
-console.log('Contentful Space ID:', process.env.CONTENTFUL_SPACE_ID)
-console.log('Contentful Token exists:', !!process.env.CONTENTFUL_ACCESS_TOKEN)
-
 export const contentfulClient = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
@@ -14,7 +11,7 @@ export interface BlogPost {
     title: string
     slug: string
     excerpt: string
-    body: any
+    body: unknown
     coverImage?: {
       fields: {
         file: { url: string }
@@ -25,6 +22,7 @@ export interface BlogPost {
     publishedDate: string
     seoTitle?: string
     seoDescription?: string
+    /** Array of category slugs — e.g. ['supplements-nutrition'] */
     categories?: string[]
   }
 }
@@ -35,12 +33,23 @@ export async function getAllPosts(): Promise<BlogPost[]> {
       content_type: 'blogPost',
       order: ['-fields.publishedDate'],
     })
-    if (entries.items.length > 0) {
-      console.log('Sample post fields:', JSON.stringify(Object.keys(entries.items[0]?.fields || {})))
-    }
-    return entries.items as unknown as BlogPost[]
+return entries.items as unknown as BlogPost[]
   } catch (e) {
     console.error('Contentful getAllPosts error:', e)
+    return []
+  }
+}
+
+export async function getPostsByCategory(categorySlug: string): Promise<BlogPost[]> {
+  try {
+    const entries = await contentfulClient.getEntries({
+      content_type: 'blogPost',
+      'fields.categories[in]': categorySlug,
+      order: ['-fields.publishedDate'],
+    })
+    return entries.items as unknown as BlogPost[]
+  } catch (e) {
+    console.error('Contentful getPostsByCategory error:', e)
     return []
   }
 }
