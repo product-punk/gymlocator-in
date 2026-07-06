@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Workout Guides — Page 2 | Gymlocator Fitness Hub</title>
+<meta name="description" content="Browse all workout guides from the Gymlocator Fitness Hub. Expert-written training advice for every level." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="blog.css">
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="Blog Hub.html">Gymlocator<span class="in">.in</span></a>
+    <div class="nav-links">
+      <a href="#">Cities</a>
+      <a href="Blog Hub.html" class="active">Blog</a>
+      <a href="#">About</a>
+    </div>
+    <a href="#" class="btn btn-primary"><i class="ti ti-plus"></i>List your gym</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ===================== ARCHIVE HEADER ===================== -->
+<section class="bb-hair">
+  <div class="wrap" style="padding-top:40px; padding-bottom:36px;">
+    <div class="crumbs" style="margin-bottom:22px;">
+      <a href="Blog Hub.html">Home</a><span class="sep">/</span>
+      <a href="Blog Hub.html">Blog</a><span class="sep">/</span>
+      <span class="cur">Workout Guides</span>
+    </div>
+    <div class="label" style="margin-bottom:10px;">Category</div>
+    <h1 class="h1" style="font-size:48px;">Workout Guides</h1>
+    <p style="margin-top:14px; max-width:560px; font-size:15px; line-height:1.6; color:var(--text-secondary);">
+      Programming, technique and progression advice from certified trainers.
+      <span class="mono" style="color:var(--text-muted); font-size:13px;">— Page 2 of 10 · 118 articles</span>
+    </p>
+  </div>
+</section>
+
+<!-- ===================== CATEGORY NAV ===================== -->
+<div class="nav" style="top:64px; z-index:40;">
+  <div class="wrap" style="padding-top:14px; padding-bottom:14px;">
+    <div class="cat-row" id="catRow">
+      <button class="cat-chip">All</button>
+      <button class="cat-chip active">Workout Guides</button>
+      <button class="cat-chip">Gym Reviews</button>
+      <button class="cat-chip">Nutrition</button>
+      <button class="cat-chip">Fitness Trends</button>
+      <button class="cat-chip">Beginner Basics</button>
+      <button class="cat-chip">Recovery</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ARTICLE GRID ===================== -->
+<section class="wrap" style="padding-top:48px;">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:28px;">
+    <span class="mono" style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em;">Showing 13–24</span>
+    <button class="btn btn-outline"><i class="ti ti-arrows-sort"></i>Newest first</button>
+  </div>
+  <div class="grid-3" id="grid"></div>
+
+  <!-- ===================== PAGINATION ===================== -->
+  <nav class="pager" style="margin-top:64px;" aria-label="Pagination">
+    <a href="#" class="nav-btn"><i class="ti ti-chevron-left"></i>Prev</a>
+    <a href="#">1</a>
+    <span class="active" aria-current="page">2</span>
+    <a href="#">3</a>
+    <a href="#">4</a>
+    <span class="gap">…</span>
+    <a href="#">10</a>
+    <a href="#" class="nav-btn">Next<i class="ti ti-chevron-right"></i></a>
+  </nav>
+  <p style="text-align:center; margin-top:18px; font-size:12px; color:var(--text-muted);" class="mono">Page 2 of 10</p>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <a class="logo" href="Blog Hub.html">Gymlocator<span class="in">.in</span></a>
+    <div class="foot-links">
+      <a href="#">About</a><a href="#">Contact</a><a href="#">Privacy Policy</a><a href="#">Sitemap</a>
+    </div>
+    <div class="copy">© 2025 Gymlocator.in</div>
+  </div>
+</footer>
+
+<script>
+const AUTHORS = [{n:'Arjun Kapoor',i:'AK'},{n:'Priya Nair',i:'PN'},{n:'Rohan Mehta',i:'RM'},{n:'Sneha Reddy',i:'SR'}];
+const TITLES = [
+  'Progressive overload without a coach: a simple framework',
+  'The push/pull/legs split, demystified',
+  'How to warm up properly in 8 minutes',
+  'Dumbbell-only routines for small home setups',
+  'Fixing your squat depth — a mobility checklist',
+  'When to add weight vs when to add reps',
+  'Training to failure: useful or overrated?',
+  'Building a chest without a bench press',
+  'How many days a week should beginners lift?',
+];
+const READS=['4 min','5 min','6 min','7 min','8 min','10 min'];
+const DATES=['Jun 12','Jun 10','Jun 7','Jun 4','Jun 1','May 29','May 26','May 23','May 20'];
+
+function card(idx){
+  const a=AUTHORS[idx%AUTHORS.length];
+  return `
+  <a href="Post.html" class="card">
+    <div class="thumb imgph"><span class="tag">article · 16:10</span></div>
+    <div class="body">
+      <span class="pill pill-cat" style="align-self:flex-start;">Workout Guides</span>
+      <div class="title">${TITLES[idx]}</div>
+      <div class="excerpt">A practical, no-fluff breakdown you can act on the next time you step into the gym.</div>
+      <div class="meta">
+        <div class="avatar" style="width:28px; height:28px; font-size:11px;">${a.i}</div>
+        <div style="display:flex; flex-direction:column;">
+          <span class="name" style="color:var(--text-secondary); font-size:12px; font-weight:600;">${a.n}</span>
+          <span class="when" style="font-size:11px; color:var(--text-muted);">${DATES[idx]} · ${READS[idx%READS.length]}</span>
+        </div>
+      </div>
+    </div>
+  </a>`;
+}
+document.getElementById('grid').innerHTML = TITLES.map((_,i)=>card(i)).join('');
+
+document.querySelectorAll('#catRow .cat-chip').forEach(c=>{
+  c.addEventListener('click', ()=>{
+    document.querySelectorAll('#catRow .cat-chip').forEach(x=>x.classList.remove('active'));
+    c.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -12,7 +12,7 @@ with gyms in their city or locality. Think Zomato UX but for fitness centers.
 - **Styling**: TailwindCSS only — no component libraries, no inline styles
 - **Database**: Supabase (PostgreSQL)
 - **Hosting**: Vercel
-- **Blog**: MDX files (no DB)
+- **Blog**: Contentful (headless CMS) — see "Blog / Contentful" section
 - **Maps**: Google Maps iframe embed (no API key required)
 
 ---
@@ -43,9 +43,13 @@ app/
 │   └── [slug]/
 │       └── page.tsx                      → /gym/cult-fit-koramangala-bangalore
 ├── blog/
-│   ├── page.tsx                          → /blog
-│   └── [slug]/
-│       └── page.tsx                      → /blog/best-gyms-bangalore-2026
+│   ├── page.tsx                          → /blog (hub)
+│   ├── [slug]/
+│   │   └── page.tsx                      → /blog/best-gyms-bangalore-2026  (post)
+│   │                                        /blog/supplements-nutrition    (category hub — shared route)
+│   └── author/
+│       └── [slug]/
+│           └── page.tsx                  → /blog/author/arjun-kapoor
 ├── about/page.tsx
 ├── contact/page.tsx
 └── sitemap.xml/route.ts                  → auto-generated
@@ -119,6 +123,57 @@ gym_count     int default 0
 
 ---
 
+## Blog / Contentful
+
+Blog content lives in Contentful (not MDX). Client + queries in `src/lib/contentful.ts`.
+Env vars: `CONTENTFUL_SPACE_ID`, `CONTENTFUL_ACCESS_TOKEN`.
+
+### `blogPost` content type
+```
+title          Short text
+slug           Short text (unique)
+excerpt        Long text
+body           Rich text
+coverImage     Media
+author         Short text  — author NAME, must exactly match an author entry's name
+publishedDate  Date
+seoTitle       Short text (optional)
+seoDescription Long text (optional)
+categories     Short text, list — stores category SLUGS (e.g. 'supplements-nutrition'),
+               NOT labels. Slug→label mapping lives in src/lib/blog-categories.ts
+```
+
+### `author` content type
+```
+name          Short text (required) — must exactly match blogPost.author strings
+slug          Short text (unique)   — kebab-case of name, e.g. 'arjun-kapoor'
+                                      must equal authorNameToSlug(name) from contentful.ts
+designation   Short text            — e.g. 'Certified Fitness Trainer & Gym Reviewer'
+photo         Media
+bio           Long text             — paragraphs separated by blank lines
+quote         Short text            — pull-quote rendered after bio
+credentials   Short text, list      — e.g. ['ACE Certified', 'NSCA-CPT', '9 years experience']
+verified      Boolean               — shows 'Verified Contributor' badge
+linkedin      Short text (URL)
+twitter       Short text (URL)
+instagram     Short text (URL)
+website       Short text (URL)
+gymsReviewed  Short text            — display stat, e.g. '120+'
+totalReads    Short text            — display stat, e.g. '1.2M'
+```
+
+### Blog routing rules
+- `/blog/[slug]` is shared between posts and category hubs — resolved via
+  `getCategoryBySlug()` from `src/lib/blog-categories.ts` (12 fixed categories)
+- `/blog/author/[slug]` — author profile page; posts matched by author NAME
+  (`getPostsByAuthor(name)`), page looked up by slug (`getAuthorBySlug(slug)`)
+- Blog pages use ISR: `export const revalidate = 3600`
+- Blog design system: dark theme tokens in `src/app/globals.css`
+  (base #0C0C0C, surface, raised, border, accent #D4D4D4, signal #009A6B)
+- Design reference prototypes: `design-handoff/gym-locator/project/blog/`
+
+---
+
 ## SEO Rules — Follow on Every Page
 
 ### Meta title templates
@@ -129,6 +184,8 @@ Locality:    "Gyms in {Locality}, {City} — Top Fitness Centers | Gymlocator"
 Amenity:     "{Amenity} Gyms in {City} — Find & Compare | Gymlocator"
 Gym detail:  "{Gym Name}, {Locality} {City} — Timings, Fees & Reviews"
 Blog post:   "{Post Title} | Gymlocator Fitness Guide"
+Blog cat.:   "{Category Label} — Guides, Tips & Advice | Gymlocator"
+Author:      "{Name} — {Designation} | Gymlocator"
 ```
 
 ### Schema markup per page
@@ -140,6 +197,7 @@ Blog post:   "{Post Title} | Gymlocator Fitness Guide"
 | Amenity     | `CollectionPage` + `BreadcrumbList`               |
 | Gym detail  | `LocalBusiness` + `SportsActivityLocation` + `BreadcrumbList` |
 | Blog post   | `Article` + `BreadcrumbList`                      |
+| Author      | `ProfilePage` + `Person` + `BreadcrumbList`       |
 
 ### Breadcrumbs (always render these)
 ```

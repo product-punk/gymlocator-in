@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Gymlocator — Favicon</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --accent:#DCFF1C; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; background:#0C0C0C; color:#F0F0F0; font-family:'Inter',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  .mono{ font-family:'JetBrains Mono',ui-monospace,monospace; }
+  .label{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent); }
+  .b-hair{ border:0.5px solid #222; }
+  .bt-hair{ border-top:0.5px solid #222; }
+  a{ color:inherit; }
+
+  .wrap{ max-width:1040px; margin:0 auto; padding:64px 32px 96px; }
+  h1{ font-size:40px; font-weight:800; letter-spacing:-1.4px; margin:0; }
+  .sub{ color:#AAA; font-size:15px; margin-top:10px; max-width:560px; line-height:1.6; }
+
+  .grid{ display:grid; gap:1px; background:#222; border:0.5px solid #222; border-radius:12px; overflow:hidden; margin-top:40px; }
+  .grid.cols-3{ grid-template-columns:repeat(3,1fr); }
+  @media(max-width:760px){ .grid.cols-3{ grid-template-columns:1fr; } }
+  .cell{ background:#0C0C0C; padding:32px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; min-height:220px; }
+  .cell .meta{ text-align:center; }
+  .cell .name{ font-size:13px; font-weight:700; color:#F0F0F0; }
+  .cell .dim{ font-size:11px; color:#555; margin-top:2px; }
+
+  .section-h{ display:flex; align-items:baseline; gap:14px; margin:64px 0 0; }
+  .section-h h2{ font-size:20px; font-weight:700; letter-spacing:-0.5px; margin:0; }
+
+  /* browser tab mock */
+  .browser{ margin-top:40px; border:0.5px solid #222; border-radius:12px; overflow:hidden; background:#161616; }
+  .tabbar{ display:flex; align-items:flex-end; gap:2px; padding:10px 12px 0; background:#0e0e0e; }
+  .tab{ display:flex; align-items:center; gap:8px; background:#1A1A1A; border:0.5px solid #222; border-bottom:none; border-radius:8px 8px 0 0; padding:9px 14px; font-size:12px; color:#AAA; max-width:200px; }
+  .tab.active{ background:#222; color:#F0F0F0; }
+  .tab.dim{ opacity:.55; }
+  .tab img{ width:16px; height:16px; border-radius:3px; flex:none; }
+  .tab .x{ color:#555; font-size:13px; margin-left:2px; }
+  .addressbar{ display:flex; align-items:center; gap:10px; padding:10px 14px; background:#161616; }
+  .addressbar .pill{ flex:1; background:#0C0C0C; border:0.5px solid #222; border-radius:20px; padding:8px 14px; font-size:12px; color:#AAA; }
+  .addressbar .pill b{ color:#F0F0F0; font-weight:600; }
+
+  /* phone homescreen mock */
+  .home{ margin-top:24px; display:flex; gap:28px; flex-wrap:wrap; align-items:flex-start; }
+  .ios-icon{ display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .ios-icon .ic{ width:88px; height:88px; border-radius:20px; overflow:hidden; border:0.5px solid #222; }
+  .ios-icon .ic img{ width:100%; height:100%; display:block; }
+  .ios-icon .cap{ font-size:12px; color:#AAA; }
+
+  .files{ margin-top:40px; border:0.5px solid #222; border-radius:12px; overflow:hidden; }
+  .file{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 18px; border-bottom:0.5px solid #222; }
+  .file:last-child{ border-bottom:none; }
+  .file .l{ display:flex; align-items:center; gap:14px; }
+  .file .l img{ width:28px; height:28px; border-radius:5px; border:0.5px solid #222; background:#111; }
+  .file .path{ font-size:13px; color:#F0F0F0; }
+  .file .desc{ font-size:11px; color:#555; margin-top:2px; }
+  .file .size{ font-size:11px; color:#555; }
+
+  pre{ margin:20px 0 0; background:#111; border:0.5px solid #222; border-radius:12px; padding:20px; overflow:auto; }
+  code{ font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#AAA; line-height:1.8; }
+  code .tag{ color:var(--accent); }
+  code .at{ color:#7FB0FF; }
+  code .str{ color:#F0F0F0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="label">Brand asset</div>
+  <h1 style="margin-top:14px;">Gymlocator favicon</h1>
+  <p class="sub">The barbell-pin mark, packaged as a full favicon set. Tuned with a heavier stroke and beefier barbell at small sizes so it stays legible down to 16&nbsp;px in a browser tab.</p>
+
+  <!-- ===== Browser tab context ===== -->
+  <div class="section-h"><h2>In a browser tab</h2></div>
+  <div class="browser">
+    <div class="tabbar">
+      <div class="tab active">
+        <img src="favicon/favicon-32.png" alt="Gymlocator favicon">
+        Gymlocator.in
+        <span class="x">×</span>
+      </div>
+      <div class="tab dim">
+        <img src="favicon/favicon-32.png" alt="">
+        Best gyms in Banga…
+        <span class="x">×</span>
+      </div>
+      <div class="tab dim" style="max-width:120px;">
+        <span style="width:16px;height:16px;border-radius:3px;background:#333;flex:none;"></span>
+        New tab
+      </div>
+    </div>
+    <div class="addressbar">
+      <span class="pill"><b>gymlocator.in</b>&nbsp;/city/bangalore</span>
+    </div>
+  </div>
+
+  <!-- ===== Size ladder ===== -->
+  <div class="section-h"><h2>Size ladder</h2><span class="mono" style="font-size:11px;color:#555;">PNG · dark base</span></div>
+  <div class="grid cols-3">
+    <div class="cell">
+      <img src="favicon/favicon-16.png" width="16" height="16" alt="16px favicon" style="image-rendering:pixelated;">
+      <div class="meta"><div class="name">Tab / address bar</div><div class="dim mono">16 × 16</div></div>
+    </div>
+    <div class="cell">
+      <img src="favicon/favicon-32.png" width="32" height="32" alt="32px favicon" style="image-rendering:pixelated;">
+      <div class="meta"><div class="name">Retina tab / bookmark</div><div class="dim mono">32 × 32</div></div>
+    </div>
+    <div class="cell">
+      <img src="favicon/favicon-48.png" width="48" height="48" alt="48px favicon">
+      <div class="meta"><div class="name">Windows / shortcut</div><div class="dim mono">48 × 48</div></div>
+    </div>
+  </div>
+
+  <!-- ===== App / home screen ===== -->
+  <div class="section-h"><h2>App icon &amp; home screen</h2></div>
+  <div class="home">
+    <div class="ios-icon">
+      <div class="ic"><img src="favicon/favicon-180.png" alt="Apple touch icon"></div>
+      <div class="cap mono">apple-touch · 180</div>
+    </div>
+    <div class="ios-icon">
+      <div class="ic" style="border-radius:20px;"><img src="favicon/app-icon-512-rounded.png" alt="Rounded app icon"></div>
+      <div class="cap mono">maskable · 512</div>
+    </div>
+    <div class="ios-icon">
+      <div class="ic"><img src="favicon/favicon-192.png" alt="Android icon"></div>
+      <div class="cap mono">android · 192</div>
+    </div>
+  </div>
+
+  <!-- ===== File manifest ===== -->
+  <div class="section-h"><h2>Files</h2><span class="mono" style="font-size:11px;color:#555;">/favicon</span></div>
+  <div class="files">
+    <div class="file"><div class="l"><img src="favicon/favicon-16.png" alt=""><div><div class="path">favicon-16.png</div><div class="desc">Browser tab, address bar</div></div></div><div class="size mono">16²</div></div>
+    <div class="file"><div class="l"><img src="favicon/favicon-32.png" alt=""><div><div class="path">favicon-32.png</div><div class="desc">Retina tab, bookmarks bar</div></div></div><div class="size mono">32²</div></div>
+    <div class="file"><div class="l"><img src="favicon/favicon-48.png" alt=""><div><div class="path">favicon-48.png</div><div class="desc">Windows site icon</div></div></div><div class="size mono">48²</div></div>
+    <div class="file"><div class="l"><img src="favicon/favicon-64.png" alt=""><div><div class="path">favicon-64.png</div><div class="desc">High-DPI fallback</div></div></div><div class="size mono">64²</div></div>
+    <div class="file"><div class="l"><img src="favicon/favicon-180.png" alt=""><div><div class="path">favicon-180.png</div><div class="desc">Apple touch icon (iOS home screen)</div></div></div><div class="size mono">180²</div></div>
+    <div class="file"><div class="l"><img src="favicon/favicon-192.png" alt=""><div><div class="path">favicon-192.png</div><div class="desc">Android / PWA manifest</div></div></div><div class="size mono">192²</div></div>
+    <div class="file"><div class="l"><img src="favicon/favicon-512.png" alt=""><div><div class="path">favicon-512.png</div><div class="desc">PWA splash / store listing</div></div></div><div class="size mono">512²</div></div>
+    <div class="file"><div class="l"><img src="favicon/app-icon-512-rounded.png" alt=""><div><div class="path">app-icon-512-rounded.png</div><div class="desc">Maskable / rounded app icon</div></div></div><div class="size mono">512²</div></div>
+    <div class="file"><div class="l"><img src="favicon/mark-white-transparent-512.png" alt="" style="background:#333;"><div><div class="path">mark-white-transparent-512.png</div><div class="desc">Transparent mark — white pin + accent barbell</div></div></div><div class="size mono">512²</div></div>
+    <div class="file"><div class="l"><img src="favicon/mark-dark-transparent-512.png" alt="" style="background:#E5E5E5;"><div><div class="path">mark-dark-transparent-512.png</div><div class="desc">Transparent mark — solid dark (for light bg)</div></div></div><div class="size mono">512²</div></div>
+  </div>
+
+  <!-- ===== Install snippet ===== -->
+  <div class="section-h"><h2>Drop into &lt;head&gt;</h2></div>
+  <pre><code>&lt;<span class="tag">link</span> <span class="at">rel</span>=<span class="str">"icon"</span> <span class="at">type</span>=<span class="str">"image/png"</span> <span class="at">sizes</span>=<span class="str">"32x32"</span> <span class="at">href</span>=<span class="str">"/favicon/favicon-32.png"</span>&gt;
+&lt;<span class="tag">link</span> <span class="at">rel</span>=<span class="str">"icon"</span> <span class="at">type</span>=<span class="str">"image/png"</span> <span class="at">sizes</span>=<span class="str">"16x16"</span> <span class="at">href</span>=<span class="str">"/favicon/favicon-16.png"</span>&gt;
+&lt;<span class="tag">link</span> <span class="at">rel</span>=<span class="str">"apple-touch-icon"</span> <span class="at">sizes</span>=<span class="str">"180x180"</span> <span class="at">href</span>=<span class="str">"/favicon/favicon-180.png"</span>&gt;
+&lt;<span class="tag">link</span> <span class="at">rel</span>=<span class="str">"manifest"</span> <span class="at">href</span>=<span class="str">"/site.webmanifest"</span>&gt;</code></pre>
+
+  <p class="sub mono" style="font-size:11px;color:#555;margin-top:24px;">Manifest uses favicon-192.png &amp; favicon-512.png. Browsers requesting /favicon.ico will fall back to the 32px PNG via the link tag.</p>
+
+</div>
+</body>
+</html>

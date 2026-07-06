@@ -1,5 +1,5 @@
-import { getAllPosts, getPostBySlug, getPostsByCategory } from '@/lib/contentful'
-import { getCategoryBySlug, BLOG_CATEGORIES } from '@/lib/blog-categories'
+import { getAllPosts, getPostBySlug, getPostsByCategory, authorNameToSlug } from '@/lib/contentful'
+import { getCategoryBySlug, getLabelFromSlug, BLOG_CATEGORIES } from '@/lib/blog-categories'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS, INLINES } from '@contentful/rich-text-types'
 import { notFound } from 'next/navigation'
@@ -137,7 +137,7 @@ export default async function BlogSlugPage({
             href={`/blog/${categorySlug}`}
             className="text-xs text-[#888] uppercase tracking-wider hover:text-white transition-colors block"
           >
-            {post.fields.categories![0]}
+            {getLabelFromSlug(categorySlug)}
           </Link>
         )}
 
@@ -146,7 +146,14 @@ export default async function BlogSlugPage({
         </h1>
 
         <div className="flex items-center gap-4 text-sm text-[#666] mb-8">
-          {post.fields.author && <span>By {post.fields.author}</span>}
+          {post.fields.author && (
+            <Link
+              href={`/blog/author/${authorNameToSlug(post.fields.author)}`}
+              className="hover:text-white transition-colors"
+            >
+              By {post.fields.author}
+            </Link>
+          )}
           {post.fields.publishedDate && (
             <span>
               {new Date(post.fields.publishedDate).toLocaleDateString('en-IN', {

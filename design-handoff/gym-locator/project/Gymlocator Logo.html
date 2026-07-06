@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Gymlocator — Brand Marks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  html, body { margin:0; background:#0C0C0C; color:#F0F0F0; font-family:'Inter',system-ui,sans-serif; }
+  .label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#D4D4D4; }
+  .mono  { font-family:'JetBrains Mono',ui-monospace,monospace; }
+  .b-hair { border:0.5px solid #222; }
+  .bb-hair{ border-bottom:0.5px solid #222; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel">
+const { useState } = React;
+
+/* ============================================================
+   Reusable mark primitives — geometric SVG only
+   ============================================================ */
+
+// Mark A: barbell pin — locator drop with a barbell inside
+function MarkBarbellPin({ size = 56, fg = '#F0F0F0', accent = '#D4D4D4' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none">
+      {/* pin outline — squared off, geometric */}
+      <path d="M28 4 C16 4 8 12 8 24 C8 38 28 52 28 52 C28 52 48 38 48 24 C48 12 40 4 28 4 Z"
+            stroke={fg} strokeWidth="3" fill="none"/>
+      {/* barbell inside */}
+      <rect x="14" y="22" width="4"  height="8" fill={accent}/>
+      <rect x="38" y="22" width="4"  height="8" fill={accent}/>
+      <rect x="18" y="25" width="20" height="2" fill={accent}/>
+    </svg>
+  );
+}
+
+// Mark B: monogram G as a circular bar plate
+function MarkPlateG({ size = 56, fg = '#F0F0F0', accent = '#D4D4D4' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none">
+      <circle cx="28" cy="28" r="22" stroke={fg} strokeWidth="3"/>
+      <circle cx="28" cy="28" r="6"  fill={accent}/>
+      {/* G cutout: bar going right from center then down */}
+      <rect x="28" y="26" width="18" height="4" fill={accent}/>
+      <rect x="42" y="26" width="4"  height="8" fill={accent}/>
+    </svg>
+  );
+}
+
+// Mark C: stacked weight stack — three bars
+function MarkStack({ size = 56, fg = '#F0F0F0', accent = '#D4D4D4' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none">
+      <rect x="8"  y="14" width="40" height="6" fill={fg}/>
+      <rect x="12" y="25" width="32" height="6" fill={accent}/>
+      <rect x="16" y="36" width="24" height="6" fill="#555"/>
+    </svg>
+  );
+}
+
+// Mark D: barbell only — long rod with plates
+function MarkBarbell({ size = 56, fg = '#F0F0F0', accent = '#D4D4D4' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none">
+      <rect x="4"  y="22" width="6"  height="12" fill={fg}/>
+      <rect x="10" y="18" width="6"  height="20" fill={accent}/>
+      <rect x="16" y="26" width="24" height="4"  fill={fg}/>
+      <rect x="40" y="18" width="6"  height="20" fill={accent}/>
+      <rect x="46" y="22" width="6"  height="12" fill={fg}/>
+    </svg>
+  );
+}
+
+// Mark E: square locator with crosshair
+function MarkSquarePin({ size = 56, fg = '#F0F0F0', accent = '#D4D4D4' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none">
+      <rect x="4" y="4" width="48" height="48" stroke={fg} strokeWidth="3"/>
+      <rect x="26" y="8"  width="4" height="14" fill={accent}/>
+      <rect x="26" y="34" width="4" height="14" fill={accent}/>
+      <rect x="8"  y="26" width="14" height="4" fill={accent}/>
+      <rect x="34" y="26" width="14" height="4" fill={accent}/>
+      <rect x="24" y="24" width="8"  height="8" fill={accent}/>
+    </svg>
+  );
+}
+
+// Mark F: G as a barbell — letter G constructed from rods
+function MarkBarG({ size = 56, fg = '#F0F0F0', accent = '#D4D4D4' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 56 56" fill="none">
+      {/* outer ring (top, left, bottom) */}
+      <path d="M48 14 A20 20 0 1 0 48 42" stroke={fg} strokeWidth="6" fill="none" strokeLinecap="square"/>
+      {/* G horizontal bar */}
+      <rect x="28" y="26" width="22" height="6" fill={accent}/>
+      {/* small inner stub */}
+      <rect x="44" y="26" width="6"  height="12" fill={accent}/>
+    </svg>
+  );
+}
+
+/* ============================================================
+   Wordmark variants
+   ============================================================ */
+
+function Wordmark({ size = 56, weight = 800, tracking = -2, accentDot = false }) {
+  return (
+    <div style={{ fontSize: size, fontWeight: weight, letterSpacing: `${tracking}px`, lineHeight: 1, display:'flex', alignItems:'baseline' }}>
+      <span style={{ color:'#F0F0F0' }}>Gymlocator</span>
+      <span style={{ color:'#D4D4D4' }}>.in</span>
+      {accentDot && <span style={{ display:'inline-block', width: size*0.12, height: size*0.12, background:'#D4D4D4', marginLeft: size*0.1, transform:'translateY(-' + (size*0.05) + 'px)' }}/>}
+    </div>
+  );
+}
+
+/* ============================================================
+   Card shells for the canvas
+   ============================================================ */
+
+function Card({ children, pad = 56, bg = '#0C0C0C', center = true, style = {} }) {
+  return (
+    <div style={{
+      width:'100%', height:'100%', background:bg, padding:pad, boxSizing:'border-box',
+      display:'flex', alignItems: center?'center':'flex-start', justifyContent: center?'center':'flex-start',
+      ...style
+    }}>{children}</div>
+  );
+}
+
+function Spec({ children }) {
+  return (
+    <div style={{
+      position:'absolute', top:16, left:16,
+      fontFamily:'JetBrains Mono, monospace', fontSize:10, color:'#555',
+      textTransform:'uppercase', letterSpacing:'0.12em'
+    }}>{children}</div>
+  );
+}
+
+/* ============================================================
+   Logo lockups
+   ============================================================ */
+
+function LockupHorizontal({ Mark, gap = 18, fontSize = 44, weight = 800, tracking = -1.6 }) {
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap }}>
+      <Mark size={56}/>
+      <div style={{ fontSize, fontWeight: weight, letterSpacing: `${tracking}px`, lineHeight:1, display:'flex', alignItems:'baseline' }}>
+        <span style={{ color:'#F0F0F0' }}>Gymlocator</span>
+        <span style={{ color:'#D4D4D4' }}>.in</span>
+      </div>
+    </div>
+  );
+}
+
+function LockupStacked({ Mark }) {
+  return (
+    <div style={{ display:'flex', flexDirection:'column', alignItems:'flex-start', gap:18 }}>
+      <Mark size={72}/>
+      <div style={{ fontSize:32, fontWeight:800, letterSpacing:'-1.2px', lineHeight:1, display:'flex', alignItems:'baseline' }}>
+        <span style={{ color:'#F0F0F0' }}>Gymlocator</span>
+        <span style={{ color:'#D4D4D4' }}>.in</span>
+      </div>
+      <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.16em', color:'#555' }}>
+        India's gym discovery platform
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   App
+   ============================================================ */
+
+function App() {
+  return (
+    <DesignCanvas>
+
+      {/* ============ SECTION 1: PRIMARY WORDMARK ============ */}
+      <DCSection id="primary" title="01 — Primary wordmark">
+
+        <DCArtboard id="word-hero" label="A · Hero wordmark on near-black" width={1100} height={460}>
+          <Card pad={0}>
+            <Spec>WORDMARK · INTER 800 · −2px · 96PX</Spec>
+            <div style={{ fontSize:96, fontWeight:800, letterSpacing:'-3.2px', lineHeight:1, display:'flex', alignItems:'baseline' }}>
+              <span style={{ color:'#F0F0F0' }}>Gymlocator</span>
+              <span style={{ color:'#D4D4D4' }}>.in</span>
+            </div>
+          </Card>
+        </DCArtboard>
+
+        <DCArtboard id="word-inverse" label="B · Inverse on accent" width={1100} height={460}>
+          <Card pad={0} bg="#D4D4D4">
+            <Spec><span style={{color:'#555'}}>WORDMARK · INVERSE</span></Spec>
+            <div style={{ fontSize:96, fontWeight:800, letterSpacing:'-3.2px', lineHeight:1, display:'flex', alignItems:'baseline' }}>
+              <span style={{ color:'#0C0C0C' }}>Gymlocator</span>
+              <span style={{ color:'#555' }}>.in</span>
+            </div>
+          </Card>
+        </DCArtboard>
+
+        <DCArtboard id="word-mono" label="C · All-white monotone" width={1100} height={460}>
+          <Card pad={0}>
+            <Spec>WORDMARK · MONOTONE</Spec>
+            <div style={{ fontSize:96, fontWeight:800, letterSpacing:'-3.2px', lineHeight:1, display:'flex', alignItems:'baseline' }}>
+              <span style={{ color:'#F0F0F0' }}>Gymlocator</span>
+              <span style={{ color:'#F0F0F0' }}>.in</span>
+            </div>
+          </Card>
+        </DCArtboard>
+
+      </DCSection>
+
+      {/* ============ SECTION 2: MARK + WORDMARK LOCKUPS ============ */}
+      <DCSection id="lockups" title="02 — Mark + wordmark lockups">
+
+        <DCArtboard id="lockup-pin" label="D · Barbell-pin lockup" width={720} height={300}>
+          <Card pad={0}>
+            <Spec>BARBELL PIN · HORIZONTAL</Spec>
+            <LockupHorizontal Mark={MarkBarbellPin}/>
+          </Card>
+        </DCArtboard>
+
+        <DCArtboard id="lockup-plate" label="E · Plate-G lockup" width={720} height={300}>
+          <Card pad={0}>
+            <Spec>PLATE G · HORIZONTAL</Spec>
+            <LockupHorizontal Mark={MarkPlateG}/>
+          </Card>
+        </DCArtboard>
+
+        <DCArtboard id="lockup-stack" label="F · Weight-stack lockup" width={720} height={300}>
+          <Card pad={0}>
+            <Spec>STACK · HORIZONTAL</Spec>
+            <LockupHorizontal Mark={MarkStack}/>
+          </Card>
+        </DCArtboard>
+
+        <DCArtboard id="lockup-barbell" label="G · Barbell lockup" width={720} height={300}>
+          <Card pad={0}>
+            <Spec>BARBELL · HORIZONTAL</Spec>
+            <LockupHorizontal Mark={MarkBarbell}/>
+          </Card>
+        </DCArtboard>
+
+        <DCArtboard id="lockup-square" label="H · Square-pin lockup" width={720} height={300}>
+          <Card pad={0}>
+            <Spec>SQUARE PIN · HORIZONTAL</Spec>
+            <LockupHorizontal Mark={MarkSquarePin}/>
+          </Card>
+        </DCArtboard>
+
+        <DCArtboard id="lockup-barG" label="I · Bar-G lockup" width={720} height={300}>
+          <Card pad={0}>
+            <Spec>BAR G · HORIZONTAL</Spec>
+            <LockupHorizontal Mark={MarkBarG}/>
+          </Card>
+        </DCArtboard>
+
+      </DCSection>
+
+      {/* ============ SECTION 3: STACKED / TAGLINE ============ */}
+      <DCSection id="stacked" title="03 — Stacked lockup with tagline">
+
+        <DCArtboard id="stack-pin" label="J · Stacked, barbell pin" width={620} height={420}>
+          <Card pad={56} center={false} style={{ alignItems:'center' }}>
+            <Spec>STACKED · TAGLINE</Spec>
+            <LockupStacked Mark={MarkBarbellPin}/>
+          </Card>
+        </DCArtboard>
+
+        <DCArtboard id="stack-plate" label="K · Stacked, plate G" width={620} height={420}>
+          <Card pad={56} center={false} style={{ alignItems:'center' }}>
+            <Spec>STACKED · TAGLINE</Spec>
+            <LockupStacked Mark={MarkPlateG}/>
+          </Card>
+        </DCArtboard>
+
+        <DCArtboard id="stack-barG" label="L · Stacked, bar G" width={620} height={420}>
+          <Card pad={56} center={false} style={{ alignItems:'center' }}>
+            <Spec>STACKED · TAGLINE</Spec>
+            <LockupStacked Mark={MarkBarG}/>
+          </Card>
+        </DCArtboard>
+
+      </DCSection>
+
+      {/* ============ SECTION 4: ICON / APP / FAVICON ============ */}
+      <DCSection id="icons" title="04 — App icon & favicon">
+
+        <DCArtboard id="app-pin" label="M · App icon — barbell pin" width={420} height={420}>
+          <div style={{ width:'100%', height:'100%', background:'#0C0C0C', border:'0.5px solid #222', display:'flex', alignItems:'center', justifyContent:'center', position:'relative' }}>
+            <Spec>APP · 1024PX SAFE AREA</Spec>
+            <MarkBarbellPin size={220}/>
+          </div>
+        </DCArtboard>
+
+        <DCArtboard id="app-plate" label="N · App icon — plate G" width={420} height={420}>
+          <div style={{ width:'100%', height:'100%', background:'#0C0C0C', border:'0.5px solid #222', display:'flex', alignItems:'center', justifyContent:'center', position:'relative' }}>
+            <Spec>APP · 1024PX</Spec>
+            <MarkPlateG size={220}/>
+          </div>
+        </DCArtboard>
+
+        <DCArtboard id="app-barG" label="O · App icon — bar G" width={420} height={420}>
+          <div style={{ width:'100%', height:'100%', background:'#0C0C0C', border:'0.5px solid #222', display:'flex', alignItems:'center', justifyContent:'center', position:'relative' }}>
+            <Spec>APP · 1024PX</Spec>
+            <MarkBarG size={220}/>
+          </div>
+        </DCArtboard>
+
+        <DCArtboard id="app-inverse" label="P · App icon — inverse on accent" width={420} height={420}>
+          <div style={{ width:'100%', height:'100%', background:'#D4D4D4', display:'flex', alignItems:'center', justifyContent:'center', position:'relative' }}>
+            <div style={{ position:'absolute', top:16, left:16, fontFamily:'JetBrains Mono, monospace', fontSize:10, color:'#555', textTransform:'uppercase', letterSpacing:'0.12em' }}>APP · INVERSE</div>
+            <MarkBarbellPin size={220} fg="#0C0C0C" accent="#0C0C0C"/>
+          </div>
+        </DCArtboard>
+
+      </DCSection>
+
+      {/* ============ SECTION 5: SCALE & USAGE ============ */}
+      <DCSection id="scale" title="05 — Scale test & usage">
+
+        <DCArtboard id="scale-row" label="Q · Scale ladder (16 → 56 → 96)" width={1200} height={300}>
+          <div style={{ width:'100%', height:'100%', background:'#0C0C0C', padding:40, boxSizing:'border-box', display:'flex', alignItems:'center', gap:60, position:'relative' }}>
+            <Spec>SCALE LADDER</Spec>
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:10 }}>
+              <div style={{ fontSize:16, fontWeight:800, letterSpacing:'-0.5px', display:'flex', alignItems:'baseline' }}>
+                <span style={{ color:'#F0F0F0' }}>Gymlocator</span><span style={{ color:'#D4D4D4' }}>.in</span>
+              </div>
+              <div className="mono" style={{ fontSize:10, color:'#555', textTransform:'uppercase' }}>16 PX</div>
+            </div>
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:10 }}>
+              <div style={{ fontSize:28, fontWeight:800, letterSpacing:'-1px', display:'flex', alignItems:'baseline' }}>
+                <span style={{ color:'#F0F0F0' }}>Gymlocator</span><span style={{ color:'#D4D4D4' }}>.in</span>
+              </div>
+              <div className="mono" style={{ fontSize:10, color:'#555', textTransform:'uppercase' }}>28 PX</div>
+            </div>
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:10 }}>
+              <div style={{ fontSize:56, fontWeight:800, letterSpacing:'-2px', display:'flex', alignItems:'baseline' }}>
+                <span style={{ color:'#F0F0F0' }}>Gymlocator</span><span style={{ color:'#D4D4D4' }}>.in</span>
+              </div>
+              <div className="mono" style={{ fontSize:10, color:'#555', textTransform:'uppercase' }}>56 PX</div>
+            </div>
+          </div>
+        </DCArtboard>
+
+        <DCArtboard id="favicon-row" label="R · Favicon tests — 16/32/64" width={620} height={240}>
+          <div style={{ width:'100%', height:'100%', background:'#0C0C0C', padding:32, boxSizing:'border-box', display:'flex', alignItems:'center', justifyContent:'space-around', position:'relative' }}>
+            <Spec>FAVICON · 16 / 32 / 64</Spec>
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:10 }}>
+              <div style={{ width:16, height:16, background:'#111', border:'0.5px solid #222', display:'flex', alignItems:'center', justifyContent:'center' }}><MarkBarbellPin size={12}/></div>
+              <div className="mono" style={{ fontSize:10, color:'#555' }}>16</div>
+            </div>
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:10 }}>
+              <div style={{ width:32, height:32, background:'#111', border:'0.5px solid #222', display:'flex', alignItems:'center', justifyContent:'center' }}><MarkBarbellPin size={26}/></div>
+              <div className="mono" style={{ fontSize:10, color:'#555' }}>32</div>
+            </div>
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:10 }}>
+              <div style={{ width:64, height:64, background:'#111', border:'0.5px solid #222', display:'flex', alignItems:'center', justifyContent:'center' }}><MarkBarbellPin size={52}/></div>
+              <div className="mono" style={{ fontSize:10, color:'#555' }}>64</div>
+            </div>
+          </div>
+        </DCArtboard>
+
+        <DCArtboard id="navbar-preview" label="S · In context — navbar" width={1200} height={200}>
+          <div style={{ width:'100%', height:'100%', background:'#0C0C0C', position:'relative' }}>
+            <Spec>IN CONTEXT · STICKY NAV</Spec>
+            <div style={{ height:64, borderBottom:'0.5px solid #222', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 40px', marginTop:60 }}>
+              <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+                <MarkBarbellPin size={26}/>
+                <div style={{ fontSize:20, fontWeight:800, letterSpacing:'-0.5px', display:'flex', alignItems:'baseline' }}>
+                  <span style={{ color:'#F0F0F0' }}>Gymlocator</span><span style={{ color:'#D4D4D4' }}>.in</span>
+                </div>
+              </div>
+              <div style={{ display:'flex', gap:36, alignItems:'center' }}>
+                <span style={{ color:'#555', fontSize:14 }}>Cities</span>
+                <span style={{ color:'#555', fontSize:14 }}>Blog</span>
+                <span style={{ color:'#555', fontSize:14 }}>About</span>
+                <div style={{ background:'#D4D4D4', color:'#0C0C0C', fontWeight:700, fontSize:13, padding:'10px 16px' }}>List your gym</div>
+              </div>
+            </div>
+          </div>
+        </DCArtboard>
+
+      </DCSection>
+
+      {/* ============ SECTION 6: CLEAR SPACE & CONSTRUCTION ============ */}
+      <DCSection id="construction" title="06 — Clear space & construction">
+
+        <DCArtboard id="clearspace" label="T · Clear space (X = cap height)" width={900} height={420}>
+          <div style={{ width:'100%', height:'100%', background:'#0C0C0C', display:'flex', alignItems:'center', justifyContent:'center', position:'relative' }}>
+            <Spec>CLEAR SPACE = 1X</Spec>
+            <div style={{ position:'relative', padding:'48px 48px' }}>
+              {/* dotted clear-space frame */}
+              <div style={{ position:'absolute', inset:0, border:'1px dashed #333' }}></div>
+              {/* X marker top-left */}
+              <div className="mono" style={{ position:'absolute', top:-22, left:0, fontSize:10, color:'#555', textTransform:'uppercase' }}>1X</div>
+              <div className="mono" style={{ position:'absolute', bottom:-22, left:0, fontSize:10, color:'#555', textTransform:'uppercase' }}>1X</div>
+              <div style={{ display:'flex', alignItems:'center', gap:18 }}>
+                <MarkBarbellPin size={56}/>
+                <div style={{ fontSize:44, fontWeight:800, letterSpacing:'-1.6px', lineHeight:1, display:'flex', alignItems:'baseline' }}>
+                  <span style={{ color:'#F0F0F0' }}>Gymlocator</span><span style={{ color:'#D4D4D4' }}>.in</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </DCArtboard>
+
+        <DCArtboard id="palette" label="U · Color usage" width={900} height={240}>
+          <div style={{ width:'100%', height:'100%', background:'#0C0C0C', padding:40, boxSizing:'border-box', display:'flex', gap:20, position:'relative' }}>
+            <Spec>COLOR · TOKENS</Spec>
+            {[
+              ['BASE','#0C0C0C'],
+              ['SURFACE','#111111'],
+              ['BORDER','#222222'],
+              ['ACCENT','#D4D4D4'],
+              ['TEXT','#F0F0F0'],
+            ].map(([n,c]) => (
+              <div key={n} style={{ flex:1, display:'flex', flexDirection:'column' }}>
+                <div style={{ flex:1, background:c, border:'0.5px solid #222' }}/>
+                <div className="mono" style={{ fontSize:10, color:'#555', marginTop:10, letterSpacing:'0.12em' }}>{n}</div>
+                <div className="mono" style={{ fontSize:11, color:'#AAA', marginTop:2 }}>{c}</div>
+              </div>
+            ))}
+          </div>
+        </DCArtboard>
+
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

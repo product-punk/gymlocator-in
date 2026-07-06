@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Find Best Gyms in India | Gymlocator.in</title>
+<meta name="description" content="Discover, compare and connect with top fitness centers across India. Search gyms by city, locality or name." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        base:        '#0C0C0C',
+        surface:     '#111111',
+        raised:      '#1A1A1A',
+        border:      '#222222',
+        'border-hi': '#333333',
+        accent:      'var(--accent)',
+        'accent-dim': 'var(--accent-dim)',
+        'accent-ink': 'var(--accent-ink)',
+        'text-primary':   '#F0F0F0',
+        'text-secondary': '#AAAAAA',
+        'text-muted':     '#555555',
+        'text-disabled':  '#333333',
+      },
+      fontFamily: { sans: ['Inter','ui-sans-serif','system-ui','sans-serif'] },
+      borderWidth: { 'hair': '0.5px' },
+      borderRadius: { sm: '8px', md: '12px', pill: '20px' },
+      letterSpacing: {
+        h1: '-0.035em',  /* -2px at 56px */
+        h2: '-0.03125em',/* -1px at 32px */
+        h3: '-0.025em',  /* -0.5px at 20px */
+        label: '0.08em',
+      },
+    }
+  }
+}
+</script>
+
+<style>
+  :root {
+    /* default palette — Volt Lime on near-black */
+    --accent:     #DCFF1C;
+    --accent-dim: #1F2208;
+    --accent-ink: #0C0C0C; /* foreground sat on accent (CTAs) */
+  }
+  html, body { background: #0C0C0C; }
+  body { font-family: 'Inter', system-ui, sans-serif; color: #F0F0F0; -webkit-font-smoothing: antialiased; }
+  /* hair border helper because 0.5px is finicky */
+  .b-hair { border-width: 0.5px; border-style: solid; border-color: #222; }
+  .bb-hair { border-bottom-width: 0.5px; border-bottom-style: solid; border-bottom-color: #222; }
+  .bt-hair { border-top-width: 0.5px; border-top-style: solid; border-top-color: #222; }
+  /* hide horizontal scrollbar on featured row */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  /* H1/H2/H3 utility classes */
+  .h1 { font-size: 56px; line-height: 1.02; font-weight: 800; letter-spacing: -2px; }
+  .h2 { font-size: 32px; line-height: 1.1;  font-weight: 700; letter-spacing: -1px; }
+  .h3 { font-size: 20px; line-height: 1.2;  font-weight: 700; letter-spacing: -0.5px; }
+  .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+  @media (max-width: 640px) {
+    .h1 { font-size: 40px; letter-spacing: -1.4px; }
+    .h2 { font-size: 26px; letter-spacing: -0.8px; }
+  }
+  /* Subtle striped placeholder for image slots */
+  .img-placeholder {
+    background-color: #1A1A1A;
+    background-image: repeating-linear-gradient(135deg, #1A1A1A 0 14px, #161616 14px 28px);
+  }
+  /* Smooth ghost link transition */
+  .ghost { transition: color 150ms ease; }
+  .ghost:hover { color: #F0F0F0; }
+  /* Search input focus */
+  .input-dark:focus { outline: none; border-color: #333; }
+  /* Featured card width */
+  .feat-card { flex: 0 0 340px; }
+  @media (max-width: 640px) { .feat-card { flex: 0 0 84vw; } }
+
+  /* ===== Inverted treatment for sections placed ON the accent color ===== */
+  .on-accent { background: var(--accent); color: var(--accent-ink); }
+  .on-accent .text-text-primary    { color: #0C0C0C !important; }
+  .on-accent .text-text-secondary  { color: rgba(12,12,12,0.72) !important; }
+  .on-accent .text-text-muted      { color: rgba(12,12,12,0.50) !important; }
+  .on-accent .text-text-disabled   { color: rgba(12,12,12,0.18) !important; }
+  .on-accent .text-accent          { color: #0C0C0C !important; }
+  .on-accent .label                { color: #0C0C0C !important; }
+  .on-accent .bg-base,
+  .on-accent .bg-surface,
+  .on-accent .bg-raised            { background: var(--accent) !important; }
+  .on-accent .bg-border            { background: rgba(12,12,12,0.18) !important; }
+  .on-accent .b-hair,
+  .on-accent .bb-hair,
+  .on-accent .bt-hair              { border-color: rgba(12,12,12,0.20) !important; }
+  /* Primary CTA flips to dark with accent text */
+  .on-accent .bg-accent            { background: #0C0C0C !important; color: var(--accent) !important; }
+  .on-accent .bg-accent:hover      { background: #1A1A1A !important; }
+  .on-accent .bg-accent .text-base { color: var(--accent) !important; }
+  /* Outlined CTA: dark border + dark text */
+  .on-accent .outline-cta          { border-color: rgba(12,12,12,0.55) !important; color: #0C0C0C !important; }
+  /* Accent-dim chips become low-opacity ink */
+  .on-accent .bg-accent-dim        { background: rgba(12,12,12,0.10) !important; color: #0C0C0C !important; }
+  /* Subtle dotted backdrop so big accent blocks don't feel flat */
+  .on-accent .accent-dots {
+    background-image: radial-gradient(rgba(12,12,12,0.10) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  /* Dark card placed back ON an accent section (creates contrast pop) */
+  .on-accent .dark-card {
+    background: #0C0C0C !important;
+    border-color: rgba(12,12,12,0.35) !important;
+  }
+  .on-accent .dark-card .text-text-primary   { color: #F0F0F0 !important; }
+  .on-accent .dark-card .text-text-secondary { color: #AAAAAA !important; }
+  .on-accent .dark-card .label               { color: var(--accent) !important; }
+  .on-accent .dark-card .bg-accent           { background: var(--accent) !important; color: #0C0C0C !important; }
+  .on-accent .dark-card .bg-accent:hover     { background: #FFFFFF !important; }
+  .on-accent .dark-card .bg-accent .text-base{ color: #0C0C0C !important; }
+  .on-accent .dark-card .outline-cta         { border-color: var(--accent) !important; color: var(--accent) !important; }
+
+  /* Light grey card on dark background (Mridul's request) */
+  .light-card {
+    background: #E5E5E5 !important;
+    border-color: #C8C8C8 !important;
+  }
+  .light-card .text-text-primary   { color: #0C0C0C !important; }
+  .light-card .text-text-secondary { color: #444444 !important; }
+  .light-card .bg-accent           { background: #0C0C0C !important; color: var(--accent) !important; }
+  .light-card .bg-accent:hover     { background: #1A1A1A !important; }
+  .light-card .bg-accent .text-base{ color: var(--accent) !important; }
+  .light-card .outline-cta         { border-color: #0C0C0C !important; color: #0C0C0C !important; }
+</style>
+</head>
+<body class="bg-base text-text-primary">
+
+<template id="__bundler_thumbnail" data-bg-color="#0C0C0C">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0C0C0C"/>
+    <!-- pin silhouette -->
+    <path d="M600 200 C540 200 500 240 500 300 C500 380 600 480 600 480 C600 480 700 380 700 300 C700 240 660 200 600 200 Z"
+          stroke="#DCFF1C" stroke-width="14" fill="none"/>
+    <!-- barbell inside -->
+    <rect x="535" y="290" width="14" height="36" fill="#DCFF1C"/>
+    <rect x="651" y="290" width="14" height="36" fill="#DCFF1C"/>
+    <rect x="552" y="302" width="96"  height="12" fill="#DCFF1C"/>
+    <!-- wordmark -->
+    <text x="600" y="600" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="72" letter-spacing="-3" fill="#F0F0F0">Gymlocator<tspan fill="#DCFF1C">.in</tspan></text>
+  </svg>
+</template>
+
+
+<!-- ============================ NAVBAR ============================ -->
+<nav data-screen-label="01 Navbar" class="sticky top-0 z-40 bg-base/95 backdrop-blur bb-hair">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-10 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-baseline gap-0">
+      <span class="text-text-primary font-bold tracking-tight text-[20px]">Gymlocator</span><span class="brand-in text-accent font-bold text-[20px]">.in</span>
+    </a>
+    <div class="hidden md:flex items-center gap-9">
+      <a href="#cities"   class="ghost text-[14px] text-text-muted">Cities</a>
+      <a href="#"         class="ghost text-[14px] text-text-muted">Blog</a>
+      <a href="#"         class="ghost text-[14px] text-text-muted">About</a>
+    </div>
+    <a href="#"
+       class="inline-flex items-center gap-2 bg-accent text-base font-bold text-[13px] px-4 py-2.5 rounded-sm hover:bg-white transition-colors">
+      <i class="ti ti-plus text-[16px]"></i>
+      List your gym
+    </a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============================ HERO ============================ -->
+<section data-screen-label="02 Hero" class="bb-hair">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-10 min-h-[80vh] flex flex-col justify-center py-20 md:py-28">
+
+    <div class="label mb-6 flex items-center gap-2">
+      <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent"></span>
+      India's gym discovery platform
+    </div>
+
+    <h1 class="h1 max-w-[920px] text-text-primary">
+      Find the best gyms<br class="hidden md:block"/>
+      in your city.
+    </h1>
+
+    <p class="mt-6 max-w-[620px] text-[16px] leading-relaxed text-text-secondary">
+      Discover, compare and connect with top fitness centers across India. Filter by amenity, price tier, locality and timing — no signup needed.
+    </p>
+
+    <!-- Search bar -->
+    <form action="#" class="mt-10 max-w-[780px]">
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-2 p-2 bg-surface rounded-md b-hair">
+        <div class="flex items-center gap-3 flex-1 px-3">
+          <i class="ti ti-search text-[20px] text-text-muted"></i>
+          <input
+            type="text"
+            placeholder="Search by city, locality or gym name…"
+            class="input-dark bg-transparent w-full py-3 text-[15px] text-text-primary placeholder:text-text-secondary placeholder:font-medium border-0" data-comment-anchor="0a4f1e2ce8-input"
+          />
+        </div>
+        <button type="submit"
+          class="inline-flex items-center justify-center gap-2 bg-accent text-base font-bold text-[14px] px-6 py-3 rounded-sm hover:bg-white transition-colors">
+          <i class="ti ti-search text-[16px]"></i>
+          Search
+        </button>
+      </div>
+    </form>
+
+    <!-- Quick links -->
+    <div class="mt-6 flex flex-wrap items-center gap-x-1.5 gap-y-2 text-[13px] text-text-muted">
+      <span class="label mr-2" data-comment-anchor="d6470503f4-span">Popular</span>
+      <a href="#" class="ghost px-2 py-1 rounded-sm">Bangalore</a><span class="text-text-disabled">·</span>
+      <a href="#" class="ghost px-2 py-1 rounded-sm">Mumbai</a><span class="text-text-disabled">·</span>
+      <a href="#" class="ghost px-2 py-1 rounded-sm">Delhi</a><span class="text-text-disabled">·</span>
+      <a href="#" class="ghost px-2 py-1 rounded-sm">Pune</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================ ACCENT MARQUEE ============================ -->
+<section data-screen-label="02b Marquee" class="on-accent bb-hair">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-10 py-5 flex flex-wrap items-center gap-x-10 gap-y-3 text-[12px] font-bold uppercase tracking-[0.14em]" style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace;">
+    <span class="inline-flex items-center gap-2">
+      <span class="inline-block w-1.5 h-1.5 rounded-full" style="background:#0C0C0C;"></span>
+      Live across India
+    </span>
+    <span class="opacity-30" style="color:#0C0C0C;">———</span>
+    <span><strong class="text-[15px] mr-1">2,580+</strong> gyms listed</span>
+    <span class="opacity-30" style="color:#0C0C0C;">———</span>
+    <span><strong class="text-[15px] mr-1">8</strong> cities</span>
+    <span class="opacity-30" style="color:#0C0C0C;">———</span>
+    <span><strong class="text-[15px] mr-1">13</strong> amenities</span>
+    <span class="opacity-30" style="color:#0C0C0C;">———</span>
+    <span><strong class="text-[15px] mr-1">24/7</strong> open access</span>
+  </div>
+</section>
+
+<!-- ============================ TRENDING CITIES ============================ -->
+<section id="cities" data-screen-label="03 Trending Cities" class="bb-hair">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-10 pt-12 md:pt-14 pb-20 md:pb-24" data-comment-anchor="8718fe8fa2-div">
+
+    <div class="flex items-end justify-between gap-6 mb-10">
+      <div>
+        <div class="label mb-3">Step 1 · Pick a city</div>
+        <h2 class="h2 text-text-primary">Trending Cities</h2>
+      </div>
+      <a href="#" class="ghost hidden sm:inline-flex items-center gap-1.5 text-[13px] text-text-muted">
+        View all cities
+        <i class="ti ti-arrow-right text-[16px]"></i>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+
+      <!-- City card template, repeated -->
+      <a href="#" class="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors">
+        <i class="ti ti-building-skyscraper text-[28px] text-text-primary"></i>
+        <div class="mt-8 flex items-end justify-between gap-3">
+          <div>
+            <div class="text-[17px] font-bold tracking-tight text-text-primary">Bangalore</div>
+            <div class="text-[12px] text-text-muted mt-0.5">380 gyms</div>
+          </div>
+          <i class="ti ti-arrow-up-right text-[18px] text-text-muted group-hover:text-text-primary transition-colors"></i>
+        </div>
+      </a>
+
+      <a href="#" class="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors">
+        <i class="ti ti-buildings text-[28px] text-text-primary"></i>
+        <div class="mt-8 flex items-end justify-between gap-3">
+          <div>
+            <div class="text-[17px] font-bold tracking-tight text-text-primary">Mumbai</div>
+            <div class="text-[12px] text-text-muted mt-0.5">520 gyms</div>
+          </div>
+          <i class="ti ti-arrow-up-right text-[18px] text-text-muted group-hover:text-text-primary transition-colors"></i>
+        </div>
+      </a>
+
+      <a href="#" class="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors">
+        <i class="ti ti-building-monument text-[28px] text-text-primary"></i>
+        <div class="mt-8 flex items-end justify-between gap-3">
+          <div>
+            <div class="text-[17px] font-bold tracking-tight text-text-primary">Delhi</div>
+            <div class="text-[12px] text-text-muted mt-0.5">450 gyms</div>
+          </div>
+          <i class="ti ti-arrow-up-right text-[18px] text-text-muted group-hover:text-text-primary transition-colors"></i>
+        </div>
+      </a>
+
+      <a href="#" class="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors">
+        <i class="ti ti-building-arch text-[28px] text-text-primary"></i>
+        <div class="mt-8 flex items-end justify-between gap-3">
+          <div>
+            <div class="text-[17px] font-bold tracking-tight text-text-primary">Hyderabad</div>
+            <div class="text-[12px] text-text-muted mt-0.5">280 gyms</div>
+          </div>
+          <i class="ti ti-arrow-up-right text-[18px] text-text-muted group-hover:text-text-primary transition-colors"></i>
+        </div>
+      </a>
+
+      <a href="#" class="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors">
+        <i class="ti ti-building-pavilion text-[28px] text-text-primary"></i>
+        <div class="mt-8 flex items-end justify-between gap-3">
+          <div>
+            <div class="text-[17px] font-bold tracking-tight text-text-primary">Chennai</div>
+            <div class="text-[12px] text-text-muted mt-0.5">320 gyms</div>
+          </div>
+          <i class="ti ti-arrow-up-right text-[18px] text-text-muted group-hover:text-text-primary transition-colors"></i>
+        </div>
+      </a>
+
+      <a href="#" class="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors">
+        <i class="ti ti-building-community text-[28px] text-text-primary"></i>
+        <div class="mt-8 flex items-end justify-between gap-3">
+          <div>
+            <div class="text-[17px] font-bold tracking-tight text-text-primary">Pune</div>
+            <div class="text-[12px] text-text-muted mt-0.5">250 gyms</div>
+          </div>
+          <i class="ti ti-arrow-up-right text-[18px] text-text-muted group-hover:text-text-primary transition-colors"></i>
+        </div>
+      </a>
+
+      <a href="#" class="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors">
+        <i class="ti ti-building-bridge text-[28px] text-text-primary"></i>
+        <div class="mt-8 flex items-end justify-between gap-3">
+          <div>
+            <div class="text-[17px] font-bold tracking-tight text-text-primary">Kolkata</div>
+            <div class="text-[12px] text-text-muted mt-0.5">200 gyms</div>
+          </div>
+          <i class="ti ti-arrow-up-right text-[18px] text-text-muted group-hover:text-text-primary transition-colors"></i>
+        </div>
+      </a>
+
+      <a href="#" class="group block bg-surface b-hair rounded-md p-5 hover:bg-raised hover:border-border-hi transition-colors">
+        <i class="ti ti-building-factory-2 text-[28px] text-text-primary"></i>
+        <div class="mt-8 flex items-end justify-between gap-3">
+          <div>
+            <div class="text-[17px] font-bold tracking-tight text-text-primary">Ahmedabad</div>
+            <div class="text-[12px] text-text-muted mt-0.5">180 gyms</div>
+          </div>
+          <i class="ti ti-arrow-up-right text-[18px] text-text-muted group-hover:text-text-primary transition-colors"></i>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FEATURED GYMS ============================ -->
+<section data-screen-label="04 Featured Gyms" class="bb-hair">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-10 py-20 md:py-24">
+
+    <div class="flex items-end justify-between gap-6 mb-10">
+      <div>
+        <div class="flex items-center gap-3 mb-3">
+          <div class="label">Featured</div>
+          <span class="inline-flex items-center label !text-accent bg-accent-dim px-2 py-1 rounded-pill" style="border-radius:20px;">
+            Sponsored
+          </span>
+        </div>
+        <h2 class="h2 text-text-primary">Featured Gyms</h2>
+      </div>
+      <div class="hidden sm:flex items-center gap-2">
+        <button class="w-10 h-10 b-hair rounded-sm bg-surface text-text-muted hover:text-text-primary hover:border-border-hi transition-colors" aria-label="Scroll left">
+          <i class="ti ti-arrow-left text-[18px]"></i>
+        </button>
+        <button class="w-10 h-10 b-hair rounded-sm bg-surface text-text-muted hover:text-text-primary hover:border-border-hi transition-colors" aria-label="Scroll right">
+          <i class="ti ti-arrow-right text-[18px]"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Horizontal scroll row -->
+    <div class="no-scrollbar -mx-5 md:-mx-10 px-5 md:px-10 flex gap-4 overflow-x-auto pb-2 snap-x">
+
+      <!-- CARD 1 -->
+      <article class="feat-card snap-start bg-surface b-hair rounded-md overflow-hidden flex flex-col">
+        <div class="relative h-[200px] img-placeholder">
+          <span class="absolute top-3 left-3 label !text-accent bg-accent-dim px-2 py-1 rounded-pill" style="border-radius:20px;">Featured</span>
+          <span class="absolute bottom-3 right-3 text-[10px] font-mono uppercase text-text-muted bg-base/70 backdrop-blur px-2 py-1 b-hair">gym photo</span>
+        </div>
+        <div class="p-4 flex flex-col gap-3 flex-1">
+          <div>
+            <h3 class="h3 text-text-primary">Cult Iron Koramangala</h3>
+            <div class="flex items-center gap-1.5 text-[13px] text-text-muted mt-1">
+              <i class="ti ti-map-pin text-[14px]"></i>
+              Koramangala, Bangalore
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-accent-dim text-accent px-2 py-1 rounded-sm">CrossFit</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-raised b-hair text-text-muted px-2 py-1 rounded-sm">Sauna</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-raised b-hair text-text-muted px-2 py-1 rounded-sm">AC</span>
+          </div>
+          <div class="mt-auto pt-3 bt-hair flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5 text-[13px] text-text-primary">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent"></span>
+              <span class="font-bold">4.8</span>
+              <span class="text-text-muted">(312)</span>
+            </div>
+            <div class="text-[13px] text-text-secondary"><span class="text-text-muted">₹</span>2,400<span class="text-text-muted">/mo</span></div>
+            <a href="#" class="inline-flex items-center gap-1.5 bg-accent text-base font-bold text-[12px] px-3 py-2 rounded-sm hover:bg-white transition-colors">
+              <i class="ti ti-phone text-[14px]"></i>
+              Call now
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 2 -->
+      <article class="feat-card snap-start bg-surface b-hair rounded-md overflow-hidden flex flex-col">
+        <div class="relative h-[200px] img-placeholder">
+          <span class="absolute top-3 left-3 label !text-accent bg-accent-dim px-2 py-1 rounded-pill" style="border-radius:20px;">Featured</span>
+          <span class="absolute bottom-3 right-3 text-[10px] font-mono uppercase text-text-muted bg-base/70 backdrop-blur px-2 py-1 b-hair">gym photo</span>
+        </div>
+        <div class="p-4 flex flex-col gap-3 flex-1">
+          <div>
+            <h3 class="h3 text-text-primary">Anytime Fitness Bandra</h3>
+            <div class="flex items-center gap-1.5 text-[13px] text-text-muted mt-1">
+              <i class="ti ti-map-pin text-[14px]"></i>
+              Bandra West, Mumbai
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-accent-dim text-accent px-2 py-1 rounded-sm">24/7</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-raised b-hair text-text-muted px-2 py-1 rounded-sm">Cardio</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-raised b-hair text-text-muted px-2 py-1 rounded-sm">Parking</span>
+          </div>
+          <div class="mt-auto pt-3 bt-hair flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5 text-[13px] text-text-primary">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent"></span>
+              <span class="font-bold">4.6</span>
+              <span class="text-text-muted">(840)</span>
+            </div>
+            <div class="text-[13px] text-text-secondary"><span class="text-text-muted">₹</span>3,200<span class="text-text-muted">/mo</span></div>
+            <a href="#" class="inline-flex items-center gap-1.5 bg-accent text-base font-bold text-[12px] px-3 py-2 rounded-sm hover:bg-white transition-colors">
+              <i class="ti ti-phone text-[14px]"></i>
+              Call now
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 3 -->
+      <article class="feat-card snap-start bg-surface b-hair rounded-md overflow-hidden flex flex-col">
+        <div class="relative h-[200px] img-placeholder">
+          <span class="absolute top-3 left-3 label !text-accent bg-accent-dim px-2 py-1 rounded-pill" style="border-radius:20px;">Featured</span>
+          <span class="absolute bottom-3 right-3 text-[10px] font-mono uppercase text-text-muted bg-base/70 backdrop-blur px-2 py-1 b-hair">gym photo</span>
+        </div>
+        <div class="p-4 flex flex-col gap-3 flex-1">
+          <div>
+            <h3 class="h3 text-text-primary">Talwalkars Connaught</h3>
+            <div class="flex items-center gap-1.5 text-[13px] text-text-muted mt-1">
+              <i class="ti ti-map-pin text-[14px]"></i>
+              Connaught Place, Delhi
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-accent-dim text-accent px-2 py-1 rounded-sm">Yoga</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-raised b-hair text-text-muted px-2 py-1 rounded-sm">Pilates</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-raised b-hair text-text-muted px-2 py-1 rounded-sm">Steam</span>
+          </div>
+          <div class="mt-auto pt-3 bt-hair flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5 text-[13px] text-text-primary">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent"></span>
+              <span class="font-bold">4.7</span>
+              <span class="text-text-muted">(520)</span>
+            </div>
+            <div class="text-[13px] text-text-secondary"><span class="text-text-muted">₹</span>2,800<span class="text-text-muted">/mo</span></div>
+            <a href="#" class="inline-flex items-center gap-1.5 bg-accent text-base font-bold text-[12px] px-3 py-2 rounded-sm hover:bg-white transition-colors">
+              <i class="ti ti-phone text-[14px]"></i>
+              Call now
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 4 -->
+      <article class="feat-card snap-start bg-surface b-hair rounded-md overflow-hidden flex flex-col">
+        <div class="relative h-[200px] img-placeholder">
+          <span class="absolute top-3 left-3 label !text-accent bg-accent-dim px-2 py-1 rounded-pill" style="border-radius:20px;">Featured</span>
+          <span class="absolute bottom-3 right-3 text-[10px] font-mono uppercase text-text-muted bg-base/70 backdrop-blur px-2 py-1 b-hair">gym photo</span>
+        </div>
+        <div class="p-4 flex flex-col gap-3 flex-1">
+          <div>
+            <h3 class="h3 text-text-primary">Iron Paradise Banjara</h3>
+            <div class="flex items-center gap-1.5 text-[13px] text-text-muted mt-1">
+              <i class="ti ti-map-pin text-[14px]"></i>
+              Banjara Hills, Hyderabad
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-accent-dim text-accent px-2 py-1 rounded-sm">Powerlifting</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-raised b-hair text-text-muted px-2 py-1 rounded-sm">MMA</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-raised b-hair text-text-muted px-2 py-1 rounded-sm">Boxing</span>
+          </div>
+          <div class="mt-auto pt-3 bt-hair flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5 text-[13px] text-text-primary">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent"></span>
+              <span class="font-bold">4.9</span>
+              <span class="text-text-muted">(214)</span>
+            </div>
+            <div class="text-[13px] text-text-secondary"><span class="text-text-muted">₹</span>3,600<span class="text-text-muted">/mo</span></div>
+            <a href="#" class="inline-flex items-center gap-1.5 bg-accent text-base font-bold text-[12px] px-3 py-2 rounded-sm hover:bg-white transition-colors">
+              <i class="ti ti-phone text-[14px]"></i>
+              Call now
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 5 -->
+      <article class="feat-card snap-start bg-surface b-hair rounded-md overflow-hidden flex flex-col">
+        <div class="relative h-[200px] img-placeholder">
+          <span class="absolute top-3 left-3 label !text-accent bg-accent-dim px-2 py-1 rounded-pill" style="border-radius:20px;">Featured</span>
+          <span class="absolute bottom-3 right-3 text-[10px] font-mono uppercase text-text-muted bg-base/70 backdrop-blur px-2 py-1 b-hair">gym photo</span>
+        </div>
+        <div class="p-4 flex flex-col gap-3 flex-1">
+          <div>
+            <h3 class="h3 text-text-primary">SheLifts Kothrud</h3>
+            <div class="flex items-center gap-1.5 text-[13px] text-text-muted mt-1">
+              <i class="ti ti-map-pin text-[14px]"></i>
+              Kothrud, Pune
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-accent-dim text-accent px-2 py-1 rounded-sm">Women-only</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-raised b-hair text-text-muted px-2 py-1 rounded-sm">Zumba</span>
+            <span class="text-[11px] font-bold uppercase tracking-[0.08em] bg-raised b-hair text-text-muted px-2 py-1 rounded-sm">Functional</span>
+          </div>
+          <div class="mt-auto pt-3 bt-hair flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5 text-[13px] text-text-primary">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent"></span>
+              <span class="font-bold">4.8</span>
+              <span class="text-text-muted">(190)</span>
+            </div>
+            <div class="text-[13px] text-text-secondary"><span class="text-text-muted">₹</span>2,100<span class="text-text-muted">/mo</span></div>
+            <a href="#" class="inline-flex items-center gap-1.5 bg-accent text-base font-bold text-[12px] px-3 py-2 rounded-sm hover:bg-white transition-colors">
+              <i class="ti ti-phone text-[14px]"></i>
+              Call now
+            </a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================ HOW IT WORKS ============================ -->
+<section data-screen-label="05 How it works" class="bb-hair">
+  <div data-comment-anchor="72087342b8-div">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-10 py-20 md:py-24">
+
+    <div class="mb-12 flex items-end justify-between gap-6 flex-wrap">
+      <div>
+        <div class="label mb-3">Process</div>
+        <h2 class="h2 text-text-primary max-w-[640px]">Three steps from a search<br class="hidden md:block"/> to a gym membership.</h2>
+      </div>
+      <div class="hidden md:flex items-center gap-2 text-[12px] uppercase tracking-[0.12em] text-text-muted" style="font-family: ui-monospace, SFMono-Regular, monospace;">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-accent"></span>
+        Avg. time — 90 seconds
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-border b-hair rounded-md overflow-hidden">
+
+      <div class="bg-base p-8 md:p-10 flex flex-col gap-6 min-h-[260px]">
+        <div class="flex items-start justify-between">
+          <i class="ti ti-search text-[32px] text-accent"></i>
+          <span class="text-[80px] leading-none font-extrabold tracking-tighter text-text-disabled select-none">01</span>
+        </div>
+        <div class="mt-auto">
+          <h3 class="h3 text-text-primary">Search your city</h3>
+          <p class="text-[14px] text-text-secondary mt-2 leading-relaxed">Pick from eight metros or type a locality to narrow down. Zero signup, zero spam.</p>
+        </div>
+      </div>
+
+      <div class="bg-base p-8 md:p-10 flex flex-col gap-6 min-h-[260px]">
+        <div class="flex items-start justify-between">
+          <i class="ti ti-arrows-shuffle-2 text-[32px] text-accent"></i>
+          <span class="text-[80px] leading-none font-extrabold tracking-tighter text-text-disabled select-none">02</span>
+        </div>
+        <div class="mt-auto">
+          <h3 class="h3 text-text-primary">Compare gyms</h3>
+          <p class="text-[14px] text-text-secondary mt-2 leading-relaxed">Side-by-side filters for price tier, AC, timings, gender policy and 13 amenities — including 24/7 and women-only.</p>
+        </div>
+      </div>
+
+      <div class="bg-base p-8 md:p-10 flex flex-col gap-6 min-h-[260px]">
+        <div class="flex items-start justify-between">
+          <i class="ti ti-phone text-[32px] text-accent"></i>
+          <span class="text-[80px] leading-none font-extrabold tracking-tighter text-text-disabled select-none">03</span>
+        </div>
+        <div class="mt-auto">
+          <h3 class="h3 text-text-primary">Connect directly</h3>
+          <p class="text-[14px] text-text-secondary mt-2 leading-relaxed">Tap to call the gym, get directions on Maps or message the owner. No middleman, no booking fees.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA strip — light grey card on dark page -->
+    <div class="light-card mt-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 b-hair rounded-md p-6 md:p-8">
+      <div>
+        <h3 class="h3 text-text-primary">Run a gym? Get listed.</h3>
+        <p class="text-[14px] text-text-secondary mt-1">Free during beta. Verified listings get priority placement on city pages.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="#" class="outline-cta inline-flex items-center gap-2 bg-transparent font-bold text-[13px] px-4 py-2.5 rounded-sm transition-colors" style="border:0.5px solid #0C0C0C;">
+          Learn more
+        </a>
+        <a href="#" class="inline-flex items-center gap-2 bg-accent text-base font-bold text-[13px] px-4 py-2.5 rounded-sm hover:bg-white transition-colors">
+          List your gym
+          <i class="ti ti-arrow-right text-[16px]"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer data-screen-label="06 Footer" class="bg-surface bt-hair">
+  <div class="max-w-[1280px] mx-auto px-5 md:px-10 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <a href="#" class="flex items-baseline">
+      <span class="text-text-primary font-bold tracking-tight text-[20px]">Gymlocator</span><span class="brand-in text-accent font-bold text-[20px]">.in</span>
+    </a>
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+      <a href="#" class="ghost text-[13px] text-text-muted">About</a>
+      <a href="#" class="ghost text-[13px] text-text-muted">Contact</a>
+      <a href="#" class="ghost text-[13px] text-text-muted">Privacy Policy</a>
+      <a href="#" class="ghost text-[13px] text-text-muted">Sitemap</a>
+    </div>
+    <div class="text-[12px] text-text-muted">© 2025 Gymlocator.in</div>
+  </div>
+</footer>
+
+<!-- ===================== TWEAKS ===================== -->
+<div id="tweaks-root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const { useEffect } = React;
+
+// Curated two-color themes — each is [accent, accent-dim (tinted dark), accent-ink (text on accent)]
+const PALETTES = {
+  lime:    ['#DCFF1C', '#1F2208', '#0C0C0C'], // Volt Lime  — Cult.fit energy
+  yellow:  ['#FFE600', '#231F00', '#0C0C0C'], // Acid       — taxi / warning
+  mint:    ['#3DFFB0', '#06241A', '#0C0C0C'], // Mint       — fresh / clean
+  blue:    ['#3DA9FF', '#0A1B2A', '#0C0C0C'], // Ice        — trustworthy
+  magenta: ['#FF2D87', '#240814', '#0C0C0C'], // Hot Pink   — Equinox energy
+  red:     ['#FF3D2E', '#2A0B07', '#0C0C0C'], // Volt Red   — bold / danger
+  orange:  ['#FF7A1A', '#241307', '#0C0C0C'], // Sodium     — warm, athletic
+  gold:    ['#FFB800', '#241A00', '#0C0C0C'], // Solar Gold — premium
+  silver:  ['#D4D4D4', '#1E1E1E', '#0C0C0C'], // Original silver mono
+};
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "palette": PALETTES.lime,
+  "logoTintIn": true,
+  "rounded": "sharp"
+}/*EDITMODE-END*/;
+
+function ThemeApp() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [accent, accentDim, accentInk] = t.palette;
+
+  useEffect(() => {
+    const r = document.documentElement.style;
+    r.setProperty('--accent',     accent);
+    r.setProperty('--accent-dim', accentDim);
+    r.setProperty('--accent-ink', accentInk);
+  }, [accent, accentDim, accentInk]);
+
+  useEffect(() => {
+    // toggle the .in span color — if disabled, fall back to muted white
+    const ins = document.querySelectorAll('.brand-in, [data-brand-in]');
+    ins.forEach(el => { el.style.color = t.logoTintIn ? accent : '#F0F0F0'; });
+  }, [t.logoTintIn, accent]);
+
+  useEffect(() => {
+    // adjust radius scale
+    const map = { sharp: ['4px','8px','12px'], soft: ['8px','12px','20px'], pill: ['10px','16px','24px'] };
+    const [s,m,l] = map[t.rounded] || map.sharp;
+    const r = document.documentElement.style;
+    r.setProperty('--r-sm', s);
+    r.setProperty('--r-md', m);
+    r.setProperty('--r-lg', l);
+  }, [t.rounded]);
+
+  return (
+    <TweaksPanel title="Tweaks">
+      <TweakSection label="Theme color" />
+      <TweakColor
+        label="Accent"
+        value={t.palette}
+        options={[PALETTES.lime, PALETTES.yellow, PALETTES.mint, PALETTES.blue, PALETTES.magenta, PALETTES.red, PALETTES.orange, PALETTES.gold, PALETTES.silver]}
+        onChange={(v) => setTweak('palette', v)}
+      />
+      <TweakToggle
+        label="Tint .in in logo"
+        value={t.logoTintIn}
+        onChange={(v) => setTweak('logoTintIn', v)}
+      />
+      <TweakSection label="Shape" />
+      <TweakRadio
+        label="Radius"
+        value={t.rounded}
+        options={['sharp', 'soft', 'pill']}
+        onChange={(v) => setTweak('rounded', v)}
+      />
+    </TweaksPanel>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<ThemeApp />);
+</script>
+
+</body>
+</html>
