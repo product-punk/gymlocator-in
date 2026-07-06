@@ -11,13 +11,19 @@ export async function GET() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 
-  const ALL_CITIES = [
-    'bangalore', 'mumbai', 'delhi', 'pune', 'hyderabad',
-    'chennai', 'kolkata', 'ahmedabad', 'gurgaon', 'noida', 'ghaziabad',
-  ]
+  // Cities from DB, gated at the publishing threshold (≥10 gyms)
+  const { data: cityRows } = await supabase
+    .from('cities')
+    .select('slug, gym_count')
+    .eq('is_active', true)
+    .gte('gym_count', 10)
+  const ALL_CITIES = (cityRows ?? []).map(c => c.slug)
+
+  // A facet page needs enough gyms to be worth indexing
+  const MIN_GYMS_PER_FACET = 3
 
   const FACETS = [
-    { slug: 'women',                 filter: { column: 'gender',        value: 'women-only',         type: 'eq' as const },       cities: ['ahmedabad', 'mumbai', 'hyderabad', 'pune', 'chennai', 'bangalore', 'kolkata', 'delhi'] },
+    { slug: 'women',                 filter: { column: 'gender',        value: 'women-only',         type: 'eq' as const },       cities: ALL_CITIES },
     { slug: 'budget',                filter: { column: 'price_monthly', value: 1500,                 type: 'lte' as const },      cities: ALL_CITIES },
     { slug: 'premium',               filter: { column: 'price_monthly', value: 3500,                 type: 'gte' as const },      cities: ALL_CITIES },
     { slug: 'cardio',                filter: { column: 'amenities',     value: ['Cardio'],            type: 'contains' as const }, cities: ALL_CITIES },
@@ -49,7 +55,7 @@ export async function GET() {
 
       const { count } = await query
 
-      if (count && count > 0) {
+      if (count && count >= MIN_GYMS_PER_FACET) {
         urls.push(`${baseUrl}/gyms/${city}/${facet.slug}`)
       }
     }

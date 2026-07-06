@@ -113,7 +113,39 @@ export default async function BlogSlugPage({
   const category = getCategoryBySlug(slug)
   if (category) {
     const posts = await getPostsByCategory(slug)
-    return <CategoryHubPage category={category} posts={posts} />
+    const categoryJsonLd = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'CollectionPage',
+          name: `${category.label} — Gymlocator Fitness Hub`,
+          description: category.description,
+          url: `https://gymlocator.in/blog/${category.slug}`,
+          hasPart: posts.map(p => ({
+            '@type': 'Article',
+            headline: p.fields.title,
+            url: `https://gymlocator.in/blog/${p.fields.slug}`,
+          })),
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://gymlocator.in' },
+            { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://gymlocator.in/blog' },
+            { '@type': 'ListItem', position: 3, name: category.label },
+          ],
+        },
+      ],
+    }
+    return (
+      <>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryJsonLd) }}
+        />
+        <CategoryHubPage category={category} posts={posts} />
+      </>
+    )
   }
 
   // Blog post route
@@ -122,8 +154,62 @@ export default async function BlogSlugPage({
 
   const categorySlug = post.fields.categories?.[0]
 
+  const postJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Article',
+        headline: post.fields.title,
+        description: post.fields.seoDescription || post.fields.excerpt,
+        url: `https://gymlocator.in/blog/${post.fields.slug}`,
+        image: post.fields.coverImage?.fields?.file?.url
+          ? `https:${post.fields.coverImage.fields.file.url}`
+          : undefined,
+        datePublished: post.fields.publishedDate,
+        dateModified: post.sys.updatedAt,
+        author: post.fields.author
+          ? {
+              '@type': 'Person',
+              name: post.fields.author,
+              url: `https://gymlocator.in/blog/author/${authorNameToSlug(post.fields.author)}`,
+            }
+          : undefined,
+        publisher: {
+          '@type': 'Organization',
+          name: 'Gymlocator.in',
+          logo: { '@type': 'ImageObject', url: 'https://gymlocator.in/logo.png' },
+        },
+        mainEntityOfPage: `https://gymlocator.in/blog/${post.fields.slug}`,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://gymlocator.in' },
+          { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://gymlocator.in/blog' },
+          ...(categorySlug
+            ? [{
+                '@type': 'ListItem',
+                position: 3,
+                name: getLabelFromSlug(categorySlug),
+                item: `https://gymlocator.in/blog/${categorySlug}`,
+              }]
+            : []),
+          {
+            '@type': 'ListItem',
+            position: categorySlug ? 4 : 3,
+            name: post.fields.title,
+          },
+        ],
+      },
+    ],
+  }
+
   return (
     <main className="min-h-screen bg-[#0C0C0C] text-[#E0E0E0]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(postJsonLd) }}
+      />
       <div className="max-w-3xl mx-auto px-4 py-16">
         <Link
           href="/blog"

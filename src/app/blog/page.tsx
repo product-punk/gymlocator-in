@@ -17,5 +17,40 @@ export const metadata: Metadata = {
 
 export default async function BlogPage() {
   const posts = await getAllPosts()
-  return <BlogHubClient posts={posts} />
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Blog',
+        name: 'Gymlocator Fitness Hub',
+        description:
+          'Expert workout guides, honest gym reviews, and nutrition advice for fitness in India.',
+        url: 'https://gymlocator.in/blog',
+        blogPost: posts.slice(0, 20).map(p => ({
+          '@type': 'BlogPosting',
+          headline: p.fields.title,
+          url: `https://gymlocator.in/blog/${p.fields.slug}`,
+          datePublished: p.fields.publishedDate,
+        })),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://gymlocator.in' },
+          { '@type': 'ListItem', position: 2, name: 'Blog' },
+        ],
+      },
+    ],
+  }
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BlogHubClient posts={posts} />
+    </>
+  )
 }

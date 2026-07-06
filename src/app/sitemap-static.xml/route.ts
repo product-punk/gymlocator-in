@@ -13,6 +13,7 @@ export async function GET() {
     { loc: `${baseUrl}/contact`, priority: '0.7', freq: 'monthly' },
     { loc: `${baseUrl}/list-your-gym`, priority: '0.8', freq: 'monthly' },
     { loc: `${baseUrl}/calculators/protein`, priority: '0.8', freq: 'monthly' },
+    { loc: `${baseUrl}/privacy`, priority: '0.3', freq: 'yearly' },
   ]
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
