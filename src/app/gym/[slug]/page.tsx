@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getGymBySlug } from '@/lib/supabase/queries'
+import GymImage from '@/components/shared/GymImage'
 
 export const revalidate = 3600
 
@@ -100,17 +101,12 @@ export default async function GymDetailPage({ params }: Props) {
 
               {/* Hero image - full width on mobile */}
               <div className="col-span-1 md:col-span-2 relative h-[240px] md:h-[280px] bg-raised rounded-md overflow-hidden">
-                {gym.images?.[0] && gym.images[0] !== '' && gym.images[0] !== 'nan' ? (
-                  <img
-                    src={gym.images[0]}
-                    alt={gym.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <i className="ti ti-building-skyscraper text-[48px] text-accent" />
-                  </div>
-                )}
+                <GymImage
+                  src={gym.images?.[0]}
+                  alt={gym.name}
+                  className="w-full h-full object-cover"
+                  iconSize={48}
+                />
                 {gym.is_featured && (
                   <span className="absolute top-3 left-3 label !text-accent bg-accent-dim px-2 py-1 rounded-sm">
                     Featured
@@ -128,18 +124,13 @@ export default async function GymDetailPage({ params }: Props) {
               <div className="hidden md:grid col-span-2 grid-rows-2 gap-2">
                 {[1, 2, 3, 4].map((n) => (
                   <div key={n} className="relative h-[134px] bg-raised rounded-md overflow-hidden">
-                    {gym.images?.[n] && gym.images[n] !== '' && gym.images[n] !== 'nan' ? (
-                      <img
-                        src={gym.images[n]}
-                        alt={`${gym.name} photo ${n + 1}`}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <i className="ti ti-photo text-[24px] text-accent" />
-                      </div>
-                    )}
+                    <GymImage
+                      src={gym.images?.[n]}
+                      alt={`${gym.name} photo ${n + 1}`}
+                      className="w-full h-full object-cover"
+                      icon="ti-photo"
+                      iconSize={24}
+                    />
                   </div>
                 ))}
               </div>

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import GymImage from './GymImage'
 
 function formatSlug(slug: string) {
   if (!slug) return ''
@@ -31,18 +32,11 @@ export default function GymCard({ gym }: { gym: {
       {/* IMAGE */}
       <Link href={`/gym/${gym.slug}`} className="block">
         <div className="h-[180px] relative overflow-hidden bg-raised">
-          {gym.images?.[0] && gym.images[0] !== '' && gym.images[0] !== 'nan' ? (
-            <img
-              src={gym.images[0]}
-              alt={gym.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <i className="ti ti-building-skyscraper text-[40px] text-accent" />
-            </div>
-          )}
+          <GymImage
+            src={gym.images?.[0]}
+            alt={gym.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
 
           {/* BADGES */}
           <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">

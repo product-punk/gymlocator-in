@@ -9,6 +9,29 @@ export async function getCities() {
   return data ?? []
 }
 
+export async function getTopLocalities(limit = 8) {
+  const { data } = await supabase
+    .from('localities')
+    .select('name, slug, city_slug, gym_count')
+    .order('gym_count', { ascending: false })
+    .limit(limit)
+  return data ?? []
+}
+
+/** Top localities for each city, for the navbar mega menu. */
+export async function getNavLocalities(perCity = 4) {
+  const { data } = await supabase
+    .from('localities')
+    .select('name, slug, city_slug, gym_count')
+    .order('gym_count', { ascending: false })
+  const byCity: Record<string, { name: string; slug: string }[]> = {}
+  for (const loc of data ?? []) {
+    const list = (byCity[loc.city_slug] ??= [])
+    if (list.length < perCity) list.push({ name: loc.name, slug: loc.slug })
+  }
+  return byCity
+}
+
 export async function getFeaturedGyms(limit = 6) {
   const { data } = await supabase
     .from('gyms')

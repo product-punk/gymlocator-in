@@ -4,6 +4,7 @@ import "./globals.css";
 import "@tabler/icons-webfont/dist/tabler-icons.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { getCities, getNavLocalities } from "@/lib/supabase/queries";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,18 +30,35 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+// Only cities meeting the publishing threshold appear in navigation
+const MIN_GYMS_FOR_NAV = 10
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [cities, localitiesByCity] = await Promise.all([
+    getCities(),
+    getNavLocalities(4),
+  ])
+
+  const navCities = cities
+    .filter((c: { gym_count: number }) => c.gym_count >= MIN_GYMS_FOR_NAV)
+    .map((c: { name: string; slug: string; gym_count: number }) => ({
+      name: c.name,
+      slug: c.slug,
+      gymCount: c.gym_count,
+      localities: localitiesByCity[c.slug] ?? [],
+    }))
+
   return (
     <html
       lang="en"
       className={`${inter.variable} dark h-full antialiased bg-base`}
     >
       <body className="min-h-full flex flex-col bg-base text-text font-sans">
-        <Navbar />
+        <Navbar cities={navCities} />
         {children}
         <Footer />
       </body>
