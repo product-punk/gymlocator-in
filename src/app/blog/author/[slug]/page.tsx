@@ -50,7 +50,7 @@ export default async function BlogAuthorPage({
   const author = await getAuthorBySlug(slug)
   if (!author) notFound()
 
-  const posts = await getPostsByAuthor(author.fields.name)
+  const posts = await getPostsByAuthor(author)
 
   const jsonLd = {
     '@context': 'https://schema.org',

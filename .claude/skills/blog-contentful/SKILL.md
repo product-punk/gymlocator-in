@@ -33,12 +33,13 @@ it's treated as a post slug.
    Slug→label mapping is `getLabelFromSlug()` in `src/lib/blog-categories.ts`.
    The Contentful query `fields.categories[in]` matches on the slug.
 
-2. **Authors are linked by exact NAME string.** `blogPost.author` is a plain
-   Short text field holding the author's display name. The `author` content
-   type has a `name` that must match those strings exactly, and a `slug` that
-   must equal `authorNameToSlug(name)` (kebab-case) from `src/lib/contentful.ts`.
-   `getPostsByAuthor(name)` queries posts by name; `getAuthorBySlug(slug)`
-   fetches the profile.
+2. **Authors are linked by Reference.** `blogPost.author` is a Reference field
+   validated to accept only `author` entries — editors pick from existing
+   authors. Code handles both shapes via `postAuthorName()` / `postAuthorSlug()`
+   (`PostAuthor = string | linked entry`) because legacy posts may still hold a
+   name string. `getPostsByAuthor(author)` queries by linked entry ID first,
+   then falls back to exact-name matching; `getAuthorBySlug(slug)` fetches the
+   profile.
 
 ## Adding a new category
 
@@ -49,12 +50,13 @@ it's treated as a post slug.
 ## Adding a new author
 
 1. In Contentful, create an `author` entry:
-   - `name` — exact display name used on posts (e.g. "Arjun Kapoor")
-   - `slug` — kebab-case of name (e.g. `arjun-kapoor`)
+   - `name` — display name (e.g. "Arjun Kapoor")
+   - `slug` — kebab-case (e.g. `arjun-kapoor`)
    - Optional: `designation`, `photo`, `bio` (blank-line-separated paragraphs),
      `quote`, `credentials` (list), `verified`, `linkedin`, `twitter`,
      `instagram`, `website`, `gymsReviewed`, `totalReads`
-2. Set `blogPost.author` to that exact name on their posts
+   - Publish the entry AND its photo asset (assets publish separately)
+2. On blog posts, pick the author via the Reference field
 3. `/blog/author/{slug}` works automatically (ISR, prerendered via `generateStaticParams`)
 
 ## Shared components (`src/app/blog/_components/`)

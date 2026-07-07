@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { BlogPost } from '@/lib/contentful'
+import { postAuthorName } from '@/lib/post-author'
 import { getLabelFromSlug } from '@/lib/blog-categories'
 
 // Contentful returns protocol-relative URLs (//images.ctfassets.net/...)
@@ -31,13 +32,14 @@ export function CategoryPill({ category }: { category?: string }) {
 
 export function PostMeta({ post }: { post: BlogPost }) {
   const { fields } = post
+  const authorName = postAuthorName(fields.author)
   return (
     <div className="flex items-center gap-2.5">
       <div className="w-7 h-7 rounded-full bg-raised border-[0.5px] border-border flex items-center justify-center text-[11px] font-bold text-accent flex-none">
-        {initials(fields.author)}
+        {initials(authorName)}
       </div>
       <div className="flex flex-col">
-        <span className="text-[12px] font-semibold text-text-secondary">{fields.author || 'Gymlocator'}</span>
+        <span className="text-[12px] font-semibold text-text-secondary">{authorName || 'Gymlocator'}</span>
         {fields.publishedDate && (
           <span className="text-[11px] text-text-muted">{formatDate(fields.publishedDate)}</span>
         )}

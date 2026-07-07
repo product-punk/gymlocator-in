@@ -135,7 +135,9 @@ slug           Short text (unique)
 excerpt        Long text
 body           Rich text
 coverImage     Media
-author         Short text  — author NAME, must exactly match an author entry's name
+author         Reference (Author only) — links to an author entry; editors pick
+               from existing authors. Legacy name strings still render but
+               won't get profile links unless they match authorNameToSlug.
 publishedDate  Date
 seoTitle       Short text (optional)
 seoDescription Long text (optional)
