@@ -1,5 +1,5 @@
 /**
- * Helpers for Contentful rich text documents — TOC extraction, heading
+ * Helpers for Contentful rich text documents - TOC extraction, heading
  * anchors and read-time estimation. Client-safe (no SDK import).
  */
 

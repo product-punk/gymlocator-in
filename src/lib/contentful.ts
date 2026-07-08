@@ -27,9 +27,9 @@ export interface BlogPost {
     publishedDate: string
     seoTitle?: string
     seoDescription?: string
-    /** Array of category slugs — e.g. ['supplements-nutrition'] */
+    /** Array of category slugs - e.g. ['supplements-nutrition'] */
     categories?: string[]
-    /** JSON object field — array of { question, answer } */
+    /** JSON object field - array of { question, answer } */
     faqs?: BlogFaq[]
   }
 }
@@ -75,7 +75,7 @@ export interface Author {
   sys: { id: string }
   fields: {
     name: string
-    /** kebab-case of name — e.g. 'arjun-kapoor'. Must match authorNameToSlug(name). */
+    /** kebab-case of name - e.g. 'arjun-kapoor'. Must match authorNameToSlug(name). */
     slug: string
     designation?: string
     /** fields is absent when the linked asset is unpublished (unresolved link) */
@@ -85,20 +85,20 @@ export interface Author {
         title?: string
       }
     }
-    /** Long text — paragraphs separated by blank lines */
+    /** Long text - paragraphs separated by blank lines */
     bio?: string
     /** Pull-quote shown after the bio */
     quote?: string
-    /** Badge strip — e.g. ['ACE Certified', 'NSCA-CPT', '9 years experience'] */
+    /** Badge strip - e.g. ['ACE Certified', 'NSCA-CPT', '9 years experience'] */
     credentials?: string[]
     verified?: boolean
     linkedin?: string
     twitter?: string
     instagram?: string
     website?: string
-    /** Display stats — e.g. '120+' */
+    /** Display stats - e.g. '120+' */
     gymsReviewed?: string
-    /** Display stats — e.g. '1.2M' */
+    /** Display stats - e.g. '1.2M' */
     totalReads?: string
   }
 }
@@ -132,7 +132,7 @@ export async function getAuthorBySlug(slug: string): Promise<Author | null> {
 }
 
 /**
- * Posts by author — tries the Reference-field lookup (author links to an
+ * Posts by author - tries the Reference-field lookup (author links to an
  * author entry), then falls back to legacy exact-name matching on a
  * Short text field. One of the two queries 422s depending on the field
  * type; both failing just means no posts.
@@ -146,7 +146,7 @@ export async function getPostsByAuthor(author: Author): Promise<BlogPost[]> {
     })
     if (entries.items.length) return entries.items as unknown as BlogPost[]
   } catch {
-    // author is a Short text field — fall through to name match
+    // author is a Short text field - fall through to name match
   }
   try {
     const entries = await contentfulClient.getEntries({

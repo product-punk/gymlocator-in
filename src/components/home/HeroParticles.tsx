@@ -1,5 +1,5 @@
 /*
- * Static particle field — 14 dots drifting upward via the `particle`
+ * Static particle field - 14 dots drifting upward via the `particle`
  * CSS keyframe in globals.css. Negative delays distribute them mid-cycle
  * so the field looks "full" from the first frame. All class strings are
  * literals so Tailwind's scanner picks up the arbitrary values.

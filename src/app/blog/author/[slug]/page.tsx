@@ -21,8 +21,8 @@ export async function generateMetadata({
 
   const { name, designation, bio } = author.fields
   const title = designation
-    ? `${name} — ${designation} | Gymlocator`
-    : `${name} — Author | Gymlocator`
+    ? `${name} - ${designation} | Gymlocator`
+    : `${name} - Author | Gymlocator`
   const description =
     bio?.split(/\n\s*\n/)[0]?.slice(0, 160) ??
     `Read workout guides, gym reviews and fitness articles by ${name} on Gymlocator.`

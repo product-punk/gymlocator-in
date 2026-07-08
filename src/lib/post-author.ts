@@ -1,5 +1,5 @@
 /**
- * Author helpers safe to import from client components — no Contentful SDK
+ * Author helpers safe to import from client components - no Contentful SDK
  * (contentful.ts instantiates the client with server-only env vars).
  *
  * blogPost.author is either a legacy name string or a Reference to an

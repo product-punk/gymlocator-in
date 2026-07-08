@@ -228,7 +228,7 @@ export default function BlogHubClient({ posts }: { posts: BlogPost[] }) {
             Train smarter.<br />Pick the right gym.
           </h1>
           <p className="mt-[18px] max-w-[560px] text-[16px] leading-[1.6] text-text-secondary">
-            Workout guides, honest gym reviews and no-nonsense nutrition advice — written by certified trainers who actually train in India.
+            Workout guides, honest gym reviews and no-nonsense nutrition advice - written by certified trainers who actually train in India.
           </p>
         </div>
       </section>
@@ -284,7 +284,7 @@ export default function BlogHubClient({ posts }: { posts: BlogPost[] }) {
               <div className="label mb-2.5">Newsletter</div>
               <h2 className="h2 text-[28px]">Get the weekly fitness brief</h2>
               <p className="mt-2.5 text-[14px] leading-[1.6] text-text-secondary">
-                One email every Friday — the best new guides, gym openings near you, and a workout to try. No spam, unsubscribe anytime.
+                One email every Friday - the best new guides, gym openings near you, and a workout to try. No spam, unsubscribe anytime.
               </p>
             </div>
             {subscribed ? (
@@ -324,7 +324,7 @@ export default function BlogHubClient({ posts }: { posts: BlogPost[] }) {
       <section className="max-w-[1200px] mx-auto px-5 md:px-10 pt-[72px]">
         <SectionHead label="The archive" title="All articles" />
         {posts.length === 0 ? (
-          <p className="text-text-muted text-[15px] py-8">No articles yet — check back soon.</p>
+          <p className="text-text-muted text-[15px] py-8">No articles yet - check back soon.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {posts.map(p => (

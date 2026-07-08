@@ -39,7 +39,7 @@ export async function generateMetadata({
   const category = getCategoryBySlug(slug)
   if (category) {
     return {
-      title: `${category.label} — Guides, Tips & Advice | Gymlocator`,
+      title: `${category.label} - Guides, Tips & Advice | Gymlocator`,
       description: category.description,
       openGraph: {
         title: `${category.label} | Gymlocator Fitness Hub`,
@@ -180,7 +180,7 @@ export default async function BlogSlugPage({
       '@graph': [
         {
           '@type': 'CollectionPage',
-          name: `${category.label} — Gymlocator Fitness Hub`,
+          name: `${category.label} - Gymlocator Fitness Hub`,
           description: category.description,
           url: `https://gymlocator.in/blog/${category.slug}`,
           hasPart: posts.map(p => ({
@@ -398,7 +398,7 @@ export default async function BlogSlugPage({
         </section>
       )}
 
-      {/* Body — sidebar + prose */}
+      {/* Body - sidebar + prose */}
       <section className="max-w-[1100px] mx-auto px-5 md:px-10 pt-12">
         <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-12 lg:gap-14">
           <aside className="hidden lg:block">

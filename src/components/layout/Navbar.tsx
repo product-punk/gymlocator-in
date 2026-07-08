@@ -61,7 +61,7 @@ export default function Navbar({ cities }: { cities: NavCity[] }) {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-9 h-full">
-          {/* Mega menu trigger — links to /cities, panel opens on hover/focus */}
+          {/* Mega menu trigger - links to /cities, panel opens on hover/focus */}
           <div
             className="h-full flex items-center"
             onMouseEnter={() => setMegaOpen(true)}
@@ -81,7 +81,7 @@ export default function Navbar({ cities }: { cities: NavCity[] }) {
               />
             </Link>
 
-            {/* Mega panel — always in the DOM for crawlers, CSS-toggled */}
+            {/* Mega panel - always in the DOM for crawlers, CSS-toggled */}
             <div
               className={`absolute left-0 right-0 top-16 bg-surface bb-hair shadow-[0_16px_40px_rgba(0,0,0,0.5)] transition-all duration-150 ${
                 megaOpen

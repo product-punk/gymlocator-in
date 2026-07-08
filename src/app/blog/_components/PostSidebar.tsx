@@ -66,7 +66,7 @@ export default function PostSidebar({ toc, url, title }: {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      // clipboard unavailable — ignore
+      // clipboard unavailable - ignore
     }
   }
 

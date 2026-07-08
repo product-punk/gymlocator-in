@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    console.log('API hit — body received:', JSON.stringify(body).slice(0, 200))
+    console.log('API hit - body received:', JSON.stringify(body).slice(0, 200))
 
     console.log('API key present:', !!process.env.OPENAI_API_KEY)
     console.log('API key prefix:', process.env.OPENAI_API_KEY?.slice(0, 7))

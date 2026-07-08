@@ -170,7 +170,7 @@ export default function AuthorPage({ author, posts }: { author: Author; posts: B
         </div>
         {posts.length === 0 ? (
           <div className="py-20 text-center">
-            <p className="text-text-muted text-[15px]">No articles yet — check back soon.</p>
+            <p className="text-text-muted text-[15px]">No articles yet - check back soon.</p>
             <Link
               href="/blog"
               className="mt-5 inline-flex items-center gap-1.5 text-[13px] text-accent hover:underline"

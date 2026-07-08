@@ -58,7 +58,7 @@ export default function HeroSection() {
             India&apos;s gym discovery platform
           </motion.div>
 
-          {/* H1 — word-by-word stagger */}
+          {/* H1 - word-by-word stagger */}
           <h1 className="h1 text-text max-w-[920px] mt-6" aria-label={HEADLINE}>
             {HEADLINE_WORDS.map((word, i) => (
               <motion.span

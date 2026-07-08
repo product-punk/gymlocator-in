@@ -57,7 +57,7 @@ const FACETS: Record<string, FacetConfig> = {
   'women': {
     label: 'Women-Only Gyms',
     pageTitle: (city) => `Women-Only Gyms in ${city}`,
-    subtitle: (total, city) => `Compare ${total} women-only gyms in ${city} — dedicated spaces with female trainers and women-exclusive equipment floors.`,
+    subtitle: (total, city) => `Compare ${total} women-only gyms in ${city} - dedicated spaces with female trainers and women-exclusive equipment floors.`,
     seoTitle: (city) => `Women-Only Gyms in ${city} - Safe & Comfortable | Gymlocator`,
     seoDescription: (city) => `Find women-only gyms in ${city}. Compare fees, timings and amenities at all-female fitness spaces near you.`,
     seoContent: (city) => `Women-only gyms in ${city} provide a comfortable, distraction-free environment for women of all fitness levels. These gyms feature dedicated equipment floors, female trainers, and flexible timings designed around working women. Many also offer group classes like Zumba, yoga, and aerobics. Memberships typically range from ₹1,200 to ₹4,500 per month depending on the area and facilities.`,
@@ -69,7 +69,7 @@ const FACETS: Record<string, FacetConfig> = {
     subtitle: (total, city) => `${total} affordable gyms in ${city} with memberships under ₹1,500 per month.`,
     seoTitle: (city) => `Budget Gyms in ${city} - Under ₹1,500/Month | Gymlocator`,
     seoDescription: (city) => `Find affordable gyms in ${city} with monthly fees under ₹1,500. Compare equipment, timings and trainers at cheap gyms near you.`,
-    seoContent: (city) => `Budget gyms in ${city} offer everything you need to build a solid fitness routine without breaking the bank. Most budget gyms include cardio equipment, free weights, and basic machines for under ₹1,500 per month. Some offer annual plans starting at ₹8,000–₹12,000. Look for gyms in neighbourhood markets and residential areas — they tend to be more affordable than gym chains.`,
+    seoContent: (city) => `Budget gyms in ${city} offer everything you need to build a solid fitness routine without breaking the bank. Most budget gyms include cardio equipment, free weights, and basic machines for under ₹1,500 per month. Some offer annual plans starting at ₹8,000–₹12,000. Look for gyms in neighbourhood markets and residential areas - they tend to be more affordable than gym chains.`,
     cities: 'all',
   },
   'premium': {
@@ -84,7 +84,7 @@ const FACETS: Record<string, FacetConfig> = {
   'cardio': {
     label: 'Cardio Gyms',
     pageTitle: (city) => `Best Cardio Gyms in ${city}`,
-    subtitle: (total, city) => `${total} gyms in ${city} with dedicated cardio floors — treadmills, cycles, ellipticals and steppers.`,
+    subtitle: (total, city) => `${total} gyms in ${city} with dedicated cardio floors - treadmills, cycles, ellipticals and steppers.`,
     seoTitle: (city) => `Cardio Gyms in ${city} - Treadmills, Cycles & More | Gymlocator`,
     seoDescription: (city) => `Find gyms in ${city} with excellent cardio equipment. Compare cardio-focused gyms by fees, timings and machine variety near you.`,
     seoContent: (city) => `Cardio gyms in ${city} are ideal for weight loss, endurance training, and heart health. Look for gyms with a wide variety of machines: treadmills, ellipticals, stationary bikes, rowing machines and stair climbers. The best cardio gyms also offer group fitness classes like cycling, aerobics and HIIT to keep your routine varied.`,
@@ -102,10 +102,10 @@ const FACETS: Record<string, FacetConfig> = {
   'with-swimming-pool': {
     label: 'Gyms with Swimming Pool',
     pageTitle: (city) => `Gyms with Swimming Pool in ${city}`,
-    subtitle: (total, city) => `${total} gyms in ${city} with swimming pools — full-body training and active recovery.`,
+    subtitle: (total, city) => `${total} gyms in ${city} with swimming pools - full-body training and active recovery.`,
     seoTitle: (city) => `Gyms with Swimming Pool in ${city} - Find & Compare | Gymlocator`,
     seoDescription: (city) => `Find gyms and fitness clubs in ${city} with swimming pools. Compare pool facilities, membership fees and timings near you.`,
-    seoContent: (city) => `Gyms with swimming pools in ${city} offer a complete fitness experience combining strength training with aquatic exercise. Swimming is one of the best low-impact full-body workouts — ideal for weight loss, joint recovery and endurance. Pool-equipped gyms in ${city} tend to be mid-to-premium priced (₹2,500–₹8,000/month) but often include the pool in the base membership.`,
+    seoContent: (city) => `Gyms with swimming pools in ${city} offer a complete fitness experience combining strength training with aquatic exercise. Swimming is one of the best low-impact full-body workouts - ideal for weight loss, joint recovery and endurance. Pool-equipped gyms in ${city} tend to be mid-to-premium priced (₹2,500–₹8,000/month) but often include the pool in the base membership.`,
     cities: 'all',
   },
   'with-steam-sauna': {

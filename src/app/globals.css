@@ -3,7 +3,7 @@
 
 @theme {
   /*
-   * Five canonical brand tokens — use only these in new code.
+   * Five canonical brand tokens - use only these in new code.
    *
    *   base    → page background (the darkest layer)
    *   surface → cards, panels, nav backgrounds (one step lighter)
@@ -13,7 +13,7 @@
    *
    * Additional tokens below (raised, border-hi, accent-dim, text-*)
    * are kept for legacy utility classes (ghost, filter-pill, silver-section).
-   * Do NOT add new shades — every new component should use the five above.
+   * Do NOT add new shades - every new component should use the five above.
    */
 
   /* ── Core five ── */
@@ -23,7 +23,7 @@
   --color-accent:  #D4D4D4;
   --color-text:    #F0F0F0;
 
-  /* ── Supporting (legacy — do not expand) ── */
+  /* ── Supporting (legacy - do not expand) ── */
   --color-raised:         #1A1A1A;
   --color-border-hi:      #333333;
   --color-accent-dim:     #1E1E1E;
@@ -128,13 +128,13 @@
   background: var(--color-accent-dim);
 }
 
-/* Silver section background — used for contrast breaks */
+/* Silver section background - used for contrast breaks */
 .silver-section {
   background: #E0E0E0;
   color: #0C0C0C;
 }
 
-/* Elite metallic finish — layered gradient + edge highlights + slow sheen.
+/* Elite metallic finish - layered gradient + edge highlights + slow sheen.
    Pair with .silver-section; the gradient here wins by declaration order. */
 .silver-elite {
   position: relative;
@@ -171,7 +171,7 @@
 .silver-section .bb-hair,
 .silver-section .bt-hair              { border-color: rgba(0,0,0,0.15) !important; }
 
-/* Light card — used inside dark sections */
+/* Light card - used inside dark sections */
 .light-card {
   background: #E5E5E5 !important;
   border-color: #C8C8C8 !important;
@@ -204,13 +204,13 @@
   );
 }
 
-/* Marquee keyframe — outside @layer so it's always global */
+/* Marquee keyframe - outside @layer so it's always global */
 @keyframes marquee {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-/* Hero animation keyframes — outside @layer so they're always global */
+/* Hero animation keyframes - outside @layer so they're always global */
 @keyframes hero-breathe {
   0%, 100% { opacity: 0.45; }
   50%      { opacity: 1; }
@@ -255,12 +255,12 @@
     display: none;
   }
 
-  /* Hero background glow — slow breathing pulse */
+  /* Hero background glow - slow breathing pulse */
   .hero-breathe {
     animation: hero-breathe 3s ease-in-out infinite;
   }
 
-  /* Floating hero particle — per-dot speed/offset via --dur / --delay */
+  /* Floating hero particle - per-dot speed/offset via --dur / --delay */
   .particle {
     opacity: 0;
     animation: particle-rise var(--dur, 18s) linear infinite;
@@ -268,7 +268,7 @@
     will-change: transform, opacity;
   }
 
-  /* Search bar focus — gentle white box-shadow pulse */
+  /* Search bar focus - gentle white box-shadow pulse */
   .search-glow:focus-within {
     animation: search-glow-pulse 2.4s ease-in-out infinite;
   }

@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'About Gymlocator.in — Built by a Fitness Obsessive',
-  description: 'Gymlocator.in was built by someone who has spent 10+ years training across gyms in India — from luxury wellness clubs to basement iron rooms. Real experience behind every recommendation.',
+  title: 'About Gymlocator.in - Built by a Fitness Obsessive',
+  description: 'Gymlocator.in was built by someone who has spent 10+ years training across gyms in India - from luxury wellness clubs to basement iron rooms. Real experience behind every recommendation.',
   alternates: { canonical: 'https://gymlocator.in/about' },
   robots: { index: true, follow: true },
 }

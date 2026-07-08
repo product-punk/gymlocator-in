@@ -3,14 +3,14 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Gymlocator.in',
-  description: 'Privacy policy for Gymlocator.in — how we collect, use and protect your data.',
+  description: 'Privacy policy for Gymlocator.in - how we collect, use and protect your data.',
   alternates: { canonical: 'https://gymlocator.in/privacy' },
 }
 
 const SECTIONS = [
   {
     heading: 'Information We Collect',
-    body: 'We collect information you voluntarily provide when contacting us or listing a gym — such as your name, email address, and gym details. We also collect standard server logs and analytics data (pages visited, device type, referring URL) to improve the site.',
+    body: 'We collect information you voluntarily provide when contacting us or listing a gym - such as your name, email address, and gym details. We also collect standard server logs and analytics data (pages visited, device type, referring URL) to improve the site.',
   },
   {
     heading: 'How We Use It',

@@ -42,7 +42,7 @@ export default function CategoryHubPage({
       <section className="max-w-[1200px] mx-auto px-5 md:px-10 pt-14">
         {posts.length === 0 ? (
           <div className="py-20 text-center">
-            <p className="text-text-muted text-[15px]">No articles in this category yet — check back soon.</p>
+            <p className="text-text-muted text-[15px]">No articles in this category yet - check back soon.</p>
             <Link
               href="/blog"
               className="mt-5 inline-flex items-center gap-1.5 text-[13px] text-accent hover:underline"
