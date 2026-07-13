@@ -4,6 +4,8 @@ import "./globals.css";
 import "@tabler/icons-webfont/dist/tabler-icons.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { GTMScript, GTMNoScript } from "@/components/analytics/GTM";
+import AnalyticsListener from "@/components/analytics/AnalyticsListener";
 import { getCities, getNavLocalities } from "@/lib/supabase/queries";
 
 const inter = Inter({
@@ -57,7 +59,12 @@ export default async function RootLayout({
       lang="en"
       className={`${inter.variable} dark h-full antialiased bg-base`}
     >
+      <head>
+        <GTMScript />
+      </head>
       <body className="min-h-full flex flex-col bg-base text-text font-sans">
+        <GTMNoScript />
+        <AnalyticsListener />
         <Navbar cities={navCities} />
         {children}
         <Footer />
