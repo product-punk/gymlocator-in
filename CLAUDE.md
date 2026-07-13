@@ -7,11 +7,12 @@ with gyms in their city or locality. Think Zomato UX but for fitness centers.
 ---
 
 ## Tech Stack
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router) + React 19
 - **Language**: TypeScript (strict mode)
 - **Styling**: TailwindCSS only — no component libraries, no inline styles
 - **Database**: Supabase (PostgreSQL)
-- **Hosting**: Vercel
+- **Hosting**: Netlify (production + deploy previews)
+- **Analytics**: GTM + GA4 — see "Tracking & Analytics" section (docs/tracking/)
 - **Blog**: Contentful (headless CMS) — see "Blog / Contentful" section
 - **Maps**: Google Maps iframe embed (no API key required)
 
@@ -302,6 +303,43 @@ Indore · Chandigarh · Jaipur · Dehradun · Lucknow ·
 Surat · Coimbatore · Bhopal · Thane · Nagpur
 
 ---
+
+## Tracking & Analytics (READ BEFORE TOUCHING TRACKED COMPONENTS)
+
+Full architecture lives in `docs/tracking/` (00-README is the index).
+The event catalog in `docs/tracking/02-event-taxonomy.md` is FROZEN — never
+invent event names or parameters; if a new event seems needed, stop and ask.
+
+### Absolute tracking rules
+1. **GTM-first.** Never add gtag.js, Meta Pixel, or any vendor script to code.
+   All vendor tags live in the GTM container.
+2. **One push helper.** All dataLayer pushes go through
+   `src/lib/analytics/track.ts`. Never call `window.dataLayer.push` directly.
+3. **No PII, ever.** No form field values, names, emails, phone numbers, or
+   calculator body metrics in any event. Field *names* and slugs only.
+4. **Never convert a server component to a client component for tracking.**
+   Static CTAs (tel:, wa.me, maps, mailto, gym cards) are tracked via
+   `data-gtm-*` attributes + GTM click triggers — attributes render server-side.
+   Only state-dependent moments (form success, search results, calculator
+   completion) use `track()` pushes in already-client components.
+5. **page_view is fired manually** by `AnalyticsListener` on pathname change.
+   Never add GTM History triggers or GA4 enhanced page_view collection.
+   Query-param changes (sort/filter/search) must NOT fire page_view.
+6. **GTM loads only in production.** `NEXT_PUBLIC_GTM_ID` is scoped to the
+   Netlify Production context. Never hardcode a GTM/GA4 ID.
+7. `form_success` (API 2xx confirmed) is the conversion — never `form_submit`.
+
+### Tracked components — re-run QA (docs/tracking/08-qa-plan.md) when editing
+`src/app/layout.tsx` · `src/app/gym/[slug]/page.tsx` · `src/app/contact/page.tsx`
+· `src/components/home/SearchBar.tsx` · `src/components/shared/GymCard.tsx`
+· `src/components/shared/GymFilters.tsx` · `src/app/list-your-gym/ListGymForm.tsx`
+· `src/app/calculators/protein/ProteinCalculator.tsx`
+
+### data-gtm-* attribute contract (server components)
+Every tracked static element carries `data-gtm-event="<event_name>"` plus its
+params as `data-gtm-<param>` attributes. Exact shapes:
+`docs/tracking/03-datalayer-spec.md`. GymCard requires a `list_position` prop
+(1-based index) from every parent that maps over gyms.
 
 ## What We Are NOT Building (MVP)
 - User accounts / login

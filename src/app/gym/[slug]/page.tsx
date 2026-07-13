@@ -14,13 +14,18 @@ function formatSlug(slug: string) {
   ).join(' ')
 }
 
+function stripDashes(text: string) {
+  return text.replace(/\s*[–—]+\s*/g, ' - ').trim()
+}
+
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params
   const gym = await getGymBySlug(slug)
   if (!gym) return {}
+  const gymName = stripDashes(gym.name)
   return {
-    title: `${gym.name}, ${gym.locality_slug ? formatSlug(gym.locality_slug) + ' ' : ''}${formatSlug(gym.city_slug)} - Timings, Fees & Reviews | Gymlocator`,
-    description: `${gym.name} in ${gym.locality_slug ? formatSlug(gym.locality_slug) + ', ' : ''}${formatSlug(gym.city_slug)}. ${gym.price_monthly ? 'Membership from Rs ' + gym.price_monthly + '/month. ' : ''}Timings, amenities, contact and directions on Gymlocator.`,
+    title: `${gymName}, ${gym.locality_slug ? formatSlug(gym.locality_slug) + ' ' : ''}${formatSlug(gym.city_slug)} - Timings, Fees & Reviews | Gymlocator`,
+    description: `${gymName} in ${gym.locality_slug ? formatSlug(gym.locality_slug) + ', ' : ''}${formatSlug(gym.city_slug)}. ${gym.price_monthly ? 'Membership from Rs ' + gym.price_monthly + '/month. ' : ''}Timings, amenities, contact and directions on Gymlocator.`,
     robots: {
       index: true,
       follow: true,
