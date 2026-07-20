@@ -55,7 +55,7 @@ export async function getPartnerGyms() {
 export async function getGymBySlug(slug: string) {
   const { data } = await supabase
     .from('gyms')
-    .select('*')
+    .select('id, name, slug, city_slug, locality_slug, address, phone, whatsapp, amenities, gender, price_monthly, price_annually, price_range, ac, timing_open, timing_close, is_247, rating, review_count, is_featured, is_verified, lat, lng, is_active')
     .eq('slug', slug)
     .eq('is_active', true)
     .single()
@@ -258,7 +258,7 @@ export async function searchGymsAndLocalities(query: string) {
   const [gymsRes, citiesRes, localitiesRes] = await Promise.all([
     supabase
       .from('gyms')
-      .select('id, name, slug, city_slug, locality_slug, rating, review_count, images, price_monthly, amenities, is_247, gender')
+      .select('id, name, slug, city_slug, locality_slug, rating, review_count, price_monthly, amenities, is_247, gender, timing_open, timing_close, is_featured, is_verified')
       .eq('is_active', true)
       .ilike('name', `%${q}%`)
       .order('rating', { ascending: false })

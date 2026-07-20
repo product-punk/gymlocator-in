@@ -155,8 +155,8 @@ type Gym = {
   is_247: boolean
   rating: number
   review_count: number
-  images: string[]
   is_featured: boolean
+  is_verified: boolean
   is_active: boolean
 }
 
@@ -358,8 +358,8 @@ export default async function CitySlugPage({ params, searchParams }: Props) {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {gyms.map((gym) => (
-              <GymCard key={gym.id} gym={gym} />
+            {gyms.map((gym, i) => (
+              <GymCard key={gym.id} gym={gym} list_position={i + 1} />
             ))}
           </div>
         )}

@@ -215,9 +215,8 @@ export default async function CityPage({ params, searchParams }: Props) {
               is_featured: boolean; is_verified: boolean; is_247: boolean; gender?: string;
               rating: number; review_count: number; timing_open: string | null;
               timing_close: string | null; amenities: string[]; price_monthly: number | null;
-              images?: string[];
-            }) => (
-              <GymCard key={gym.id} gym={gym} />
+            }, i: number) => (
+              <GymCard key={gym.id} gym={gym} list_position={i + 1} />
             ))}
           </div>
         )}

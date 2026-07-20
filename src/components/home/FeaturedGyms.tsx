@@ -10,7 +10,6 @@ interface Gym {
   review_count: number | null
   price_monthly: number | null
   amenities: string[]
-  images?: string[]
   is_featured?: boolean
   is_verified?: boolean
   is_247?: boolean
@@ -41,8 +40,8 @@ export default function FeaturedGyms({ gyms }: { gyms: Gym[] }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {gyms.map((gym) => (
-            <GymCard key={gym.id} gym={gym} />
+          {gyms.map((gym, i) => (
+            <GymCard key={gym.id} gym={gym} list_position={i + 1} />
           ))}
         </div>
 

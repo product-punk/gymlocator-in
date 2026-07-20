@@ -98,7 +98,12 @@ timing_close  text                        -- '22:00'
 is_247        boolean default false
 rating        float4
 review_count  int default 0
-images        text[]                      -- array of image URLs
+images        text[]                      -- array of image URLs (DEPRECATED: scraped Google Maps CDN
+                                         --   URLs expire/403. Column kept in DB, NOT rendered in UI.
+                                         --   Do not add image display without a real CDN source.)
+whatsapp      text                        -- WhatsApp number (optional)
+price_annually int                        -- annual membership price (optional)
+is_verified   boolean default false
 is_featured   boolean default false
 is_active     boolean default true
 created_at    timestamptz default now()
@@ -217,7 +222,17 @@ Home > Bangalore > CrossFit Gyms
 ## Component Patterns
 
 ### Gym card (used on city, locality, amenity pages)
-Must show: name, locality, rating, price_range, top 3 amenities, phone CTA
+`src/components/shared/GymCard.tsx` — **image-free**. No gym photos are rendered anywhere in
+the app (images column is deprecated — see DB schema note above).
+
+Card must show: locality eyebrow, name, rating dot, badges (Featured/Verified/24/7/Women Only),
+timings + monthly-fee spec strip, top 3 amenity chips, full-width "View gym" CTA footer.
+
+**Required prop:** `list_position: number` (1-based index from the parent map). Every parent
+that renders GymCard must pass this — it satisfies the frozen GTM tracking contract.
+The card article carries `data-gtm-event="select_content"` + `data-gtm-list-position`.
+
+**Design system rule:** Cards use `hover:-translate-y-0.5 transition-[colors,transform]` lift.
 
 ### Search bar (homepage hero)
 - Searches by city, locality, or gym name
@@ -340,6 +355,33 @@ Every tracked static element carries `data-gtm-event="<event_name>"` plus its
 params as `data-gtm-<param>` attributes. Exact shapes:
 `docs/tracking/03-datalayer-spec.md`. GymCard requires a `list_position` prop
 (1-based index) from every parent that maps over gyms.
+
+## Known SEO Gaps (pre-launch backlog)
+
+These are confirmed issues, not new — do not try to "fix" them inline while
+working on unrelated tasks. They need dedicated attention before Wave 1 launch.
+
+1. **OG images absent** on gym, city, locality, and amenity pages. `generateMetadata`
+   returns no `openGraph.images`. Social/WhatsApp link previews show no image.
+   Fix: add a static fallback OG image to the root layout, plus per-city og images.
+
+2. **City page title template mismatch.** CLAUDE.md spec says
+   `"Best Gyms in {City} 2026 — Fees, Reviews & Timings | Gymlocator"`.
+   Actual output: `"Best Gyms in {City} - Compare Fees, Timings & Ratings | Gymlocator"`.
+   Fix in `src/app/gyms/[city]/page.tsx`.
+
+3. **Sitemap filters missing.**
+   - `src/app/sitemap-gyms.xml/route.ts` — add `.eq('is_active', true)`
+   - `src/app/sitemap-localities.xml/route.ts` — add `.gte('gym_count', 5)` threshold
+   Both expose non-indexable URLs to Googlebot today.
+
+4. **`generateStaticParams` missing** from `src/app/gym/[slug]/page.tsx`. Without it,
+   gym detail pages do on-demand ISR rather than build-time static generation.
+
+5. **`LocalBusiness` JSON-LD schema lacks `image` property** on gym detail pages.
+   Do not add until real (non-scraped) image URLs are available.
+
+---
 
 ## What We Are NOT Building (MVP)
 - User accounts / login

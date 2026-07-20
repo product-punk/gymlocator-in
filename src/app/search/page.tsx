@@ -159,8 +159,8 @@ export default async function SearchPage({ searchParams }: Props) {
               <span className="text-[14px] text-accent font-normal">({gyms.length})</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {gyms.map((gym) => (
-                <GymCard key={gym.id} gym={gym} />
+              {gyms.map((gym, i) => (
+                <GymCard key={gym.id} gym={gym} list_position={i + 1} />
               ))}
             </div>
           </section>
